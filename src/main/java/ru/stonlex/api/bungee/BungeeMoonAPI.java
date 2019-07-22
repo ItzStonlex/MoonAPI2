@@ -2,7 +2,7 @@ package ru.stonlex.api.bungee;
 
 import net.md_5.bungee.api.plugin.Plugin;
 
-public class BungeeMoonAPI extends Plugin {
+public final class BungeeMoonAPI extends Plugin {
 
     /**
      * Пока здесь попросту нечего писать.

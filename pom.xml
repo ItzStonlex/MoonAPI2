@@ -10,13 +10,10 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <artifact.directory>C:/Users/usr/Desktop</artifact.directory>
-    </properties>
-
     <build>
         <finalName>MoonAPI 2.0</finalName>
         <defaultGoal>clean package install</defaultGoal>
+        <outputDirectory>C:/Users/usr/Desktop/Minecraft projects</outputDirectory>
 
         <resources>
             <resource>
@@ -56,5 +53,42 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.12-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.milkbowl</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.7.1-b91</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
