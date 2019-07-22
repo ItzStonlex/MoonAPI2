@@ -1,0 +1,4 @@
+name: MoonAPI
+main: ru.stonlex.api.bungee.BungeeMoonAPI
+version: 2.0
+author: ItzStonlex
