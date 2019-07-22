@@ -1,36 +1,31 @@
 package ru.stonlex.api.bukkit.hologram;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.api.bukkit.modules.protocol.entity.FakeArmorStand;
+import ru.stonlex.api.bukkit.modules.protocol.entity.impl.FakeArmorStand;
+import ru.stonlex.api.bukkit.types.CacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
 import ru.stonlex.api.java.interfaces.Clickable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public final class HologramManager {
-
-    private final Map<String, MoonHologram> hologramMap = new HashMap<>();
+public final class HologramManager extends CacheManager<MoonHologram> {
 
     /**
      * Кеширование голограммы в мапу по ее имени.
      */
     public void cacheHologram(String hologramName, MoonHologram hologram) {
-        hologramMap.put(hologramName.toLowerCase(), hologram);
+        cacheData(hologramName.toLowerCase(), hologram);
     }
 
     /**
      * Получение голограммы из кеша по ее имени.
      */
     public MoonHologram getCachedHologram(String hologramName) {
-        return hologramMap.get(hologramName.toLowerCase());
+        return getCache(hologramName.toLowerCase());
     }
 
     /**

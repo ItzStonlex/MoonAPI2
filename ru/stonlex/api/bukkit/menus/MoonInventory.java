@@ -105,14 +105,6 @@ public abstract class MoonInventory {
     }
 
     /**
-     * Получение информации о данном инвентаре
-     *  (Название, количество строк и размер)
-     */
-    public InventoryInfo getInfo() {
-        return info;
-    }
-
-    /**
      * Открытие инвентаря игроку
      */
     public void openInventory(Player player) {

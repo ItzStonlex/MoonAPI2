@@ -19,27 +19,27 @@ public class WrapperUtil {
     
     public final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
-    public Class<?>[] toClasses(Object... elements) {
-        final List<Class<?>> classes = new ArrayList<>();
-        for (Object element : elements) {
-            classes.add(element.getClass());
-        }
-        return classes.toArray(new Class[0]);
-    }
-
     public Class<?> getNmsClass(String className) {
         try {
+
             return Class.forName("net.minecraft.server." + VERSION + "." + className);
+
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException();
+
+            e.printStackTrace();
+            return null;
         }
     }
 
-    public Class<?> getBukkitClass(String packageName, String className) {
+    public Class<?> getCraftbukkitClass(String packageName, String className) {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + VERSION + "." + packageName + "." + className);
+
+            return Class.forName("org.bukkit.craftbukkit." + VERSION + "." + (packageName != null && !packageName.isEmpty() ? packageName + "." : "") + className);
+
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException();
+
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -2,14 +2,10 @@ package ru.stonlex.api.bukkit.menus.manager;
 
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.menus.MoonInventory;
+import ru.stonlex.api.bukkit.types.CacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public final class InventoryManager {
-
-    private final Map<String, MoonInventory> inventoryMap = new HashMap<>();
+public final class InventoryManager extends CacheManager<MoonInventory> {
 
     /**
      * Создание инвентаря без использования абстракции.
@@ -32,14 +28,14 @@ public final class InventoryManager {
      * Кеширование инвентаря в мапу по его имени.
      */
     public void cacheInventory(String inventoryName, MoonInventory inventory) {
-        inventoryMap.put(inventoryName.toLowerCase(), inventory);
+        cacheData(inventoryName.toLowerCase(), inventory);
     }
 
     /**
      * Получение инвентаря из кеша по его имени.
      */
     public MoonInventory getCachedInventory(String inventoryName) {
-        return inventoryMap.get(inventoryName.toLowerCase());
+        return getCache(inventoryName.toLowerCase());
     }
 
 }

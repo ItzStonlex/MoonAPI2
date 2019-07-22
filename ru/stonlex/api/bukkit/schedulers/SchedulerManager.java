@@ -3,11 +3,14 @@ package ru.stonlex.api.bukkit.schedulers;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class SchedulerManager {
 
     private final TIntObjectMap<MoonTask> taskMap = new TIntObjectHashMap<>();
+
+    private final ExecutorService asyncExecutorService = Executors.newCachedThreadPool();
 
     /**
      * Получение шедулера по его ID
@@ -26,7 +29,7 @@ public final class SchedulerManager {
     /**
      * Регистрация шедулера (добавление в мапу и его инициализация)
      */
-    void registerScheduler(MoonTask scheduler) {
+    public void registerScheduler(MoonTask scheduler) {
         if (taskMap.containsKey(scheduler.getSchedulerId())) {
             throw new RuntimeException("Task " + scheduler.getSchedulerId() + " has been registered.");
         }
@@ -39,8 +42,8 @@ public final class SchedulerManager {
 
 
 
-    void async(Runnable command) {
-        Executors.newCachedThreadPool().submit(command);
+    public void async(Runnable command) {
+        asyncExecutorService.submit(command);
     }
 
 }

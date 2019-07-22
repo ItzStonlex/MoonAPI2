@@ -16,6 +16,8 @@ public abstract class MoonTask implements Runnable {
 
     private ScheduledExecutorService executorService;
 
+    private final SchedulerManager schedulerManager = Management.getSchedulerManager();
+
     /**
      * Отмена шедулера
      */
@@ -29,7 +31,7 @@ public abstract class MoonTask implements Runnable {
      * Запуск команды шедулера через определенное количество времени
      */
     public void scheduleLater(long delay, TimeUnit unit) {
-        Management.getSchedulerManager().registerScheduler(this);
+        schedulerManager.registerScheduler(this);
 
         executorService.schedule(this, delay, unit);
     }
@@ -38,7 +40,7 @@ public abstract class MoonTask implements Runnable {
      * Цикличный запуск команды шедулера через определенное количество времени
      */
     public void scheduleTimer(long delay, long period, TimeUnit unit) {
-        Management.getSchedulerManager().registerScheduler(this);
+        schedulerManager.registerScheduler(this);
 
         executorService.scheduleAtFixedRate(this, delay, period, unit);
     }
@@ -47,14 +49,14 @@ public abstract class MoonTask implements Runnable {
      * Асинхронный запуск команды шедулера через определенное количество времени
      */
     public void scheduleAsyncLater(long delay, TimeUnit unit) {
-        Management.getSchedulerManager().async(() -> scheduleLater(delay, unit));
+        schedulerManager.async(() -> scheduleLater(delay, unit));
     }
 
     /**
      * Асинхронно-цикличный запуск команды шедулера через определенное количество времени
      */
     public void scheduleAsyncTimer(long delay, long period, TimeUnit unit) {
-        Management.getSchedulerManager().async(() -> scheduleTimer(delay, period, unit));
+        schedulerManager.async(() -> scheduleTimer(delay, period, unit));
     }
 
 }

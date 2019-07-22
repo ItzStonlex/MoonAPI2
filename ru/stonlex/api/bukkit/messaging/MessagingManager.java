@@ -17,7 +17,7 @@ public final class MessagingManager {
     
     private final MoonAPI moonAPI;
 
-    public void redirect(Player player, String server) {
+    public void redirectPlayer(Player player, String server) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("Connect");
@@ -26,45 +26,49 @@ public final class MessagingManager {
         player.sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
     }
 
+    public void sendMessage(String playerName, String message) {
+        Player playerExact = Bukkit.getPlayerExact(playerName);
+
+        if (playerExact != null && playerExact.isOnline()) {
+            playerExact.sendMessage(message);
+            return;
+        }
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
+        out.writeUTF("Message");
+        out.writeUTF(playerName);
+        out.writeUTF(message);
+
+        moonAPI.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
+    }
+
     public List<String> getOnlinePlayers(String server) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("PlayerList");
         out.writeUTF(server);
 
-        Bukkit.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
+        moonAPI.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
 
-        String[] playerList = ByteStreams.newDataInput(out.toByteArray()).readUTF().split(", ");
+        String[] playerList = ByteStreams.newDataInput(out.toByteArray())
+                .readUTF().split(", ");
+
         return new ArrayList<>(Arrays.asList(playerList));
     }
 
-    public void sendMessage(String player, String message) {
-        final Player playerExact = Bukkit.getPlayerExact(player);
-        if (playerExact.isOnline()) {
-            playerExact.sendMessage(message);
-            return;
-        }
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-
-        out.writeUTF("Message");
-        out.writeUTF(player);
-        out.writeUTF(ChatColor.translateAlternateColorCodes('&', message));
-
-        playerExact.sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
-    }
-
-    public int getOnline(String server) {
+    public int getOnlineCount(String server) {
         return getOnlinePlayers(server).size();
     }
 
-    public void kickPlayer(String player, String reason) {
+    public void kickProxyPlayer(String playerName, String reason) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("KickPlayer");
-        out.writeUTF(player);
+        out.writeUTF(playerName);
         out.writeUTF(ChatColor.translateAlternateColorCodes('&', reason));
 
-        Bukkit.getPlayerExact(player).sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
+        moonAPI.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
     }
 
     public ServerPing getServer(String address, int port) {

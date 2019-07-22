@@ -4,7 +4,6 @@ public interface VaultPlayer {
 
     String getName();
 
-
     /**
      * Раздел VaultChat
      */

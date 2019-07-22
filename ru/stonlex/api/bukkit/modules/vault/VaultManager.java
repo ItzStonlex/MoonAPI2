@@ -7,18 +7,14 @@ import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultChatManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultEconomyManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultPermissionManager;
-
-import java.util.HashMap;
-import java.util.Map;
+import ru.stonlex.api.bukkit.types.CacheManager;
 
 @Getter
-public final class VaultManager {
+public final class VaultManager extends CacheManager<VaultPlayer> {
 
     private final VaultEconomyManager economyManager       = new VaultEconomyManager();
     private final VaultPermissionManager permissionManager = new VaultPermissionManager();
     private final VaultChatManager chatManager             = new VaultChatManager();
-
-    private final Map<String, VaultPlayer> playersMap = new HashMap<>();
 
     /**
      * Получение кешированного VaultPlayer'а по нику игрока
@@ -26,7 +22,7 @@ public final class VaultManager {
      * Если его нет в мапе, то он автоматически туда добавляется
      */
     public VaultPlayer getVaultPlayer(String playerName) {
-        return playersMap.computeIfAbsent(playerName.toLowerCase(), VaultPlayerImpl::new);
+        return getComputeCache(playerName.toLowerCase(), VaultPlayerImpl::new);
     }
 
     /**
@@ -92,9 +88,9 @@ public final class VaultManager {
         @Override
         public void setBalance(double balance) {
             if (balance > getBalance()) {
-                takeMoney(balance - getBalance());
+                giveMoney(balance - getBalance());
             } else if (balance < getBalance()) {
-                giveMoney(getBalance() - balance);
+                takeMoney(getBalance() - balance);
             }
         }
 

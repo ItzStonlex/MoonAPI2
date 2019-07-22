@@ -1,14 +1,13 @@
 package ru.stonlex.api.bukkit.commands;
 
 import org.bukkit.plugin.Plugin;
+import ru.stonlex.api.bukkit.types.CacheManager;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CommandManager {
-
-    private final Map<String, MoonCommand> commandMap = new HashMap<>();
+public final class CommandManager extends CacheManager<MoonCommand> {
 
     /**
      * Регистрация команды, добавление в org.bukkit.command.CommandMap
@@ -24,14 +23,14 @@ public final class CommandManager {
             return false;
         }, Arrays.asList(aliases));
 
-        commandMap.put(aliases[0].toLowerCase(), command);
+        cacheData(aliases[0], command);
     }
 
     /**
      * Получение самой команды по ее имени
      */
     public MoonCommand getCommandByName(String commandName) {
-        return commandMap.get(commandName.toLowerCase());
+        return getCache(commandName);
     }
 
 }

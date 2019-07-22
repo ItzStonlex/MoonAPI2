@@ -8,6 +8,8 @@ public class MoonAPI extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
     }

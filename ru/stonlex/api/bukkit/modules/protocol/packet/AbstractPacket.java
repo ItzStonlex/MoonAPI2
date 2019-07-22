@@ -54,7 +54,7 @@ public abstract class AbstractPacket {
 	}
 
 	/**
-	 * Send the current packet to all online players.
+	 * Send the current packet to all online player.
 	 */
 	public void broadcastPacket() {
 		ProtocolLibrary.getProtocolManager().broadcastServerPacket(getHandle());

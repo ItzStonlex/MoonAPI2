@@ -506,7 +506,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Determine if the distance between @param location and one of the players exceeds 256
+     * Determine if the distance between @param location and one of the player exceeds 256
      *
      * @param location Location to check
      * @return Whether the distance exceeds 256 or not
@@ -546,7 +546,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which is only visible for all players within a certain range in the world of @param center
+     * Displays a particle effect which is only visible for all player within a certain range in the world of @param center
      *
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
      * @param offsetY Maximum distance particles can fly away from the center on the y-axis
@@ -575,7 +575,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which is only visible for the specified players
+     * Displays a particle effect which is only visible for the specified player
      *
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
      * @param offsetY Maximum distance particles can fly away from the center on the y-axis
@@ -604,7 +604,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which is only visible for the specified players
+     * Displays a particle effect which is only visible for the specified player
      *
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
      * @param offsetY Maximum distance particles can fly away from the center on the y-axis
@@ -623,7 +623,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which flies into a determined direction and is only visible for all players within a certain range in the world of @param center
+     * Displays a single particle which flies into a determined direction and is only visible for all player within a certain range in the world of @param center
      *
      * @param direction Direction of the particle
      * @param speed Display speed of the particle
@@ -652,7 +652,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which flies into a determined direction and is only visible for the specified players
+     * Displays a single particle which flies into a determined direction and is only visible for the specified player
      *
      * @param direction Direction of the particle
      * @param speed Display speed of the particle
@@ -681,7 +681,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which flies into a determined direction and is only visible for the specified players
+     * Displays a single particle which flies into a determined direction and is only visible for the specified player
      *
      * @param direction Direction of the particle
      * @param speed Display speed of the particle
@@ -697,7 +697,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which is colored and only visible for all players within a certain range in the world of @param center
+     * Displays a single particle which is colored and only visible for all player within a certain range in the world of @param center
      *
      * @param color Color of the particle
      * @param center Center location of the effect
@@ -721,7 +721,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which is colored and only visible for the specified players
+     * Displays a single particle which is colored and only visible for the specified player
      *
      * @param color Color of the particle
      * @param center Center location of the effect
@@ -745,7 +745,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which is colored and only visible for the specified players
+     * Displays a single particle which is colored and only visible for the specified player
      *
      * @param color Color of the particle
      * @param center Center location of the effect
@@ -759,7 +759,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which requires additional data and is only visible for all players within a certain range in the world of @param center
+     * Displays a particle effect which requires additional data and is only visible for all player within a certain range in the world of @param center
      *
      * @param data Data of the effect
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
@@ -788,7 +788,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which requires additional data and is only visible for the specified players
+     * Displays a particle effect which requires additional data and is only visible for the specified player
      *
      * @param data Data of the effect
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
@@ -817,7 +817,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which requires additional data and is only visible for the specified players
+     * Displays a particle effect which requires additional data and is only visible for the specified player
      *
      * @param data Data of the effect
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
@@ -836,7 +836,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for all players within a certain range in the world of @param center
+     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for all player within a certain range in the world of @param center
      *
      * @param data Data of the effect
      * @param direction Direction of the particle
@@ -862,7 +862,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for the specified players
+     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for the specified player
      *
      * @param data Data of the effect
      * @param direction Direction of the particle
@@ -888,7 +888,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for the specified players
+     * Displays a single particle which requires additional data that flies into a determined direction and is only visible for the specified player
      *
      * @param data Data of the effect
      * @param direction Direction of the particle
@@ -1305,7 +1305,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents a particle effect packet with all attributes which is used for sending packets to the players
+     * Represents a particle effect packet with all attributes which is used for sending packets to the player
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the same usage conditions
      *
@@ -1496,7 +1496,7 @@ public enum ParticleEffect {
         }
 
         /**
-         * Sends the packet to all players in the list
+         * Sends the packet to all player in the list
          *
          * @param center Center location of the effect
          * @param players Receivers of the packet
@@ -1513,10 +1513,10 @@ public enum ParticleEffect {
         }
 
         /**
-         * Sends the packet to all players in a certain range
+         * Sends the packet to all player in a certain range
          *
          * @param center Center location of the effect
-         * @param range Range in which players will receive the packet (Maximum range for particles is usually 16, but it can differ for some types)
+         * @param range Range in which player will receive the packet (Maximum range for particles is usually 16, but it can differ for some types)
          * @throws IllegalArgumentException If the range is lower than 1
          * @see #sendTo(Location center, Player player)
          */
