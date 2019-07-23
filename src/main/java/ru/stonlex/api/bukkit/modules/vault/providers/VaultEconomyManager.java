@@ -20,6 +20,10 @@ public final class VaultEconomyManager {
     public VaultEconomyManager() {
         RegisteredServiceProvider<Economy> serviceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
 
+        if (serviceProvider.getProvider() == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultEconomy.");
+        }
+
         this.vaultEconomy = serviceProvider.getProvider();
 
         if (vaultEconomy == null) {

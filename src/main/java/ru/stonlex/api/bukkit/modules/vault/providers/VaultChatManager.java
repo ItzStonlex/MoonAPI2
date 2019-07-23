@@ -20,6 +20,10 @@ public final class VaultChatManager {
     public VaultChatManager() {
         RegisteredServiceProvider<Chat> serviceProvider = Bukkit.getServicesManager().getRegistration(Chat.class);
 
+        if (serviceProvider.getProvider() == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultChat.");
+        }
+
         this.vaultChat = serviceProvider.getProvider();
 
         if (vaultChat == null) {

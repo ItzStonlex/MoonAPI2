@@ -20,6 +20,9 @@ public final class VaultPermissionManager {
     public VaultPermissionManager() {
         RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
 
+        if (serviceProvider.getProvider() == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultPermission.");
+        }
         this.vaultPermission = serviceProvider.getProvider();
 
         if (vaultPermission == null) {
