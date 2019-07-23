@@ -24,8 +24,6 @@ public class ChatUtil {
      * поэтому можно и самому ее написать
      */
 
-    //==================================================
-
     /**
      * Создание сообщения
      */
@@ -61,20 +59,6 @@ public class ChatUtil {
         return outputList.toArray(new BaseComponent[0]);
     }
 
-    /**
-     * Отправка сообщения игроку
-     */
-    public void sendMessage(Player player, BaseComponent... messages) {
-        player.spigot().sendMessage(messages);
-    }
-
-    /**
-     * Отправка сообщения игроку
-     */
-    public void sendMessage(Player player, BaseComponent message) {
-        player.spigot().sendMessage(message);
-    }
-
 
 
     /**
@@ -103,40 +87,47 @@ public class ChatUtil {
 
         public MessageBuilder setText(String text) {
             this.component.setText(text);
+
             return this;
         }
 
         public MessageBuilder setHoverEvent(HoverEvent.Action action, String text) {
-            final HoverEvent hoverEvent = new HoverEvent(action,
-                    new BaseComponent[]{new TextComponent(text).duplicate()});
+            final HoverEvent hoverEvent = new HoverEvent(action, new BaseComponent[]{new TextComponent(text)});
+
             this.component.setHoverEvent(hoverEvent);
+
             return this;
         }
 
         public MessageBuilder setClickEvent(ClickEvent.Action action, String text) {
             ClickEvent clickEvent = new ClickEvent(action, text);
+
             this.component.setClickEvent(clickEvent);
+
             return this;
         }
 
         public MessageBuilder setBold(boolean flag) {
             this.component.setBold(flag);
+
             return this;
         }
 
         public MessageBuilder setUnderlined(boolean flag) {
             this.component.setUnderlined(flag);
+
             return this;
         }
 
         public MessageBuilder setColor(ChatColor color) {
             this.component.setColor(color);
+
             return this;
         }
 
         @Override
         public BaseComponent[] build() {
-            return new BaseComponent[]{component.duplicate()};
+            return new BaseComponent[]{component};
         }
     }
 

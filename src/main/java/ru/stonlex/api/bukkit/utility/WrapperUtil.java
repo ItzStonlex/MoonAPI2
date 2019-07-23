@@ -8,17 +8,12 @@ import java.util.List;
 
 @UtilityClass
 public class WrapperUtil {
-
-    /**
-     * Опять же, этот код старый, и переписывать его мне было
-     * попросту лень, да и тем более, он прекрасно работает.
-     *
-     * Если кому-то он неудобен, то система как бы не особо сложная, 
-     * поэтому можно и самому ее написать
-     */
     
     public final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
+    /**
+     * Получение класса из net.minecraft.server
+     */
     public Class<?> getNmsClass(String className) {
         try {
 
@@ -31,6 +26,9 @@ public class WrapperUtil {
         }
     }
 
+    /**
+     * Поучение класса из org.bukkit.craftbukkit
+     */
     public Class<?> getCraftbukkitClass(String packageName, String className) {
         try {
 
