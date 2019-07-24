@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.particle.ParticleEffect;
+import ru.stonlex.api.java.JavaMoonAPI;
+import ru.stonlex.api.java.mail.MailSender;
 import ru.stonlex.api.java.schedulers.MoonTask;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 import ru.stonlex.api.java.utility.DateUtil;
@@ -56,6 +58,20 @@ public class TestOther {
                 })
 
                 .build().show();
+    }
+
+    /**
+     * Отправить сообщение на Mail-почту
+     */
+    public void sendMailMessage() {
+        //Получение отправителя
+        MailSender mailSender = JavaMoonAPI.getMailManager().getMailSender("itzstonlex@bk.ru",
+                "itzstonlex@bk.ru", "*****",
+                "smtp.mail.ru");
+
+        //Отправка сообщения на другой EMail-адрес
+        mailSender.sendMessage("Тема сообщения", "Сообщение",
+                "moonstudio@bk.ru");
     }
 
     /**
