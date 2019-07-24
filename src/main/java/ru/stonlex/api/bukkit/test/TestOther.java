@@ -40,18 +40,24 @@ public class TestOther {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         //Непосредтсвенно создание самого скорборда
-        MoonSidebar.newBuilder().setDisplayName("§6§lMOONSTUDIO")
+        MoonAPI.getSidebarManager().newBuilder()
+                .setShowPlayer(player)
+
+                .setDisplayName("§6§lMOONSTUDIO")
+
                 .addLine(4, "&7".concat(DateUtil.getDate("Дата: dd/MM/yy, Время: HH:mm")) )
                 .addLine(3, "")
                 .addLine(2, "&fАвтор MoonAPI: &cItzStonlex")
                 .addLine(1, "")
-                .addLine(0, "&ewww.moonstudio.space").addUpdater(20, update -> {
+                .addLine(0, "&ewww.moonstudio.space")
+
+                .addUpdater(20, update -> {
                     update.setDisplayName(displayNameColors[random.nextInt(displayNameColors.length)] + "§lMOONSTUDIO");
 
                     update.addLine(4, "&7".concat(DateUtil.getDate("Дата: dd/MM/yy, Время: HH:mm")) );
                 })
 
-                .build().show(player);
+                .build().show();
     }
 
     /**

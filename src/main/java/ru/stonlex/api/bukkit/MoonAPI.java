@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.stonlex.api.bukkit.board.manager.SidebarManager;
 import ru.stonlex.api.bukkit.commands.CommandManager;
 import ru.stonlex.api.bukkit.event.EventRegisterManager;
 import ru.stonlex.api.bukkit.game.GameAPI;
@@ -48,6 +49,9 @@ public final class MoonAPI extends JavaPlugin {
 
     @Getter
     private static final EventRegisterManager eventManager = new EventRegisterManager();
+
+    @Getter
+    private static final SidebarManager sidebarManager     = new SidebarManager();
 
 
     @Override

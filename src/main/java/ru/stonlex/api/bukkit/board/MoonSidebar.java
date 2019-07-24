@@ -16,10 +16,13 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MoonSidebar {
 
     @Getter
-    private Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
     @Getter
-    private Objective objective = scoreboard.registerNewObjective("board", "dummy");
+    private final Objective objective ;
+
+    @Getter
+    private final Player player;
 
     private final Updater updater = new Updater();
 
@@ -27,24 +30,17 @@ public class MoonSidebar {
     private final Map<Long, SidebarUpdater> UPDATERS = new HashMap<>();
 
 
+    public MoonSidebar(Player player) {
+        this.player = player;
+        this.objective = scoreboard.registerNewObjective(player.getName(), "dummy");
 
-    /**
-     * Создать новый Builder скорборда
-     */
-    public static MoonSidebarBuilder newBuilder() {
-        return new MoonSidebarBuilder();
-    }
-
-
-
-    public MoonSidebar() {
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
     /**
      * Показать скорборд игроку
      */
-    public void show(Player player) {
+    public void show() {
         player.setScoreboard(this.scoreboard);
 
         if (!UPDATERS.isEmpty()) updater.start();
@@ -89,7 +85,7 @@ public class MoonSidebar {
     /**
      * Удалить скорборд у игрока
      */
-    public void remove(Player player) {
+    public void remove() {
         player.setScoreboard(null);
     }
 

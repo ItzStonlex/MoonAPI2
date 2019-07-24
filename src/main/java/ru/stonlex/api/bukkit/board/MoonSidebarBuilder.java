@@ -1,17 +1,32 @@
 package ru.stonlex.api.bukkit.board;
 
+import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.board.updater.SidebarUpdater;
 import ru.stonlex.api.java.interfaces.Builder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class MoonSidebarBuilder implements Builder<MoonSidebar> {
 
     private MoonSidebar board = null;
     private String displayName;
+    private Player player;
 
     private final Map<Integer, String> cache = new HashMap<>();
+
+
+    /**
+     * Установить DisplayName для скорборда
+     */
+    public MoonSidebarBuilder setShowPlayer(Player player) {
+        if (board == null) this.board = new MoonSidebar(player);
+
+        this.player = player;
+
+        return this;
+    }
 
     /**
      * Установить DisplayName для скорборда
@@ -35,7 +50,7 @@ public final class MoonSidebarBuilder implements Builder<MoonSidebar> {
      * Добавить обновление в скорборд
      */
     public MoonSidebarBuilder addUpdater(long time, SidebarUpdater boardUpdater) {
-        if (this.board == null) this.board = new MoonSidebar();
+        if (board == null) this.board = new MoonSidebar(player);
 
         this.board.addUpdater(time, boardUpdater);
 
@@ -47,7 +62,7 @@ public final class MoonSidebarBuilder implements Builder<MoonSidebar> {
      */
     @Override
     public MoonSidebar build() {
-        if (this.board == null) this.board = new MoonSidebar();
+        Objects.requireNonNull(this.board, "board is not initialized");
 
         cache.forEach((index, line) -> this.board.addLine(index, line));
         this.board.setDisplayName(this.displayName);
