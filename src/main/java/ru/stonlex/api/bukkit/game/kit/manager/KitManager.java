@@ -3,7 +3,7 @@ package ru.stonlex.api.bukkit.game.kit.manager;
 import ru.stonlex.api.bukkit.game.kit.KitBuilder;
 import ru.stonlex.api.bukkit.game.kit.KitInfo;
 import ru.stonlex.api.bukkit.game.kit.MoonKit;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 public final class KitManager extends CacheManager<MoonKit> {
 

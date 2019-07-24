@@ -3,7 +3,7 @@ package ru.stonlex.api.bukkit.game.perk.manager;
 import ru.stonlex.api.bukkit.game.perk.MoonPerk;
 import ru.stonlex.api.bukkit.game.perk.PerkBuilder;
 import ru.stonlex.api.bukkit.game.perk.PerkInfo;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 public final class PerkManager extends CacheManager<MoonPerk> {
 

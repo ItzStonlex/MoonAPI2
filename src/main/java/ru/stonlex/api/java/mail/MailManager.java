@@ -1,6 +1,6 @@
-package ru.stonlex.api.bukkit.mail;
+package ru.stonlex.api.java.mail;
 
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 public final class MailManager extends CacheManager<MailSender> {
 

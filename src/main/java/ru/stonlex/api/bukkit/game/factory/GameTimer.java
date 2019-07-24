@@ -3,7 +3,7 @@ package ru.stonlex.api.bukkit.game.factory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
-import ru.stonlex.api.bukkit.schedulers.MoonTask;
+import ru.stonlex.api.java.schedulers.MoonTask;
 
 import java.util.concurrent.TimeUnit;
 

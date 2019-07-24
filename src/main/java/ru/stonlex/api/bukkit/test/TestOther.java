@@ -8,10 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import ru.stonlex.api.bukkit.MoonAPI;
-import ru.stonlex.api.bukkit.board.MoonSidebar;
-import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.particle.ParticleEffect;
-import ru.stonlex.api.bukkit.schedulers.MoonTask;
+import ru.stonlex.api.java.schedulers.MoonTask;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 import ru.stonlex.api.java.utility.DateUtil;
 

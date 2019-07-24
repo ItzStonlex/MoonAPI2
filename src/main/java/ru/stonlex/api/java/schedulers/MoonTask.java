@@ -1,8 +1,8 @@
-package ru.stonlex.api.bukkit.schedulers;
+package ru.stonlex.api.java.schedulers;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.java.JavaMoonAPI;
 
 import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,7 +16,7 @@ public abstract class MoonTask implements Runnable {
 
     private ScheduledExecutorService executorService;
 
-    private final SchedulerManager schedulerManager = MoonAPI.getSchedulerManager();
+    private final SchedulerManager schedulerManager = JavaMoonAPI.getSchedulerManager();
 
     /**
      * Отмена шедулера

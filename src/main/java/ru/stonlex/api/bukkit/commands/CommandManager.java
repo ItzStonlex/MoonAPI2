@@ -1,11 +1,9 @@
 package ru.stonlex.api.bukkit.commands;
 
 import org.bukkit.plugin.Plugin;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class CommandManager extends CacheManager<MoonCommand> {
 

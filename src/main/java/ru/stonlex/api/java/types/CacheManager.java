@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.types;
+package ru.stonlex.api.java.types;
 
 import java.util.HashMap;
 import java.util.Map;

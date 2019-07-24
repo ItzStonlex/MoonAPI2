@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.types;
+package ru.stonlex.api.java.types;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

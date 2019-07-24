@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.protocol.entity.impl.FakeArmorStand;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
 import ru.stonlex.api.java.interfaces.Clickable;
 

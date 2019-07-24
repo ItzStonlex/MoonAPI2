@@ -1,6 +1,6 @@
-package ru.stonlex.api.bukkit.mail;
+package ru.stonlex.api.java.mail;
 
-import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.java.JavaMoonAPI;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -52,7 +52,7 @@ public class MailSender {
             }
         };
 
-        MoonAPI.getSchedulerManager().async(messageSender);
+        JavaMoonAPI.getSchedulerManager().async(messageSender);
     }
 
 

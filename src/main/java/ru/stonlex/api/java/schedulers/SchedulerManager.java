@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.schedulers;
+package ru.stonlex.api.java.schedulers;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;

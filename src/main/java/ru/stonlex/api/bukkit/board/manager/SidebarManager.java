@@ -2,7 +2,7 @@ package ru.stonlex.api.bukkit.board.manager;
 
 import ru.stonlex.api.bukkit.board.MoonSidebar;
 import ru.stonlex.api.bukkit.board.MoonSidebarBuilder;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 public final class SidebarManager extends CacheManager<MoonSidebar> {
 

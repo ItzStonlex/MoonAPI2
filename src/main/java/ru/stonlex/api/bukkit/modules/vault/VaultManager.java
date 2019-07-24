@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultChatManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultEconomyManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultPermissionManager;
-import ru.stonlex.api.bukkit.types.CacheManager;
+import ru.stonlex.api.java.types.CacheManager;
 
 @Getter
 public final class VaultManager extends CacheManager<VaultPlayer> {

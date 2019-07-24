@@ -9,7 +9,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.*;
 
-public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializable {
+public class CuboidRegion implements Iterable<Block>, Cloneable, ConfigurationSerializable {
 
     /**
      * Этот код я вообще взял с интернета, поэтому он неоч,
@@ -27,7 +27,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
     private Location pos1;
     private Location pos2;
 
-    public Cuboid(Location l1, Location l2) {
+    public CuboidRegion(Location l1, Location l2) {
         this.pos1 = l1;
         this.pos2 = l2;
         this.worldName = l1.getWorld().getName();
@@ -39,15 +39,15 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         this.z2 = Math.max(l1.getBlockZ(), l2.getBlockZ());
     }
 
-    public Cuboid(Location l1) {
+    public CuboidRegion(Location l1) {
         this(l1, l1);
     }
 
-    public Cuboid(Cuboid other) {
+    public CuboidRegion(CuboidRegion other) {
         this(other.getWorld().getName(), other.x1, other.y1, other.z1, other.x2, other.y2, other.z2);
     }
 
-    public Cuboid(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public CuboidRegion(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
         this.pos1 = new Location(world, (double)x1, (double)y1, (double)z1);
         this.pos2 = new Location(world, (double)x2, (double)y2, (double)z2);
         this.worldName = world.getName();
@@ -59,7 +59,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         this.z2 = Math.max(z1, z2);
     }
 
-    private Cuboid(String worldName, int x1, int y1, int z1, int x2, int y2, int z2) {
+    private CuboidRegion(String worldName, int x1, int y1, int z1, int x2, int y2, int z2) {
         this.pos1 = new Location(Bukkit.getWorld((String)worldName), (double)x1, (double)y1, (double)z1);
         this.pos2 = new Location(Bukkit.getWorld((String)worldName), (double)x2, (double)y2, (double)z2);
         this.worldName = worldName;
@@ -71,7 +71,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         this.z2 = Math.max(z1, z2);
     }
 
-    public Cuboid(Map<String, Object> map) {
+    public CuboidRegion(Map<String, Object> map) {
         this.worldName = (String)map.get("worldName");
         this.x1 = (Integer)map.get("x1");
         this.x2 = (Integer)map.get("x2");
@@ -187,36 +187,36 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         return res;
     }
 
-    public Cuboid expand(CuboidDirection dir, int amount) {
+    public CuboidRegion expand(CuboidDirection dir, int amount) {
         switch (dir) {
             case North: {
-                return new Cuboid(this.worldName, this.x1 - amount, this.y1, this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1 - amount, this.y1, this.z1, this.x2, this.y2, this.z2);
             }
             case South: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2 + amount, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2 + amount, this.y2, this.z2);
             }
             case East: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1 - amount, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1 - amount, this.x2, this.y2, this.z2);
             }
             case West: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, this.z2 + amount);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, this.z2 + amount);
             }
             case Down: {
-                return new Cuboid(this.worldName, this.x1, this.y1 - amount, this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1 - amount, this.z1, this.x2, this.y2, this.z2);
             }
             case Up: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2 + amount, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2 + amount, this.z2);
             }
         }
         throw new IllegalArgumentException("Invalid direction " + (Object)((Object)dir));
     }
 
-    public Cuboid shift(CuboidDirection dir, int amount) {
+    public CuboidRegion shift(CuboidDirection dir, int amount) {
         return this.expand(dir, amount).expand(dir.opposite(), -amount);
     }
 
-    public Cuboid outset(CuboidDirection dir, int amount) {
-        Cuboid c;
+    public CuboidRegion outset(CuboidDirection dir, int amount) {
+        CuboidRegion c;
         switch (dir) {
             case Horizontal: {
                 c = this.expand(CuboidDirection.North, amount).expand(CuboidDirection.South, amount).expand(CuboidDirection.East, amount).expand(CuboidDirection.West, amount);
@@ -237,7 +237,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         return c;
     }
 
-    public Cuboid inset(CuboidDirection dir, int amount) {
+    public CuboidRegion inset(CuboidDirection dir, int amount) {
         return this.outset(dir, -amount);
     }
 
@@ -271,72 +271,72 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         return n > 0 ? (byte)(total / (long)n) : (byte)0;
     }
 
-    public Cuboid contract() {
+    public CuboidRegion contract() {
         return this.contract(CuboidDirection.Down).contract(CuboidDirection.South).contract(CuboidDirection.East).contract(CuboidDirection.Up).contract(CuboidDirection.North).contract(CuboidDirection.West);
     }
 
-    public Cuboid contract(CuboidDirection dir) {
-        Cuboid face = this.getFace(dir.opposite());
+    public CuboidRegion contract(CuboidDirection dir) {
+        CuboidRegion face = this.getFace(dir.opposite());
         switch (dir) {
             case Down: {
                 while (face.containsOnly(0) && face.getLowerY() > this.getLowerY()) {
                     face = face.shift(CuboidDirection.Down, 1);
                 }
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, face.getUpperY(), this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, face.getUpperY(), this.z2);
             }
             case Up: {
                 while (face.containsOnly(0) && face.getUpperY() < this.getUpperY()) {
                     face = face.shift(CuboidDirection.Up, 1);
                 }
-                return new Cuboid(this.worldName, this.x1, face.getLowerY(), this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, face.getLowerY(), this.z1, this.x2, this.y2, this.z2);
             }
             case North: {
                 while (face.containsOnly(0) && face.getLowerX() > this.getLowerX()) {
                     face = face.shift(CuboidDirection.North, 1);
                 }
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, face.getUpperX(), this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, face.getUpperX(), this.y2, this.z2);
             }
             case South: {
                 while (face.containsOnly(0) && face.getUpperX() < this.getUpperX()) {
                     face = face.shift(CuboidDirection.South, 1);
                 }
-                return new Cuboid(this.worldName, face.getLowerX(), this.y1, this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, face.getLowerX(), this.y1, this.z1, this.x2, this.y2, this.z2);
             }
             case East: {
                 while (face.containsOnly(0) && face.getLowerZ() > this.getLowerZ()) {
                     face = face.shift(CuboidDirection.East, 1);
                 }
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, face.getUpperZ());
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, face.getUpperZ());
             }
             case West: {
                 while (face.containsOnly(0) && face.getUpperZ() < this.getUpperZ()) {
                     face = face.shift(CuboidDirection.West, 1);
                 }
-                return new Cuboid(this.worldName, this.x1, this.y1, face.getLowerZ(), this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, face.getLowerZ(), this.x2, this.y2, this.z2);
             }
         }
         throw new IllegalArgumentException("Invalid direction " + (Object)((Object)dir));
     }
 
-    public Cuboid getFace(CuboidDirection dir) {
+    public CuboidRegion getFace(CuboidDirection dir) {
         switch (dir) {
             case Down: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y1, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y1, this.z2);
             }
             case Up: {
-                return new Cuboid(this.worldName, this.x1, this.y2, this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y2, this.z1, this.x2, this.y2, this.z2);
             }
             case North: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x1, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x1, this.y2, this.z2);
             }
             case South: {
-                return new Cuboid(this.worldName, this.x2, this.y1, this.z1, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x2, this.y1, this.z1, this.x2, this.y2, this.z2);
             }
             case East: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, this.z1);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z1, this.x2, this.y2, this.z1);
             }
             case West: {
-                return new Cuboid(this.worldName, this.x1, this.y1, this.z2, this.x2, this.y2, this.z2);
+                return new CuboidRegion(this.worldName, this.x1, this.y1, this.z2, this.x2, this.y2, this.z2);
             }
         }
         throw new IllegalArgumentException("Invalid direction " + (Object)((Object)dir));
@@ -350,7 +350,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         return true;
     }
 
-    public Cuboid getBoundingCuboid(Cuboid other) {
+    public CuboidRegion getBoundingCuboid(CuboidRegion other) {
         if (other == null) {
             return this;
         }
@@ -360,7 +360,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         int xMax = Math.max(this.getUpperX(), other.getUpperX());
         int yMax = Math.max(this.getUpperY(), other.getUpperY());
         int zMax = Math.max(this.getUpperZ(), other.getUpperZ());
-        return new Cuboid(this.worldName, xMin, yMin, zMin, xMax, yMax, zMax);
+        return new CuboidRegion(this.worldName, xMin, yMin, zMin, xMax, yMax, zMax);
     }
 
     public Block getRelativeBlock(int x, int y, int z) {
@@ -391,8 +391,8 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
         return new CuboidIterator(this.getWorld(), this.x1, this.y1, this.z1, this.x2, this.y2, this.z2);
     }
 
-    public Cuboid clone() {
-        return new Cuboid(this);
+    public CuboidRegion clone() {
+        return new CuboidRegion(this);
     }
 
     public String toString() {
@@ -401,30 +401,30 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 
     public List<Block> getEndLines() {
         ArrayList<Block> list = new ArrayList<Block>();
-        Cuboid cuboid1 = new Cuboid(this.corners()[0].getLocation(), this.corners()[1].getLocation());
-        list.addAll(cuboid1.getBlocks());
-        Cuboid cuboid2 = new Cuboid(this.corners()[0].getLocation(), this.corners()[2].getLocation());
-        list.addAll(cuboid2.getBlocks());
-        Cuboid cuboid3 = new Cuboid(this.corners()[0].getLocation(), this.corners()[4].getLocation());
-        list.addAll(cuboid3.getBlocks());
-        Cuboid cuboid4 = new Cuboid(this.corners()[1].getLocation(), this.corners()[3].getLocation());
-        list.addAll(cuboid4.getBlocks());
-        Cuboid cuboid5 = new Cuboid(this.corners()[1].getLocation(), this.corners()[5].getLocation());
-        list.addAll(cuboid5.getBlocks());
-        Cuboid cuboid6 = new Cuboid(this.corners()[2].getLocation(), this.corners()[3].getLocation());
-        list.addAll(cuboid6.getBlocks());
-        Cuboid cuboid7 = new Cuboid(this.corners()[2].getLocation(), this.corners()[6].getLocation());
-        list.addAll(cuboid7.getBlocks());
-        Cuboid cuboid8 = new Cuboid(this.corners()[3].getLocation(), this.corners()[7].getLocation());
-        list.addAll(cuboid8.getBlocks());
-        Cuboid cuboid9 = new Cuboid(this.corners()[4].getLocation(), this.corners()[5].getLocation());
-        list.addAll(cuboid9.getBlocks());
-        Cuboid cuboid10 = new Cuboid(this.corners()[4].getLocation(), this.corners()[6].getLocation());
-        list.addAll(cuboid10.getBlocks());
-        Cuboid cuboid11 = new Cuboid(this.corners()[5].getLocation(), this.corners()[7].getLocation());
-        list.addAll(cuboid11.getBlocks());
-        Cuboid cuboid12 = new Cuboid(this.corners()[7].getLocation(), this.corners()[6].getLocation());
-        list.addAll(cuboid12.getBlocks());
+        CuboidRegion cuboidRegion1 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[1].getLocation());
+        list.addAll(cuboidRegion1.getBlocks());
+        CuboidRegion cuboidRegion2 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[2].getLocation());
+        list.addAll(cuboidRegion2.getBlocks());
+        CuboidRegion cuboidRegion3 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[4].getLocation());
+        list.addAll(cuboidRegion3.getBlocks());
+        CuboidRegion cuboidRegion4 = new CuboidRegion(this.corners()[1].getLocation(), this.corners()[3].getLocation());
+        list.addAll(cuboidRegion4.getBlocks());
+        CuboidRegion cuboidRegion5 = new CuboidRegion(this.corners()[1].getLocation(), this.corners()[5].getLocation());
+        list.addAll(cuboidRegion5.getBlocks());
+        CuboidRegion cuboidRegion6 = new CuboidRegion(this.corners()[2].getLocation(), this.corners()[3].getLocation());
+        list.addAll(cuboidRegion6.getBlocks());
+        CuboidRegion cuboidRegion7 = new CuboidRegion(this.corners()[2].getLocation(), this.corners()[6].getLocation());
+        list.addAll(cuboidRegion7.getBlocks());
+        CuboidRegion cuboidRegion8 = new CuboidRegion(this.corners()[3].getLocation(), this.corners()[7].getLocation());
+        list.addAll(cuboidRegion8.getBlocks());
+        CuboidRegion cuboidRegion9 = new CuboidRegion(this.corners()[4].getLocation(), this.corners()[5].getLocation());
+        list.addAll(cuboidRegion9.getBlocks());
+        CuboidRegion cuboidRegion10 = new CuboidRegion(this.corners()[4].getLocation(), this.corners()[6].getLocation());
+        list.addAll(cuboidRegion10.getBlocks());
+        CuboidRegion cuboidRegion11 = new CuboidRegion(this.corners()[5].getLocation(), this.corners()[7].getLocation());
+        list.addAll(cuboidRegion11.getBlocks());
+        CuboidRegion cuboidRegion12 = new CuboidRegion(this.corners()[7].getLocation(), this.corners()[6].getLocation());
+        list.addAll(cuboidRegion12.getBlocks());
         return list;
     }
 

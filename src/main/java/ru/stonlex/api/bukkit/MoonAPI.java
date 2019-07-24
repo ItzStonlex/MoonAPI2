@@ -13,13 +13,11 @@ import ru.stonlex.api.bukkit.event.EventRegisterManager;
 import ru.stonlex.api.bukkit.game.GameAPI;
 import ru.stonlex.api.bukkit.hologram.HologramManager;
 import ru.stonlex.api.bukkit.listeners.PlayerListener;
-import ru.stonlex.api.bukkit.mail.MailManager;
 import ru.stonlex.api.bukkit.menus.listener.InventoryListener;
 import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
 import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
-import ru.stonlex.api.bukkit.schedulers.SchedulerManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +25,6 @@ import java.util.Map;
 public final class MoonAPI extends JavaPlugin {
 
 
-    @Getter
-    private static final SchedulerManager schedulerManager = new SchedulerManager();
 
     @Getter
     private static final CommandManager commandManager     = new CommandManager();
@@ -53,9 +49,6 @@ public final class MoonAPI extends JavaPlugin {
 
     @Getter
     private static final SidebarManager sidebarManager     = new SidebarManager();
-
-    @Getter
-    private static final MailManager mailManager           = new MailManager();
 
 
     @Override
