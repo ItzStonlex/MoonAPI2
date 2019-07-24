@@ -13,6 +13,7 @@ import ru.stonlex.api.bukkit.event.EventRegisterManager;
 import ru.stonlex.api.bukkit.game.GameAPI;
 import ru.stonlex.api.bukkit.hologram.HologramManager;
 import ru.stonlex.api.bukkit.listeners.PlayerListener;
+import ru.stonlex.api.bukkit.mail.MailManager;
 import ru.stonlex.api.bukkit.menus.listener.InventoryListener;
 import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
@@ -52,6 +53,9 @@ public final class MoonAPI extends JavaPlugin {
 
     @Getter
     private static final SidebarManager sidebarManager     = new SidebarManager();
+
+    @Getter
+    private static final MailManager mailManager           = new MailManager();
 
 
     @Override
