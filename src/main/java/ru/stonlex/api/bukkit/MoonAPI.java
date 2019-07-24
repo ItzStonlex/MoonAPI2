@@ -1,9 +1,7 @@
 package ru.stonlex.api.bukkit;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLib;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
@@ -62,6 +60,10 @@ public final class MoonAPI extends JavaPlugin {
         registerProtocolListener();
     }
 
+    /**
+     * Регистрация пакетного листенера для прослушки клика
+     * по MoonFakeEntity
+     */
     private void registerProtocolListener() {
         Map<String, Long> cooldowns = new HashMap<>();
 
