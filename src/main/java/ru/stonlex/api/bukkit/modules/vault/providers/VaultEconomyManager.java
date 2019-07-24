@@ -11,6 +11,8 @@ public final class VaultEconomyManager {
     @Getter
     private final Economy vaultEconomy;
 
+    private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultEconomy.";
+
     /**
      * Инициализация vaultEconomy
      *
@@ -21,13 +23,13 @@ public final class VaultEconomyManager {
         RegisteredServiceProvider<Economy> serviceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
 
         if (serviceProvider.getProvider() == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultEconomy.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
 
         this.vaultEconomy = serviceProvider.getProvider();
 
         if (vaultEconomy == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultEconomy.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
 
     }

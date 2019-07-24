@@ -11,6 +11,8 @@ public final class VaultChatManager {
     @Getter
     private final Chat vaultChat;
 
+    private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultChat.";
+
     /**
      * Инициализация vaultChat
      *
@@ -21,13 +23,13 @@ public final class VaultChatManager {
         RegisteredServiceProvider<Chat> serviceProvider = Bukkit.getServicesManager().getRegistration(Chat.class);
 
         if (serviceProvider.getProvider() == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultChat.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
 
         this.vaultChat = serviceProvider.getProvider();
 
         if (vaultChat == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultChat.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
 
     }

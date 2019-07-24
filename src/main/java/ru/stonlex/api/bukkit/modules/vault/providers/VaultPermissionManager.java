@@ -11,6 +11,8 @@ public final class VaultPermissionManager {
     @Getter
     private final Permission vaultPermission;
 
+    private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultPermission.";
+
     /**
      * Инициализация vaultPermission
      *
@@ -21,12 +23,13 @@ public final class VaultPermissionManager {
         RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
 
         if (serviceProvider.getProvider() == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultPermission.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
+
         this.vaultPermission = serviceProvider.getProvider();
 
         if (vaultPermission == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Не удалось инициализировать VaultPermission.");
+            Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
 
     }
