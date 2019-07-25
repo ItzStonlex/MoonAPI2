@@ -10,7 +10,7 @@ public final class SchedulerManager {
 
     private final TIntObjectMap<MoonTask> taskMap = new TIntObjectHashMap<>();
 
-    private final ExecutorService asyncExecutorService = Executors.newCachedThreadPool();
+    private static final ExecutorService CACHED_THREAD_POOL = Executors.newCachedThreadPool();
 
     /**
      * Получение шедулера по его ID
@@ -43,7 +43,7 @@ public final class SchedulerManager {
 
 
     public void async(Runnable command) {
-        asyncExecutorService.submit(command);
+        CACHED_THREAD_POOL.submit(command);
     }
 
 }
