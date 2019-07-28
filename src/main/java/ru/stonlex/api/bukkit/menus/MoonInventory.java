@@ -17,8 +17,8 @@ import java.util.Map;
 public abstract class MoonInventory {
 
     private Inventory inventory;
-    private InventoryInfo info;
-    private Map<Integer, InventoryButton> buttons;
+    private final InventoryInfo info;
+    private final Map<Integer, InventoryButton> buttons;
 
     @Getter
     private static final Map<String, MoonInventory> inventories = new HashMap<>();
@@ -75,6 +75,7 @@ public abstract class MoonInventory {
      */
     public void setItem(int slot, InventoryButton button) {
         buttons.put(slot, button);
+
         inventory.setItem(slot - 1, button.getItem());
     }
 
@@ -115,11 +116,11 @@ public abstract class MoonInventory {
      * Приватное открытие инвентаря игроку
      */
     private void openInventory(Player player, boolean isOpen) {
-        clear();
         this.generateInventory(player);
 
         if (isOpen) {
             player.openInventory(inventory);
+
             inventories.put(player.getName().toLowerCase(), this);
         }
     }
@@ -128,6 +129,16 @@ public abstract class MoonInventory {
      * Обновлени инвентаря игроку
      */
     public void updateInventory(Player player) {
+        clear();
+
+        openInventory(player, false);
+    }
+
+    protected void updateInventory(Player player, Runnable command) {
+        clear();
+
+        command.run();
+
         openInventory(player, false);
     }
 

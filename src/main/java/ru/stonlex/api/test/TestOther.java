@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.test;
+package ru.stonlex.api.test;
 
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -133,9 +133,8 @@ public class TestOther {
      * Где Вы еще такого могли увидеть?!
      */
     public void registerCommands() {
-                                                                                //Главная команда
-        MoonAPI.getCommandManager().registerCommand(moonAPI, new TestCommand(), "test", "testing", "moontest");
-                                                                                            //Команды подобные
+        MoonAPI.getCommandManager()
+                .registerCommand(moonAPI, new TestCommand(), "test", "testing", "moontest");
     }
 
     /**

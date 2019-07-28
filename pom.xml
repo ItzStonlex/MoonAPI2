@@ -13,7 +13,6 @@
     <build>
         <finalName>MoonAPI 2.0</finalName>
         <defaultGoal>clean package install</defaultGoal>
-        <outputDirectory>C:/Users/usr/Desktop/Minecraft projects</outputDirectory>
 
         <resources>
             <resource>
@@ -25,6 +24,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -35,7 +35,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
-                    <outputDirectory>C:/Users/usr/Desktop</outputDirectory>
+                    <outputDirectory>C:/Users/usr/Desktop/Minecraft projects</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -65,7 +65,14 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.12-SNAPSHOT</version>
+            <version>1.13-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-config</artifactId>
+            <version>1.13-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -94,6 +101,7 @@
             <groupId>net.milkbowl</groupId>
             <artifactId>Vault</artifactId>
             <version>1.7.1-b91</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

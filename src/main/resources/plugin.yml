@@ -3,6 +3,6 @@ main: ru.stonlex.api.bukkit.MoonAPI
 version: 2.0
 author: ItzStonlex
 
-softdepend:
+depend:
   - Vault
   - ProtocolLib

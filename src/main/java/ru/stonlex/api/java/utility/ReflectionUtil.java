@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.139.
- */
 package ru.stonlex.api.java.utility;
 
 import java.lang.reflect.Constructor;
@@ -10,6 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ReflectionUtil {
+
+    /**
+     * Опять же, этот код старый, и переписывать его мне было
+     * попросту лень, да и тем более, он прекрасно работает.
+     *
+     * Если кому-то он неудобен, то система как бы не особо сложная,
+     * поэтому можно и самому ее написать
+     */
+
     public static /* varargs */ Constructor<?> getConstructor(Class<?> clazz, Class<?> ... parameterTypes) throws NoSuchMethodException {
         Class<?>[] primitiveTypes = DataType.getPrimitive(parameterTypes);
         for (Constructor<?> constructor : clazz.getConstructors()) {

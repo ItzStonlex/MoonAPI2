@@ -11,6 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Executor {
 
+    /**
+     * Опять же, этот код старый, и переписывать его мне было
+     * попросту лень, да и тем более, он прекрасно работает.
+     *
+     * Если кому-то он неудобен, то система как бы не особо сложная,
+     * поэтому можно и самому ее написать
+     */
+
     private final SQLConnection connection;
 
     private Executor(final SQLConnection connection) {
@@ -22,7 +30,7 @@ public class Executor {
     }
 
     /**
-     * Выолнение SQL запроса
+     * Выполнение SQL запроса
      */
     public void execute(boolean async, String sql, Object... elements) {
         Runnable command = () -> {

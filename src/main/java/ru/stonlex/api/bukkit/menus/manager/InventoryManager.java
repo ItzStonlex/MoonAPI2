@@ -38,4 +38,19 @@ public final class InventoryManager extends CacheManager<MoonInventory> {
         return getCache(inventoryName.toLowerCase());
     }
 
+    /**
+     * Получение имени инвентаря
+     */
+    public String getInventoryName(MoonInventory inventory) {
+        for (String cacheName : cacheMap.keySet()) {
+            MoonInventory cache = getCache(cacheName);
+
+            if (cache.equals(inventory) || (cache.getInfo().getTitle().equals(inventory.getInfo().getTitle())
+                    && cache.getInfo().getRows() == inventory.getInfo().getRows())) {
+                return cacheName;
+            }
+        }
+        return null;
+    }
+
 }

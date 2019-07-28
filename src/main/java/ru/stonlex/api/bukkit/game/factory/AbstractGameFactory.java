@@ -1,5 +1,6 @@
 package ru.stonlex.api.bukkit.game.factory;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.game.GameAPI;
 import ru.stonlex.api.bukkit.game.GameSettings;
@@ -14,7 +15,7 @@ public abstract class AbstractGameFactory {
 
     protected final GameType GAME_TYPE = GAME_SETTINGS.GAME_TYPE;
 
-    protected final GameTimer GAME_LOBBY_TIMER = new GameTimer(this);
+    protected final GameTimerFactory GAME_LOBBY_TIMER = new GameTimerFactory(this);
 
     /**
      * Инициализация некоторых настроек игры
@@ -44,7 +45,7 @@ public abstract class AbstractGameFactory {
     /**
      * Вызывается при окончании игры с победителями
      */
-    public abstract void onStopGame(Player... winnerPlayers);
+    public abstract void onStopGame(@NonNull Player... winnerPlayers);
 
     /**
      * Вызывается тогда, когда необходимо выключить игру

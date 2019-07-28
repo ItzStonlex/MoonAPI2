@@ -1,10 +1,13 @@
-package ru.stonlex.api.bukkit.menus;
+package ru.stonlex.api.bungee.inventory;
 
+import gnu.trove.list.TIntList;
+import gnu.trove.map.TIntObjectMap;
 import lombok.Getter;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import ru.stonlex.api.bukkit.utility.ItemUtil;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import ru.stonlex.api.bungee.inventory.interfaces.BungeeInventoryButton;
+import ru.stonlex.api.bungee.inventory.item.BungeeItemStack;
+import ru.stonlex.api.bungee.inventory.item.BungeeMaterial;
+import ru.stonlex.api.bungee.utility.BungeeItemUtil;
 import ru.stonlex.api.java.interfaces.Clickable;
 
 import java.util.ArrayList;
@@ -12,47 +15,49 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public abstract class PagedMoonInventory extends MoonInventory {
+public abstract class BungeePagedMoonInventory extends BungeeMoonInventory {
 
     private int page, pagesCount;
 
-    private Player viewerPlayer;
+    private ProxiedPlayer viewerPlayer;
 
-    private final Map<ItemStack, Clickable<Player>> buttonMap;
+    private final Map<BungeeItemStack, Clickable<ProxiedPlayer>> pagedButtonMap;
     private final List<Integer> slotsList;
 
     /**
      * Инициализация инвентаря
      *
+     * @param inventoryName  - Имя инвентаря
      * @param inventoryTitle - Заголовок инвентаря
      * @param inventoryRows  - Количество строк в инвентаре
      */
-    public PagedMoonInventory(String inventoryTitle, int inventoryRows) {
-        this(0, inventoryTitle, inventoryRows);
+    public BungeePagedMoonInventory(String inventoryName, String inventoryTitle, int inventoryRows) {
+        this(0, inventoryName, inventoryTitle, inventoryRows);
     }
 
     /**
      * Инициализация инвентаря
      *
      * @param page           - Страница инвентаря
+     * @param inventoryName  - Имя инвентаря
      * @param inventoryTitle - Заголовок инвентаря
      * @param inventoryRows  - Количество строк в инвентаре
      */
-    private PagedMoonInventory(int page, String inventoryTitle, int inventoryRows) {
-        super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
+    private BungeePagedMoonInventory(int page, String inventoryName, String inventoryTitle, int inventoryRows) {
+        super(inventoryName, inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
 
         this.page = page;
 
-        this.buttonMap = initializeItems();
+        this.pagedButtonMap = initializeItems();
         this.slotsList = initializeSlots();
 
-        this.pagesCount = buttonMap.size() / slotsList.size();
+        this.pagesCount = pagedButtonMap.size() / slotsList.size();
     }
 
     /**
      * Инициализация предметов в инвентарь
      */
-    public abstract Map<ItemStack, Clickable<Player>> initializeItems();
+    public abstract Map<BungeeItemStack, Clickable<ProxiedPlayer>> initializeItems();
 
     /**
      * Инициализация слотов, на которых будут стоять предметы
@@ -63,7 +68,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
     /**
      * На страницу назад
      */
-    private void backward(Player player) {
+    private void backward(ProxiedPlayer player) {
         if (page - 1 < 0) {
             throw new RuntimeException("Page cannot be < 0");
         }
@@ -76,7 +81,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
     /**
      * На страницу вперед
      */
-    private void forward(Player player) {
+    private void forward(ProxiedPlayer player) {
         if (page - 1 < 0) {
             throw new RuntimeException("Page cannot be > max pages count");
         }
@@ -89,16 +94,16 @@ public abstract class PagedMoonInventory extends MoonInventory {
     /**
      * Построение страничного инвентаря
      */
-    private void buildPage(Player player) {
+    private void buildPage(ProxiedPlayer player) {
         this.viewerPlayer = player;
 
         if (page < pagesCount) {
-            setItem(getInventory().getSize() - 4, ItemUtil.getItemStack(Material.ARROW, "§eВперед"),
+            setItem(inventorySize - 4, BungeeItemUtil.getItemStack(BungeeMaterial.ARROW, "§eВперед"),
                     player1 -> forward(player));
         }
 
         if (page > 0) {
-            setItem(getInventory().getSize() - 6, ItemUtil.getItemStack(Material.ARROW, "§eНазад"),
+            setItem(inventorySize - 6, BungeeItemUtil.getItemStack(BungeeMaterial.ARROW, "§eНазад"),
                     player1 -> backward(player));
         }
 
@@ -106,15 +111,15 @@ public abstract class PagedMoonInventory extends MoonInventory {
         for (int i = 0; i < slotsList.size(); ++i) {
             int index = page * slotsList.size() + i;
 
-            if (buttonMap.size() <= index) {
+            if (pagedButtonMap.size() <= index) {
                 return;
             }
 
             int slot = slotsList.get(i);
 
-            Map.Entry<ItemStack, Clickable<Player>> itemEntry = new ArrayList<>(buttonMap.entrySet()).get(index);
+            Map.Entry<BungeeItemStack, Clickable<ProxiedPlayer>> itemEntry = new ArrayList<>(pagedButtonMap.entrySet()).get(index);
 
-            ItemStack itemStack = itemEntry.getKey();
+            BungeeItemStack itemStack = itemEntry.getKey();
 
             this.setItem(slot, itemStack, itemEntry.getValue());
         }
@@ -125,7 +130,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * Открытие инвентаря игроку
      */
     @Override
-    public void openInventory(Player player) {
+    public void openInventory(ProxiedPlayer player) {
         buildPage(player);
 
         super.openInventory(player);
@@ -135,7 +140,8 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * Обновление инвентаря игроку
      */
     @Override
-    public void updateInventory(Player player) {
+    public void updateInventory(ProxiedPlayer player) {
         super.updateInventory(player, () -> buildPage(player));
     }
+
 }

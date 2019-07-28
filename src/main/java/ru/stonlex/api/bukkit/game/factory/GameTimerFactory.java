@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Getter
-public class GameTimer {
+public class GameTimerFactory {
 
     private int seconds;
 

@@ -25,7 +25,8 @@ public class ProgressBar {
         int percent = (int) Math.round(tenPercent);
 
         String bar = yesColor + StringUtils.repeat(symbol, percent);
-        bar += StringUtils.repeat(symbol, (count - percent));
+        bar += noColor + StringUtils.repeat(symbol, (count - percent));
+
         return bar;
     }
 
@@ -34,6 +35,7 @@ public class ProgressBar {
      */
     public String getPercent() {
         double allPercent = (current / max) * 100;
+
         return ((int) Math.round(allPercent)) + "%";
     }
 

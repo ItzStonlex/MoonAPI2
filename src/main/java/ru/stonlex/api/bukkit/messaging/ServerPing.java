@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 
 @Getter
 @Setter
-class ServerPing {
+public class ServerPing {
 
     /**
      * Этот код я вообще взял с интернета, поэтому он неоч,

@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.test;
+package ru.stonlex.api.test;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

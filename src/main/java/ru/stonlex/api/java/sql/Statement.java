@@ -7,6 +7,14 @@ import java.sql.SQLException;
 
 final class Statement {
 
+    /**
+     * Опять же, этот код старый, и переписывать его мне было
+     * попросту лень, да и тем более, он прекрасно работает.
+     *
+     * Если кому-то он неудобен, то система как бы не особо сложная,
+     * поэтому можно и самому ее написать
+     */
+
     private ResultSet rs;
     private PreparedStatement statement;
 

@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.test;
+package ru.stonlex.api.test;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public class TestPagedMenu extends PagedMoonInventory {
     }
 
     @Override
-    public Map<ItemStack, Clickable<Player>> loadItems() {
+    public Map<ItemStack, Clickable<Player>> initializeItems() {
         Map<ItemStack, Clickable<Player>> itemMap = new HashMap<>();
 
         itemMap.put(ItemUtil.getItemStack(Material.STONE), player -> {
@@ -32,7 +32,7 @@ public class TestPagedMenu extends PagedMoonInventory {
     }
 
     @Override
-    public List<Integer> loadSlots() {
+    public List<Integer> initializeSlots() {
         return Arrays.asList(11, 12, 13, 14, 15, 16, 17,
                              20, 21, 22, 23, 24, 25, 26);
     }
