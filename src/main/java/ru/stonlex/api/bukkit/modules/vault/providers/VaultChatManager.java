@@ -9,7 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public final class VaultChatManager {
 
     @Getter
-    private final Chat vaultChat;
+    private Chat vaultChat;
 
     private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultChat.";
 
@@ -24,6 +24,7 @@ public final class VaultChatManager {
 
         if (serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
+            return;
         }
 
         this.vaultChat = serviceProvider.getProvider();

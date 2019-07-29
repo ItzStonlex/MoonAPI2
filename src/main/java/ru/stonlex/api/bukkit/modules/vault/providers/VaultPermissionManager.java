@@ -9,7 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public final class VaultPermissionManager {
 
     @Getter
-    private final Permission vaultPermission;
+    private Permission vaultPermission;
 
     private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultPermission.";
 
@@ -24,6 +24,7 @@ public final class VaultPermissionManager {
 
         if (serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
+            return;
         }
 
         this.vaultPermission = serviceProvider.getProvider();

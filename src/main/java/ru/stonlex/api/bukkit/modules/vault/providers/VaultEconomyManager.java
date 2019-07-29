@@ -9,7 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public final class VaultEconomyManager {
 
     @Getter
-    private final Economy vaultEconomy;
+    private Economy vaultEconomy;
 
     private static final String NO_INIT_MESSAGE = ChatColor.RED + "Не удалось инициализировать VaultEconomy.";
 
@@ -24,6 +24,7 @@ public final class VaultEconomyManager {
 
         if (serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
+            return;
         }
 
         this.vaultEconomy = serviceProvider.getProvider();
