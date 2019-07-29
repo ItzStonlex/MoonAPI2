@@ -4,10 +4,13 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.game.GameAPI;
 import ru.stonlex.api.bukkit.game.GameSettings;
 import ru.stonlex.api.bukkit.game.enums.GameType;
-import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.bukkit.game.player.GamePlayer;
+
+import java.util.Collection;
 
 public abstract class AbstractGameFactory implements Listener {
 
@@ -53,5 +56,41 @@ public abstract class AbstractGameFactory implements Listener {
      * Вызывается тогда, когда умирает игрок
      */
     public abstract void onDeath(@NonNull Player player);
+
+
+    /**
+     * Вызывается тогда, когда нужно оповестить каких-то
+     * именно игроков о чем-либо
+     *
+     * @param players - Игроки, которых нужно оповестить
+     * @param text - Текст оповещения
+     */
+    protected void broadcast(Collection<GamePlayer> players, String text) {
+        players.forEach(gamePlayer -> {
+            String message = GAME_SETTINGS.SUCCESSFULLY_PREFIX.concat(text);
+
+            gamePlayer.getPlayer().sendMessage(message);
+        });
+    }
+
+    /**
+     * Вызывается тогда, когда нужно оповестить
+     * наблюдателей в о чем-либо
+     *
+     * @param text - Текст оповещения
+     */
+    protected void broadcastToSpectators(String text) {
+        broadcast(GAME_API.getAlivePlayers(), text);
+    }
+
+    /**
+     * Вызывается тогда, когда нужно оповестить
+     * игроков, что находятся в игре в о чем-либо
+     *
+     * @param text - Текст оповещения
+     */
+    protected void broadcastToPlayers(String text) {
+        broadcast(GAME_API.getAlivePlayers(), text);
+    }
 
 }
