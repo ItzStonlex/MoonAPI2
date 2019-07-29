@@ -13,6 +13,7 @@ import ru.stonlex.api.bungee.inventory.item.BungeeItemStack;
 import ru.stonlex.api.bungee.inventory.item.BungeeMaterial;
 import ru.stonlex.api.bungee.inventory.manager.BungeeInventoryManager;
 import ru.stonlex.api.bungee.listeners.BungeeInventoryListener;
+import ru.stonlex.api.bungee.listeners.BungeeTestListener;
 import ru.stonlex.api.bungee.utility.SpigotMessageUtil;
 
 import java.util.ArrayList;
@@ -26,13 +27,8 @@ public final class BungeeMoonAPI extends Plugin {
 
     @Override
     public void onEnable() {
+        getProxy().getPluginManager().registerListener(this, new BungeeTestListener());
         getProxy().getPluginManager().registerListener(this, new BungeeInventoryListener());
-
-        /**
-         * Регистрация канала, по которому будут
-         * идти данные от Spigot серверов
-         */
-        getProxy().registerChannel(SpigotMessageUtil.CHANNEL_NAME);
 
 
         /**

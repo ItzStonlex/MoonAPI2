@@ -32,7 +32,6 @@ public class TestGame extends AbstractGameFactory {
     private static final MoonKit PLAYER_DEFAULT_KIT = KitManager.newBuilder("PlayerKit")
             .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
             .setChestplateItem(ItemUtil.getItemStack(Material.LEATHER_CHESTPLATE, "§eКуртка"))
-
             .setItemList(Lists.newArrayList(ItemUtil.getItemStack(Material.WOOD_SWORD, "§eДеревянный меч"),
                     ItemUtil.getItemStack(Material.WOOD_PICKAXE, "§eДеревянная кирка"),
                     ItemUtil.getItemStack(Material.WOOD_AXE, "§eДеревянный топор")))
@@ -45,6 +44,8 @@ public class TestGame extends AbstractGameFactory {
         GAME_SETTINGS.ARENA_WORLD_NAME = "Floris";
         GAME_SETTINGS.GAME_NAME = "SkyWars";
         GAME_SETTINGS.LOBBY_SERVER_NAME = "SWLobby-3";
+        GAME_SETTINGS.SUCCESSFULLY_PREFIX = "§f[§cSkyWars§f] ";
+        GAME_SETTINGS.ERROR_PREFIX = GAME_SETTINGS.SUCCESSFULLY_PREFIX.concat("§c");
     }
 
     private void setupStartSettings() {
@@ -90,36 +91,34 @@ public class TestGame extends AbstractGameFactory {
 
     @Override
     public void onStopGame(@NonNull Player... winnerPlayers) {
-        setupStopSettings();
+        onStopGame();
+
+        broadcastToAll("Победители: §7" + Joiner.on("§f, §7").join(winnerPlayers));
 
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Победители: §7" + Joiner.on("§f, §7").join(winnerPlayers));
-
             player.teleport(GAME_SETTINGS.END_SPAWN_LOCATION);
 
             player.getInventory().clear();
             player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
         });
-
-        new MoonTask() {
-            @Override
-            public void run() {
-                onStopGame();
-            }
-        }.scheduleLater(5, TimeUnit.SECONDS);
     }
 
     @Override
     public void onStopGame() {
         setupStopSettings();
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Игра окончена!");
+        broadcastToAll("Игра окончена!");
 
-            GamePlayer gamePlayer = GAME_API.getGamePlayer(player);
+        new MoonTask() {
+            @Override
+            public void run() {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    GamePlayer gamePlayer = GAME_API.getGamePlayer(player);
 
-            gamePlayer.leave();
-        });
+                    gamePlayer.leave();
+                });
+            }
+        }.scheduleLater(5, TimeUnit.SECONDS);
     }
 
     @Override

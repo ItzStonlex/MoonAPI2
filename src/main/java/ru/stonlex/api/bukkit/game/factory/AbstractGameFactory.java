@@ -59,6 +59,20 @@ public abstract class AbstractGameFactory implements Listener {
 
 
     /**
+     * Вызывается тогда, когда нужно оповестить всех
+     * игроков онлайн о чем-либо
+     *
+     * @param text - Текст оповещения
+     */
+    protected void broadcastToAll(String text) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            String message = GAME_SETTINGS.SUCCESSFULLY_PREFIX.concat(text);
+
+            player.sendMessage(message);
+        });
+    }
+
+    /**
      * Вызывается тогда, когда нужно оповестить каких-то
      * именно игроков о чем-либо
      *

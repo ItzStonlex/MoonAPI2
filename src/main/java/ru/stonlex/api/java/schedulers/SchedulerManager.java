@@ -30,11 +30,12 @@ public final class SchedulerManager {
      * Регистрация шедулера (добавление в мапу и его инициализация)
      */
     public void registerScheduler(MoonTask scheduler) {
+        scheduler.setSchedulerId(taskMap.size());
+
         if (taskMap.containsKey(scheduler.getSchedulerId())) {
             throw new RuntimeException("Task " + scheduler.getSchedulerId() + " has been registered.");
         }
 
-        scheduler.setSchedulerId(taskMap.size());
         scheduler.setExecutorService(Executors.newSingleThreadScheduledExecutor());
 
         taskMap.put(scheduler.getSchedulerId(), scheduler);

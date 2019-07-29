@@ -1,6 +1,7 @@
 package ru.stonlex.api.bungee.utility;
 
 import com.google.common.io.ByteArrayDataOutput;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -65,18 +66,26 @@ public class SpigotMessageUtil {
      * Регистрация принятия данных
      */
     public void registerAcceptMessages(Plugin plugin, Applicable<PluginMessageEvent> eventApplicable) {
-        ProxyServer.getInstance().getPluginManager().registerListener(plugin, new Listener() {
+        ProxyServer.getInstance().registerChannel(CHANNEL_NAME);
 
-            @EventHandler
-            public void onPluginMessage(PluginMessageEvent event) {
+        ProxyServer.getInstance().getPluginManager().registerListener(plugin, new SpigotMessageListener(eventApplicable));
+    }
 
-                if (!event.getTag().equals(CHANNEL_NAME)) {
-                    return;
-                }
+    @RequiredArgsConstructor
+    public class SpigotMessageListener implements Listener {
 
-                eventApplicable.apply(event);
+        private final Applicable<PluginMessageEvent> eventApplicable;
+
+
+        @EventHandler
+        public void onPluginMessage(PluginMessageEvent event) {
+
+            if (event.isCancelled() || !event.getTag().equals(CHANNEL_NAME)) {
+                return;
             }
-        });
+
+            eventApplicable.apply(event);
+        }
     }
 
 }

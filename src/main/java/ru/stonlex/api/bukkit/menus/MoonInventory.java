@@ -74,8 +74,6 @@ public abstract class MoonInventory {
      */
     public void setItem(int slot, InventoryButton button) {
         buttons.put(slot, button);
-
-        inventory.setItem(slot - 1, button.getItem());
     }
 
     /**
@@ -121,6 +119,14 @@ public abstract class MoonInventory {
             player.openInventory(inventory);
 
             inventories.put(player.getName().toLowerCase(), this);
+        }
+
+        setupItems();
+    }
+
+    private void setupItems() {
+        for (Map.Entry<Integer, InventoryButton> buttonEntry : buttons.entrySet()) {
+            inventory.setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItem());
         }
     }
 
