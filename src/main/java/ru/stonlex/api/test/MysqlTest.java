@@ -16,6 +16,7 @@ public class MysqlTest {
             .setDatabase("database")
             .createTable("TestData", "`Id` INT PRIMARY KEY NOT NULL, `Data` VARCHAR(255) NOT NULL").build().getExecutor();
 
+    private static final String GET_DATA_COUNT_QUERY = "SELECT COUNT(*) AS `data_count` `TestData` WHERE `Id`=?";
     private static final String CREATE_DATA_QUERY = "INSERT IGNORE INTO `TestData` (`Id`, `Data`) VALUES (?,?)";
     private static final String UPDATE_DATA_QUERY = "INSERT INTO `TestData` (`Id`, `Data`) VALUES (?,?) ON DUPLICATE KEY UPDATE `Data`=?";
     private static final String GET_DATA_BY_ID_QUERY = "SELECT * FROM `TestData` WHERE `Id`=?";
@@ -48,6 +49,16 @@ public class MysqlTest {
     public String getDataById(int id) {
         return DATABASE.executeQuery(false, GET_DATA_BY_ID_QUERY, rs -> rs.getString("Data"), id);
     }
+
+    /**
+     * Получить количество данных
+     *
+     * @param id - нумерация данных
+     */
+    public int getDataCount(int id) {
+        return DATABASE.executeQuery(false, GET_DATA_COUNT_QUERY, rs -> rs.getInt("data_count"), id);
+    }
+
     /**
      * Асинхронное получение данных по ее id
      *
