@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.game.enums.GameStatus;
 import ru.stonlex.api.bukkit.game.enums.GameType;
@@ -27,6 +28,15 @@ import java.util.concurrent.TimeUnit;
  * (Created on 29.07.2019 19:00)
  */
 public class TestGame extends AbstractGameFactory {
+
+    private static final MoonKit PLAYER_DEFAULT_KIT = KitManager.newBuilder("PlayerKit")
+            .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
+            .setChestplateItem(ItemUtil.getItemStack(Material.LEATHER_CHESTPLATE, "§eКуртка"))
+
+            .setItemList(Lists.newArrayList(ItemUtil.getItemStack(Material.WOOD_SWORD, "§eДеревянный меч"),
+                    ItemUtil.getItemStack(Material.WOOD_PICKAXE, "§eДеревянная кирка"),
+                    ItemUtil.getItemStack(Material.WOOD_AXE, "§eДеревянный топор")))
+            .build();
 
 
     public TestGame() {
@@ -69,19 +79,10 @@ public class TestGame extends AbstractGameFactory {
     public void onStartGame() {
         setupStartSettings();
 
-        MoonKit playerKit = KitManager.newBuilder("PlayerKit")
-                .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
-                .setChestplateItem(ItemUtil.getItemStack(Material.LEATHER_CHESTPLATE, "§eКуртка"))
-
-                .setItemList(Lists.newArrayList(ItemUtil.getItemStack(Material.WOOD_SWORD, "§eДеревянный меч"),
-                        ItemUtil.getItemStack(Material.WOOD_PICKAXE, "§eДеревянная кирка"),
-                        ItemUtil.getItemStack(Material.WOOD_AXE, "§eДеревянный топор")))
-                .build();
-
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Игра началась!");
 
-            playerKit.giveToPlayer(player);
+            PLAYER_DEFAULT_KIT.giveToPlayer(player);
 
             //TODO: Телепортация на локации
         });
@@ -96,9 +97,8 @@ public class TestGame extends AbstractGameFactory {
 
             player.teleport(GAME_SETTINGS.END_SPAWN_LOCATION);
 
-            GamePlayer gamePlayer = GAME_API.getGamePlayer(player);
-
-            gamePlayer.setSpectator();
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
         });
 
         new MoonTask() {
