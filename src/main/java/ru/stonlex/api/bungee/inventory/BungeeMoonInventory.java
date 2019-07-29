@@ -77,7 +77,7 @@ public abstract class BungeeMoonInventory {
     /**
      * Передающийся метод.
      *
-     * Вызывается после закрытием инвентаря
+     * Вызывается после закрытия инвентаря
      */
     public void onClose(ProxiedPlayer player) { }
 
@@ -222,6 +222,9 @@ public abstract class BungeeMoonInventory {
         openInventory(player, false);
     }
 
+    /**
+     * Закрыть инвентарь игроку
+     */
     public void closeInventory(ProxiedPlayer player) {
         sendCloseInventory(player);
     }

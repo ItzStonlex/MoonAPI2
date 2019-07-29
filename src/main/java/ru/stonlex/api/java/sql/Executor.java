@@ -1,14 +1,16 @@
 package ru.stonlex.api.java.sql;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import ru.stonlex.api.java.JavaMoonAPI;
 import ru.stonlex.api.java.interfaces.ResponseHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+@RequiredArgsConstructor
+@Getter
 public class Executor {
 
     /**
@@ -21,11 +23,7 @@ public class Executor {
 
     private final SQLConnection connection;
 
-    private Executor(final SQLConnection connection) {
-        this.connection = connection;
-    }
-
-    public static Executor getExecutor(SQLConnection connection) {
+    static Executor getExecutor(SQLConnection connection) {
         return new Executor(connection);
     }
 

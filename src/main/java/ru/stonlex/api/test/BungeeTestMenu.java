@@ -15,8 +15,8 @@ public class BungeeTestMenu extends BungeeMoonInventory {
     public void createInventory(ProxiedPlayer player) {
         setItem(14, BungeeItemUtil.getItemStack(BungeeMaterial.WOOD, "§eТестовый предмет",
                 "§7Тестовая строка 1",
-                       "§8Тестовая строка 2",
-                       "§9Тестовая строка 3"));
+                "§8Тестовая строка 2",
+                "§9Тестовая строка 3"));
     }
 
 }

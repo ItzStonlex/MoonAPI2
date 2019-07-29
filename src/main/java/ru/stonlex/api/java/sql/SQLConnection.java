@@ -1,6 +1,7 @@
 package ru.stonlex.api.java.sql;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import lombok.Getter;
 import ru.stonlex.api.java.interfaces.Builder;
 
 import java.sql.Connection;
@@ -21,8 +22,17 @@ public class SQLConnection {
     private MysqlDataSource dataSource = new MysqlDataSource();
     private Connection connection;
 
-    private static final Map<String, SQLConnection> databases = new HashMap<>();
-
+    /**
+     * Инициализация и создание MySQL-Соединения
+     *
+     * @param host - Хост.
+     * @param port - Порт.
+     * @param username - Имя пользователя.
+     * @param password - Пароль.
+     * @param database - База данных, схема.
+     * @param tables - Таблицы с их аргументами, которые нужно создать
+     *               при условии, что их не существует.
+     */
     private SQLConnection(String host, int port, String username, String password, String database,
                           Map<String, String> tables) {
 
@@ -48,10 +58,25 @@ public class SQLConnection {
         }
     }
 
+    /**
+     * Получение класса с запросами
+     * в MySQL
+     */
+    public Executor getExecutor() {
+        return Executor.getExecutor(this);
+    }
+
+    /**
+     * Получение соединения
+     */
     public Connection getConnection() {
         return connection;
     }
 
+    /**
+     * Обновление и восстановление соединения
+     * при его закрытии
+     */
     public void refreshConnection() {
         try {
             if (connection != null && !connection.isClosed() && connection.isValid(1000)) {
@@ -63,9 +88,13 @@ public class SQLConnection {
         }
     }
 
+    /**
+     * Вызов нового билдера соединения с MySQL
+     */
     public static SQLBuilder newBuilder() {
         return new SQLBuilder();
     }
+
 
     public static class SQLBuilder implements Builder<SQLConnection> {
 
@@ -76,43 +105,80 @@ public class SQLConnection {
         private int port = 3306;
         private Map<String, String> tables = new HashMap<>();
 
+        @Getter
+        private static final Map<String, SQLConnection> databases = new HashMap<>();
+
+        /**
+         * Инициализация базы данных, схемы
+         *
+         * @param database - База данных, схема
+         */
         public SQLBuilder setDatabase(String database) {
             this.database = database;
             return this;
         }
 
+        /**
+         * Инициализация пароля
+         *
+         * @param password - Пароль
+         */
         public SQLBuilder setPassword(String password) {
             this.password = password;
             return this;
         }
 
+        /**
+         * Инициализация порта
+         *
+         * @param port - Порт
+         */
         public SQLBuilder setPort(int port) {
             this.port = port;
             return this;
         }
 
+        /**
+         * Инициализация хоста
+         *
+         * @param host - Хост
+         */
         public SQLBuilder setHost(String host) {
             this.host = host;
             return this;
         }
 
+        /**
+         * Инициализация имени пользователя
+         *
+         * @param username - Имя пользователя
+         */
         public SQLBuilder setUsername(String username) {
             this.username = username;
             return this;
         }
 
+        /**
+         * Создание таблицы
+         *
+         * @param table - Имя таблицы
+         * @param value - Аргументы табллицы
+         */
         public SQLBuilder createTable(String table, String value) {
             this.tables.put(table, value);
+
             return this;
         }
 
         @Override
         public SQLConnection build() {
             SQLConnection connection = databases.getOrDefault(database, null);
+
             if (connection == null) {
                 connection = new SQLConnection(this.host, this.port, this.username,
                         this.password, this.database, this.tables);
                 databases.put(database, connection);
+
             }
             return connection;
         }
