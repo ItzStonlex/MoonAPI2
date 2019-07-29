@@ -14,9 +14,10 @@ public class MysqlTest {
             .setUsername("root")
             .setPassword("")
             .setDatabase("database")
-            .createTable("TestData", "`Id` INT NOT NULL, `Data` VARCHAR(255) NOT NULL").build().getExecutor();
+            .createTable("TestData", "`Id` INT PRIMARY KEY NOT NULL, `Data` VARCHAR(255) NOT NULL").build().getExecutor();
 
-    private static final String UPDATE_DATA_QUERY = "UPDATE `TestData` SET `Data`=? WHERE `Id`=?";
+    private static final String CREATE_DATA_QUERY = "INSERT IGNORE INTO `TestData` (`Id`, `Data`) VALUES (?,?)";
+    private static final String UPDATE_DATA_QUERY = "INSERT INTO `TestData` (`Id`, `Data`) VALUES (?,?) ON DUPLICATE KEY UPDATE `Data`=?";
     private static final String GET_DATA_BY_ID_QUERY = "SELECT * FROM `TestData` WHERE `Id`=?";
 
     /**
@@ -26,7 +27,17 @@ public class MysqlTest {
      * @param data - данные
      */
     public void updateData(int id, String data) {
-        DATABASE.execute(true, UPDATE_DATA_QUERY, data, id);
+        DATABASE.execute(true, UPDATE_DATA_QUERY, id, data, data);
+    }
+
+    /**
+     * Выполнить запрос об обновлении данных
+     *
+     * @param id - нумерация данных
+     * @param data - данные
+     */
+    public void createData(int id, String data) {
+        DATABASE.execute(true, CREATE_DATA_QUERY, id, data);
     }
 
     /**
@@ -38,7 +49,7 @@ public class MysqlTest {
         return DATABASE.executeQuery(false, GET_DATA_BY_ID_QUERY, rs -> rs.getString("Data"), id);
     }
     /**
-     * Асинхонное получение данных по ее id
+     * Асинхронное получение данных по ее id
      *
      * @param id - нумерация данных
      */
