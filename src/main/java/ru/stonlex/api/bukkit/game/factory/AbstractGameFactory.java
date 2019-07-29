@@ -17,26 +17,16 @@ public abstract class AbstractGameFactory implements Listener {
 
     protected final GameType GAME_TYPE = GAME_SETTINGS.GAME_TYPE;
 
-    protected final GameTimerFactory GAME_LOBBY_TIMER = new GameTimerFactory(this);
+    protected final GameTimerFactory GAME_LOBBY_TIMER_FACTORY = new GameTimerFactory(this);
 
     /**
      * Инициализация некоторых настроек игры
      */
-    public AbstractGameFactory(@NonNull GameType gameType, @NonNull String gameName,
-                               @NonNull String arenaWorldName, @NonNull String lobbyServerName,
-                               int startSecondsTimer) {
-
-        GAME_SETTINGS.ARENA_WORLD_NAME = arenaWorldName;
-
-        GAME_SETTINGS.GAME_NAME = gameName;
+    public AbstractGameFactory(@NonNull GameType gameType, int startSecondsTimer) {
 
         GAME_SETTINGS.GAME_TYPE = gameType;
 
-        GAME_SETTINGS.SUCCESSFULLY_PREFIX = String.format("§6%s §8| §f", gameName);
-
         GAME_SETTINGS.PLAYERS_IN_TEAM_COUNT = gameType.getPlayersInTeamCount();
-
-        GAME_SETTINGS.LOBBY_SERVER_NAME = lobbyServerName;
 
         GAME_SETTINGS.LOBBY_TIMER_START_SECONDS = startSecondsTimer;
 

@@ -1,6 +1,5 @@
 package ru.stonlex.api.test;
 
-import lombok.Getter;
 import ru.stonlex.api.java.sql.Executor;
 import ru.stonlex.api.java.sql.SQLConnection;
 

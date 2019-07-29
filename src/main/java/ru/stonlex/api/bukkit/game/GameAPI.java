@@ -2,6 +2,7 @@ package ru.stonlex.api.bukkit.game;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.bukkit.game.enums.GameStatus;
 import ru.stonlex.api.bukkit.game.kit.manager.KitManager;
 import ru.stonlex.api.bukkit.game.listeners.BlockListener;
 import ru.stonlex.api.bukkit.game.listeners.InteractListener;
@@ -32,6 +34,7 @@ public final class GameAPI {
 
     @Getter
     private final GameSettings gameSettings = new GameSettings();
+
 
     @Getter
     private final Map<String, GamePlayer> playersInGameMap = new HashMap<>();

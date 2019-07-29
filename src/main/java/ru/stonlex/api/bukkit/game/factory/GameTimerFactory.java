@@ -28,7 +28,13 @@ public class GameTimerFactory {
             public void run() {
                 seconds--;
 
+                /**
+                 * Если время таймера истекло, то мы устанавливаем
+                 * ему стандартное значение и запускаем игру
+                 */
                 if (seconds <= 0) {
+
+                    seconds = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
                     gameFactory.onStartGame();
 
                     cancel();
