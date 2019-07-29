@@ -28,9 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TestGame extends AbstractGameFactory {
 
-    /**
-     * Инициализация некоторых настроек игры
-     */
+
     public TestGame() {
         super(GameType.SOLO, 30);
 
@@ -39,8 +37,7 @@ public class TestGame extends AbstractGameFactory {
         GAME_SETTINGS.LOBBY_SERVER_NAME = "SWLobby-3";
     }
 
-    @Override
-    public void onStartGame() {
+    private void setupStartSettings() {
         GAME_SETTINGS.PLAYER_JOIN = false;
         GAME_SETTINGS.LEAVES_DECAY = false;
         GAME_SETTINGS.BLOCK_BREAK = true;
@@ -52,6 +49,25 @@ public class TestGame extends AbstractGameFactory {
         GAME_SETTINGS.PLAYER_PICKUP_ITEM = true;
 
         GAME_SETTINGS.GAME_STATUS = GameStatus.GAME_STARTED;
+    }
+
+    private void setupStopSettings() {
+        GAME_SETTINGS.PLAYER_JOIN = false;
+        GAME_SETTINGS.LEAVES_DECAY = false;
+        GAME_SETTINGS.BLOCK_BREAK = false;
+        GAME_SETTINGS.BLOCK_PLACE = false;
+        GAME_SETTINGS.PLAYER_DAMAGE_BY_ENTITY = false;
+        GAME_SETTINGS.PLAYER_DAMAGE_FALL = false;
+        GAME_SETTINGS.PLAYER_FOOD_CHANGE = false;
+        GAME_SETTINGS.PLAYER_DROP_ITEM = false;
+        GAME_SETTINGS.PLAYER_PICKUP_ITEM = false;
+
+        GAME_SETTINGS.GAME_STATUS = GameStatus.RESTART;
+    }
+
+    @Override
+    public void onStartGame() {
+        setupStartSettings();
 
         MoonKit playerKit = KitManager.newBuilder("PlayerKit")
                 .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
@@ -73,10 +89,9 @@ public class TestGame extends AbstractGameFactory {
 
     @Override
     public void onStopGame(@NonNull Player... winnerPlayers) {
-        GAME_SETTINGS.GAME_STATUS = GameStatus.RESTART;
+        setupStopSettings();
 
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Игра окончена!");
             player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Победители: §7" + Joiner.on("§f, §7").join(winnerPlayers));
 
             player.teleport(GAME_SETTINGS.END_SPAWN_LOCATION);
@@ -89,17 +104,15 @@ public class TestGame extends AbstractGameFactory {
         new MoonTask() {
             @Override
             public void run() {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    GamePlayer gamePlayer = GAME_API.getGamePlayer(player);
-
-                    gamePlayer.leave();
-                });
+                onStopGame();
             }
         }.scheduleLater(5, TimeUnit.SECONDS);
     }
 
     @Override
     public void onStopGame() {
+        setupStopSettings();
+
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage(GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Игра окончена!");
 
