@@ -1,13 +1,15 @@
 package ru.stonlex.api.bukkit.game.factory;
 
 import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import ru.stonlex.api.bukkit.game.GameAPI;
 import ru.stonlex.api.bukkit.game.GameSettings;
 import ru.stonlex.api.bukkit.game.enums.GameType;
 import ru.stonlex.api.bukkit.MoonAPI;
 
-public abstract class AbstractGameFactory {
+public abstract class AbstractGameFactory implements Listener {
 
     protected final GameAPI GAME_API = MoonAPI.getGameAPI();
 
@@ -20,7 +22,10 @@ public abstract class AbstractGameFactory {
     /**
      * Инициализация некоторых настроек игры
      */
-    public AbstractGameFactory(GameType gameType, String gameName, String arenaWorldName, String lobbyServerName, int startSecondsTimer) {
+    public AbstractGameFactory(@NonNull GameType gameType, @NonNull String gameName,
+                               @NonNull String arenaWorldName, @NonNull String lobbyServerName,
+                               int startSecondsTimer) {
+
         GAME_SETTINGS.ARENA_WORLD_NAME = arenaWorldName;
 
         GAME_SETTINGS.GAME_NAME = gameName;
@@ -34,6 +39,8 @@ public abstract class AbstractGameFactory {
         GAME_SETTINGS.LOBBY_SERVER_NAME = lobbyServerName;
 
         GAME_SETTINGS.LOBBY_TIMER_START_SECONDS = startSecondsTimer;
+
+        Bukkit.getPluginManager().registerEvents(this, MoonAPI.getPlugin(MoonAPI.class));
     }
 
     /**
@@ -51,5 +58,10 @@ public abstract class AbstractGameFactory {
      * Вызывается тогда, когда необходимо выключить игру
      */
     public abstract void onStopGame();
+
+    /**
+     * Вызывается тогда, когда умирает игрок
+     */
+    public abstract void onDeath(@NonNull Player player);
 
 }
