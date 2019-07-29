@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.bukkit.MoonAPI;
@@ -21,10 +22,7 @@ import ru.stonlex.api.bukkit.utility.ItemUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public final class GameAPI {
-
-    private final MoonAPI moonAPI;
 
     @Getter
     private final PerkManager perkManager   = new PerkManager();
@@ -42,11 +40,11 @@ public final class GameAPI {
      * Регистрация игровых листенеров, которые отслеживают
      * данные из GameSettings
      */
-    public void registerGameListeners() {
-        moonAPI.getServer().getPluginManager().registerEvents(new BlockListener(),       moonAPI);
-        moonAPI.getServer().getPluginManager().registerEvents(new InteractListener(),    moonAPI);
-        moonAPI.getServer().getPluginManager().registerEvents(new LeavesDecayListener(), moonAPI);
-        moonAPI.getServer().getPluginManager().registerEvents(new JoinListener(),        moonAPI);
+    public void registerGameListeners(Plugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(new BlockListener(),       plugin);
+        plugin.getServer().getPluginManager().registerEvents(new InteractListener(),    plugin);
+        plugin.getServer().getPluginManager().registerEvents(new LeavesDecayListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new JoinListener(),        plugin);
     }
 
     /**
@@ -96,7 +94,7 @@ public final class GameAPI {
 
         @Override
         public Player getPlayer() {
-            return moonAPI.getServer().getPlayer(playerName);
+            return Bukkit.getPlayer(playerName);
         }
 
         @Override

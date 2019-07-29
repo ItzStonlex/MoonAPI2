@@ -19,6 +19,7 @@ import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
 import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
+import ru.stonlex.api.bukkit.utility.cooldown.CooldownUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +28,9 @@ public final class MoonAPI extends JavaPlugin {
 
     public static final String PLUGIN_MESSAGE_CHANNEL      = "MoonAPI";
 
-    @Getter
-    private static final CommandManager commandManager     = new CommandManager();
 
     @Getter
-    private static final VaultManager vaultManager         = new VaultManager();
+    private static final CommandManager commandManager     = new CommandManager();
 
     @Getter
     private static final HologramManager hologramManager   = new HologramManager();
@@ -40,10 +39,7 @@ public final class MoonAPI extends JavaPlugin {
     private static final InventoryManager inventoryManager = new InventoryManager();
 
     @Getter
-    private static final MessagingManager messagingManager = new MessagingManager(MoonAPI.getPlugin(MoonAPI.class));
-
-    @Getter
-    private static final GameAPI gameAPI                   = new GameAPI(MoonAPI.getPlugin(MoonAPI.class));
+    private static final GameAPI gameAPI                   = new GameAPI();
 
     @Getter
     private static final EventRegisterManager eventManager = new EventRegisterManager();
@@ -51,6 +47,11 @@ public final class MoonAPI extends JavaPlugin {
     @Getter
     private static final SidebarManager sidebarManager     = new SidebarManager();
 
+    @Getter
+    private static MessagingManager messagingManager       = null;
+
+    @Getter
+    private static VaultManager vaultManager               =  null;
 
 
     @Override
@@ -63,6 +64,9 @@ public final class MoonAPI extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         registerProtocolListener();
+
+        messagingManager = new MessagingManager(this);
+        vaultManager     = new VaultManager();
     }
 
     /**
@@ -70,16 +74,15 @@ public final class MoonAPI extends JavaPlugin {
      * по MoonFakeEntity
      */
     private void registerProtocolListener() {
-        Map<String, Long> cooldowns = new HashMap<>();
-
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent e) {
                 Player player = e.getPlayer();
                 int entityId = e.getPacket().getIntegers().read(0);
 
-                if (cooldowns.containsKey(player.getName())
-                        && cooldowns.get(player.getName()) > System.currentTimeMillis()) {
+                String cooldownName = String.format("clickMoonEntity_%s", player.getName());
+
+                if (CooldownUtil.hasCooldown(cooldownName)) {
                     return;
                 }
 
@@ -91,7 +94,7 @@ public final class MoonAPI extends JavaPlugin {
 
                 fakeEntity.getClickable().onClick(player);
 
-                cooldowns.put(player.getName(), System.currentTimeMillis() + 1000);
+                CooldownUtil.putCooldown(cooldownName, 1000);
             }
         });
     }

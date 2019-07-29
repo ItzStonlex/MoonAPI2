@@ -43,24 +43,6 @@ public final class MessagingManager {
         moonAPI.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
     }
 
-    public List<String> getOnlinePlayers(String server) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-
-        out.writeUTF("PlayerList");
-        out.writeUTF(server);
-
-        moonAPI.getServer().sendPluginMessage(moonAPI, "BungeeCord", out.toByteArray());
-
-        String[] playerList = ByteStreams.newDataInput(out.toByteArray())
-                .readUTF().split(", ");
-
-        return new ArrayList<>(Arrays.asList(playerList));
-    }
-
-    public int getOnlineCount(String server) {
-        return getOnlinePlayers(server).size();
-    }
-
     public void kickProxyPlayer(String playerName, String reason) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 

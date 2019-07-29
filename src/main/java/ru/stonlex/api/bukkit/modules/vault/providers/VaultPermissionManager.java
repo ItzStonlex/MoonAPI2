@@ -22,7 +22,7 @@ public final class VaultPermissionManager {
     public VaultPermissionManager() {
         RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
 
-        if (serviceProvider.getProvider() == null) {
+        if (serviceProvider == null || serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
             return;
         }

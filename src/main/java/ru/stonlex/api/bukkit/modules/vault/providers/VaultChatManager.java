@@ -22,7 +22,7 @@ public final class VaultChatManager {
     public VaultChatManager() {
         RegisteredServiceProvider<Chat> serviceProvider = Bukkit.getServicesManager().getRegistration(Chat.class);
 
-        if (serviceProvider.getProvider() == null) {
+        if (serviceProvider == null || serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
             return;
         }

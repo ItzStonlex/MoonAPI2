@@ -22,7 +22,7 @@ public final class VaultEconomyManager {
     public VaultEconomyManager() {
         RegisteredServiceProvider<Economy> serviceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
 
-        if (serviceProvider.getProvider() == null) {
+        if (serviceProvider == null || serviceProvider.getProvider() == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
             return;
         }
