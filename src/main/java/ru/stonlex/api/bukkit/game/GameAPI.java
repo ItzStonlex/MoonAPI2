@@ -7,15 +7,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.game.enums.GameStatus;
+import ru.stonlex.api.bukkit.game.factory.AbstractGameFactory;
 import ru.stonlex.api.bukkit.game.kit.manager.KitManager;
-import ru.stonlex.api.bukkit.game.listeners.BlockListener;
-import ru.stonlex.api.bukkit.game.listeners.InteractListener;
-import ru.stonlex.api.bukkit.game.listeners.JoinListener;
-import ru.stonlex.api.bukkit.game.listeners.LeavesDecayListener;
+import ru.stonlex.api.bukkit.game.listeners.*;
 import ru.stonlex.api.bukkit.game.perk.manager.PerkManager;
 import ru.stonlex.api.bukkit.game.player.GamePlayer;
 import ru.stonlex.api.bukkit.MoonAPI;
@@ -24,16 +23,17 @@ import ru.stonlex.api.bukkit.utility.ItemUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
 public final class GameAPI {
 
-    @Getter
     private final PerkManager perkManager   = new PerkManager();
 
-    @Getter
     private final KitManager kitManager     = new KitManager();
 
-    @Getter
     private final GameSettings gameSettings = new GameSettings();
+
+    @Setter
+    private AbstractGameFactory gameFactory;
 
 
     @Getter
@@ -44,10 +44,19 @@ public final class GameAPI {
      * данные из GameSettings
      */
     public void registerGameListeners(Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new BlockListener(),       plugin);
-        plugin.getServer().getPluginManager().registerEvents(new InteractListener(),    plugin);
-        plugin.getServer().getPluginManager().registerEvents(new LeavesDecayListener(), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new JoinListener(),        plugin);
+        PluginManager pluginManager = plugin.getServer().getPluginManager();
+
+        pluginManager  .registerEvents  (new BlockListener(),           plugin);
+        pluginManager  .registerEvents  (new DamageListener(),          plugin);
+        pluginManager  .registerEvents  (new EntitySpawnListener(),     plugin);
+        pluginManager  .registerEvents  (new FoodChangeListener(),      plugin);
+        pluginManager  .registerEvents  (new GameStatusListener(),      plugin);
+        pluginManager  .registerEvents  (new InteractListener(),        plugin);
+        pluginManager  .registerEvents  (new ItemListener(),            plugin);
+        pluginManager  .registerEvents  (new JoinListener(),            plugin);
+        pluginManager  .registerEvents  (new LeavesDecayListener(),     plugin);
+        pluginManager  .registerEvents  (new MoveListener(),            plugin);
+        pluginManager  .registerEvents  (new WeatherChangeListener(),   plugin);
     }
 
     /**

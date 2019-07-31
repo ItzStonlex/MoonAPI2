@@ -2,6 +2,7 @@ package ru.stonlex.api.bukkit.utility;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -141,14 +142,10 @@ public class ItemUtil {
     }
 
 
-
+    @RequiredArgsConstructor
     public class ItemBuilder implements Builder<ItemStack> {
 
-        private ItemStack itemStack;
-
-        private ItemBuilder(ItemStack itemStack) {
-            this.itemStack = itemStack;
-        }
+        private final ItemStack itemStack;
 
         public ItemBuilder setDurability(int durability) {
             this.itemStack.setDurability((byte) durability);

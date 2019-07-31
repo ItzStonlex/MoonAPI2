@@ -10,31 +10,35 @@ import ru.stonlex.api.bukkit.utility.ItemUtil;
 
 public final class GameSettings {
 
-    public final ItemStack SPECTATOR_TELEPORT_ITEM = ItemUtil.getItemStack(Material.COMPASS, "§aТелепортатор",
+    public ItemStack TEAM_SELECT_ITEM = ItemUtil.getItemStack(Material.ANVIL, "§aВыбор команды",
+            "",
+            "§7Используйте данный предмет,",
+            "§7чтобы выбрать команду.");
+
+    public ItemStack SPECTATOR_TELEPORT_ITEM = ItemUtil.getItemStack(Material.COMPASS, "§aТелепортатор",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы телепортироваться к любому игроку на арене.");
 
-    public final ItemStack LEAVE_IN_GAME_ITEM = ItemUtil.getItemStack(Material.BED, "§aПокинуть игру",
+    public ItemStack LEAVE_IN_GAME_ITEM = ItemUtil.getItemStack(Material.BED, "§aПокинуть игру",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы покинуть игру.");
 
-    public final ItemStack PERK_SELECT_ITEM = ItemUtil.getItemStack(Material.BLAZE_POWDER, "§aВыбор перка",
+    public ItemStack PERK_SELECT_ITEM = ItemUtil.getItemStack(Material.BLAZE_POWDER, "§aВыбор перка",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы открыть выбор игрового перка.");
 
-    public final ItemStack KIT_SELECT_ITEM = ItemUtil.getItemStack(Material.CHEST, "§aВыбор набора",
+    public ItemStack KIT_SELECT_ITEM = ItemUtil.getItemStack(Material.CHEST, "§aВыбор набора",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы открыть выбор игрового набора.");
 
-    public final ItemStack SHOP_ITEM = ItemUtil.getItemStack(Material.CHEST, "§aМагазин",
+    public ItemStack SHOP_ITEM = ItemUtil.getItemStack(Material.CHEST, "§aМагазин",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы открыть игровой магазин.");
-
 
     public int MAX_ARENA_SLOTS = 16;
     public int PLAYERS_IN_TEAM_COUNT = 1;
@@ -63,6 +67,7 @@ public final class GameSettings {
     public boolean PLAYER_JOIN = true;
     public boolean LEAVES_DECAY = false;
     public boolean PLAYER_DAMAGE = false;
+    public boolean ENTITY_DAMAGE = false;
     public boolean PLAYER_DAMAGE_FALL = false;
     public boolean PLAYER_DAMAGE_BY_PLAYER = false;
     public boolean PLAYER_DAMAGE_BY_ENTITY = false;
