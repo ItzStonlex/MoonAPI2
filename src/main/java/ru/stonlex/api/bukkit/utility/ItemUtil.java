@@ -83,10 +83,10 @@ public class ItemUtil {
 
         try {
             GameProfile profile = new GameProfile(UUID.randomUUID(), "ItzStonlex");
-            ReflectionUtil.setField((Object) meta, "profile", (Object) ItemUtil.setGameProfileTexture(profile, texture));
+            ReflectionUtil.setField(meta, "profile", ItemUtil.setGameProfileTexture(profile, texture));
         } catch (Exception ignored) {}
         
-        item.setItemMeta((ItemMeta) meta);
+        item.setItemMeta(meta);
         return item;
     }
     
@@ -129,28 +129,22 @@ public class ItemUtil {
     }
 
     public ItemBuilder newBuilder() {
-        return new ItemBuilder();
+        return newBuilder(Material.AIR);
     }
 
     public ItemBuilder newBuilder(Material material) {
-        return new ItemBuilder(material);
+        return new ItemBuilder(new ItemStack(material));
     }
 
     public ItemBuilder newBuilder(ItemStack itemStack) {
         return new ItemBuilder(itemStack);
     }
 
+
+
     public class ItemBuilder implements Builder<ItemStack> {
 
         private ItemStack itemStack;
-
-        private ItemBuilder() {
-            this.itemStack = new ItemStack(Material.AIR);
-        }
-
-        private ItemBuilder(Material material) {
-            this.itemStack = new ItemStack(material);
-        }
 
         private ItemBuilder(ItemStack itemStack) {
             this.itemStack = itemStack;
@@ -158,63 +152,112 @@ public class ItemUtil {
 
         public ItemBuilder setDurability(int durability) {
             this.itemStack.setDurability((byte) durability);
+
             return this;
         }
 
         public ItemBuilder setUnbreakable(boolean flag) {
             ItemMeta meta = itemStack.getItemMeta();
+
             meta.spigot().setUnbreakable(flag);
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+
             this.itemStack.setItemMeta(meta);
+
             return this;
         }
 
         public ItemBuilder setMaterial(Material material) {
             this.itemStack.setType(material);
+
             return this;
         }
 
         public ItemBuilder setAmount(int amount) {
             this.itemStack.setAmount(amount);
+
             return this;
         }
 
         public ItemBuilder setName(String name) {
             ItemMeta meta = itemStack.getItemMeta();
+
             meta.setDisplayName(name);
+
             this.itemStack.setItemMeta(meta);
+
             return this;
         }
 
         public ItemBuilder setLore(String... lore) {
             ItemMeta meta = itemStack.getItemMeta();
+
             meta.setLore(Arrays.asList(lore));
+
             this.itemStack.setItemMeta(meta);
+
             return this;
         }
 
         public ItemBuilder setLore(List<String> lore) {
             ItemMeta meta = itemStack.getItemMeta();
+
             meta.setLore(lore);
+
             this.itemStack.setItemMeta(meta);
+
             return this;
         }
 
         public ItemBuilder addLore(String lore) {
             ItemMeta meta = itemStack.getItemMeta();
+
             List<String> lores = meta.getLore();
+
             if (lores == null) {
                 lores = new ArrayList<>();
             }
+
             lores.add(lore);
+
             return this.setLore(lores);
         }
 
         public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
             ItemMeta meta = itemStack.getItemMeta();
+
+            if (enchantment == null) {
+                return this;
+            }
+
             meta.addEnchant(enchantment, level, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
             this.itemStack.setItemMeta(meta);
+
+            return this;
+        }
+
+        public ItemBuilder setPlayerSkull(String playerSkull) {
+            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+            skullMeta.setOwner(playerSkull);
+
+            this.itemStack.setItemMeta(skullMeta);
+
+            return this;
+        }
+
+        public ItemBuilder setTextureValue(String texture) {
+            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+            try {
+                GameProfile profile = new GameProfile(UUID.randomUUID(), "ItzStonlex");
+                ReflectionUtil.setField(skullMeta, "profile", ItemUtil.setGameProfileTexture(profile, texture));
+            } catch (Exception ignored) {}
+
+            this.itemStack.setItemMeta(skullMeta);
+
             return this;
         }
 
