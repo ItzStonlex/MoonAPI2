@@ -107,4 +107,11 @@ public abstract class AbstractGameFactory implements Listener {
         broadcast(GAME_API.getAlivePlayers(), text);
     }
 
+    /**
+     * Получение лобби-таймера
+     */
+    public GameTimerFactory getTimerFactory() {
+        return GAME_LOBBY_TIMER_FACTORY;
+    }
+
 }

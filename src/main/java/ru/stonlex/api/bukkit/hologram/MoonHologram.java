@@ -2,9 +2,9 @@ package ru.stonlex.api.bukkit.hologram;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.api.java.interfaces.Clickable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface MoonHologram {
 
@@ -12,7 +12,7 @@ public interface MoonHologram {
 
     Location getLocation();
 
-    Clickable<Player> getClickAction();
+    Consumer<Player> getClickAction();
 
     int getLineCount();
 
@@ -32,7 +32,7 @@ public interface MoonHologram {
 
     void setLocation(Location location);
 
-    void setClickAction(Clickable<Player> clickAction);
+    void setClickAction(Consumer<Player> clickAction);
 
     void refreshHologram();
 

@@ -17,9 +17,10 @@ import ru.stonlex.api.bukkit.listeners.PlayerListener;
 import ru.stonlex.api.bukkit.menus.listener.InventoryListener;
 import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
-import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
+import ru.stonlex.api.bukkit.modules.protocol.entity.listeners.FakeEntityClickListener;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
 import ru.stonlex.api.bukkit.utility.cooldown.CooldownUtil;
+import ru.stonlex.api.test.TestCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,29 +75,7 @@ public final class MoonAPI extends JavaPlugin {
      * по MoonFakeEntity
      */
     private void registerProtocolListener() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.USE_ENTITY) {
-            @Override
-            public void onPacketReceiving(PacketEvent e) {
-                Player player = e.getPlayer();
-                int entityId = e.getPacket().getIntegers().read(0);
-
-                String cooldownName = String.format("clickMoonEntity_%s", player.getName());
-
-                if (CooldownUtil.hasCooldown(cooldownName)) {
-                    return;
-                }
-
-                MoonFakeEntity fakeEntity = MoonFakeEntity.getEntityById(entityId);
-
-                if (fakeEntity == null || fakeEntity.getClickable() == null) {
-                    return;
-                }
-
-                fakeEntity.getClickable().onClick(player);
-
-                CooldownUtil.putCooldown(cooldownName, 1000);
-            }
-        });
+        ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));
     }
 
 }

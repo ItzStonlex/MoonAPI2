@@ -1,134 +1,50 @@
 package ru.stonlex.api.bukkit.modules.protocol.entity.impl;
 
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import lombok.Getter;
+import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
 
 public class FakeArmorStand extends MoonFakeEntity {
+
+    @Getter
+    private boolean marker, small, basePlate, arms;
 
     public FakeArmorStand(Location location) {
         super(EntityType.ARMOR_STAND, location);
     }
 
-    /**
-     * Установка флага 'Small'
-     */
-    public void setSmall(boolean flag) {
-        Byte raw = getDataWatcher().getByte(10);
-        byte value = (raw == null ? (byte)0 : raw);
-        if (flag) {
-            value = (byte)(value | 1);
-        } else {
-            value &= (byte)-2;
-        }
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
+    public void setSmall(boolean small) {
+        this.small = small;
 
-        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(10, serializer), value);
-        updateWatcher();
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(11, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    /**
-     * Проверка флага 'Small'
-     */
-    public boolean isSmall() {
-        return (getDataWatcher().getByte(10) & 1) != 0;
+    public void setArms(boolean arms) {
+        this.arms = arms;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(11, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    /**
-     * Установка флага 'Gravity'
-     */
-    public void setGravity(boolean flag) {
-        Byte raw = getDataWatcher().getByte(10);
-        byte value = (raw == null ? (byte)0 : raw);
-        if (flag) {
-            value = (byte)(value | 2);
-        } else {
-            value &= (byte)-3;
-        }
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
+    public void setBasePlate(boolean basePlate) {
+        this.basePlate = basePlate;
 
-        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(10, serializer), value);
-        updateWatcher();
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(11, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    /**
-     * Проверка флага 'Gravity'
-     */
-    public boolean hasGravity() {
-        return (getDataWatcher().getByte(10) & 2) != 0;
+    public void setMarker(boolean marker) {
+        this.marker = marker;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(11, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    /**
-     * Установка флага 'Arms'
-     */
-    public void setArms(boolean flag) {
-        Byte raw = getDataWatcher().getByte(10);
-        byte value = (raw == null ? (byte)0 : raw);
-        if (flag) {
-            value = (byte)(value | 4);
-        } else {
-            value &= (byte)-5;
-        }
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
-
-        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(10, serializer), value);
-        updateWatcher();
-    }
-
-    /**
-     * Проверка флага 'Arms'
-     */
-    public boolean hasArms() {
-        return (getDataWatcher().getByte(10) & 4) != 0;
-    }
-
-    /**
-     * Установка флага 'BasePlate'
-     */
-    public void setBasePlate(boolean flag) {
-        Byte raw = getDataWatcher().getByte(10);
-        byte value = (raw == null ? (byte)0 : raw);
-        if (flag) {
-            value = (byte)(value | 8);
-        } else {
-            value &= (byte)-9;
-        }
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
-
-        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(10, serializer), value);
-        updateWatcher();
-    }
-
-    /**
-     * Проверка флага 'BasePlate'
-     */
-    public boolean hasBasePlate() {
-        return (getDataWatcher().getByte(10) & 8) != 0;
-    }
-
-    /**
-     * Установка флага 'Marker'
-     */
-    public void setMarker(boolean flag) {
-        Byte raw = getDataWatcher().getByte(10);
-        byte value = (raw == null ? (byte)0 : raw);
-        if (flag) {
-            value = (byte)(value | 16);
-        } else {
-            value &= (byte)-17;
-        }
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
-
-        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(10, serializer), value);
-        updateWatcher();
-    }
-
-    /**
-     * Проверка флага 'Marker'
-     */
-    public boolean hasMarker() {
-        return (getDataWatcher().getByte(10) & 16) != 0;
+    private byte generateBitMask() {
+        return (byte) ((small ? 0x01 : 0) + (arms ? 0x04 : 0) + (!basePlate ? 0x08 : 0) + (marker ? 0x10 : 0));
     }
 
 }

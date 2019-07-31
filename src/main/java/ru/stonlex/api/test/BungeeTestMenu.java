@@ -16,7 +16,11 @@ public class BungeeTestMenu extends BungeeMoonInventory {
         setItem(14, BungeeItemUtil.getItemStack(BungeeMaterial.WOOD, "§eТестовый предмет",
                 "§7Тестовая строка 1",
                 "§8Тестовая строка 2",
-                "§9Тестовая строка 3"));
+                "§9Тестовая строка 3"), player1 -> {
+            player.sendMessage("ого, ты че, кликнул? ну все пока я закрываю тебе инвентарь лошара");
+
+            closeInventory(player);
+        });
     }
 
 }

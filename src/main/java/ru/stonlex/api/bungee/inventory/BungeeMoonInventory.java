@@ -67,6 +67,7 @@ public abstract class BungeeMoonInventory {
      */
     public abstract void createInventory(ProxiedPlayer player);
 
+
     /**
      * Передающийся метод.
      *

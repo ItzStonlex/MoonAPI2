@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.protocol.entity.impl.FakeArmorStand;
 import ru.stonlex.api.java.types.CacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
-import ru.stonlex.api.java.interfaces.Clickable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class HologramManager extends CacheManager<MoonHologram> {
 
@@ -63,7 +63,7 @@ public final class HologramManager extends CacheManager<MoonHologram> {
         private final List<FakeArmorStand> entities = new ArrayList<>();
         private final List<String> lines = new ArrayList<>();
 
-        private Clickable<Player> clickAction;
+        private Consumer<Player> clickAction;
 
         private final double distance = 0.25D;
 
@@ -91,12 +91,11 @@ public final class HologramManager extends CacheManager<MoonHologram> {
 
             FakeArmorStand stand = new FakeArmorStand(location.clone().add(0, -(distance * lines.size()), 0));
 
-            stand.setGravity(false);
             stand.setInvisible(true);
             stand.setCustomNameVisible(true);
             stand.setCustomName(line);
 
-            stand.setClickable(clickAction);
+            stand.setClickAction(clickAction);
 
             Bukkit.getOnlinePlayers().forEach(stand::addReceiver);
 
@@ -139,17 +138,17 @@ public final class HologramManager extends CacheManager<MoonHologram> {
 
             int count = 0;
             for (FakeArmorStand stand : entities) {
-                stand.setLocation(location.clone().add(0, -(distance * count), 0));
+                stand.teleport(location.clone().add(0, -(distance * count), 0));
 
                 count++;
             }
         }
 
         @Override
-        public void setClickAction(Clickable<Player> clickAction) {
+        public void setClickAction(Consumer<Player> clickAction) {
             this.clickAction = clickAction;
 
-            entities.forEach(fakeArmorStand -> fakeArmorStand.setClickable(clickAction));
+            entities.forEach(fakeArmorStand -> fakeArmorStand.setClickAction(clickAction));
         }
 
         @Override

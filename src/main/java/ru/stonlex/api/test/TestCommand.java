@@ -2,6 +2,8 @@ package ru.stonlex.api.test;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.commands.MoonCommand;
 
 public class TestCommand implements MoonCommand {

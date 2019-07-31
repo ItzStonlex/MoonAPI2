@@ -1,11 +1,11 @@
-package ru.stonlex.api.bukkit.modules.protocol.packet.impl;
+package ru.stonlex.api.bukkit.modules.protocol.packet.entity;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 
 public class WrapperPlayServerEntityVelocity extends AbstractPacket {
 	public static final PacketType TYPE =

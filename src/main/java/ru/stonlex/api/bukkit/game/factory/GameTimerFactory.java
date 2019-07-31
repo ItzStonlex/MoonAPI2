@@ -8,12 +8,16 @@ import ru.stonlex.api.java.schedulers.MoonTask;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
-@Getter
 public class GameTimerFactory {
 
-    private int seconds;
+    @Getter
+    private int secondsLeft;
 
+    @Getter
     private MoonTask timerTask;
+
+    @Getter
+    private boolean timerWorked;
 
     private final AbstractGameFactory gameFactory;
 
@@ -22,19 +26,21 @@ public class GameTimerFactory {
      * Запуск таймера в лобби
      */
     public void start() {
+        this.timerWorked = true;
+
         this.timerTask = new MoonTask() {
 
             @Override
             public void run() {
-                seconds--;
+                secondsLeft--;
 
                 /**
                  * Если время таймера истекло, то мы устанавливаем
                  * ему стандартное значение и запускаем игру
                  */
-                if (seconds <= 0) {
+                if (secondsLeft <= 0) {
 
-                    seconds = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
+                    secondsLeft = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
                     gameFactory.onStartGame();
 
                     cancel();
@@ -42,17 +48,15 @@ public class GameTimerFactory {
                     return;
                 }
 
-                if (seconds % 5 == 0 || seconds < 5) {
+                if (secondsLeft % 5 == 0 || secondsLeft < 5) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
 
-                        player.sendMessage(gameFactory.GAME_SETTINGS.SUCCESSFULLY_PREFIX + "Игра начнется через §e" + seconds + " секунд");
+                        gameFactory.broadcastToAll("Игра начнется через §e" + secondsLeft + " секунд");
 
                         player.sendTitle(String.format("§6§l%s %s", gameFactory.GAME_SETTINGS.GAME_NAME, gameFactory.GAME_SETTINGS.GAME_TYPE.getType()),
-                                "Начало игры через §c" + seconds);
+                                "Начало игры через §c" + secondsLeft);
                     });
-
                 }
-
             }
         };
 
@@ -63,16 +67,11 @@ public class GameTimerFactory {
      * Выключение таймера в лобби.
      */
     public void stop() {
+        this.timerWorked = false;
+
         timerTask.cancel();
 
-        this.seconds = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
-    }
-
-    /**
-     * Получение количества оставшихся секунд
-     */
-    public int getSecondsLeft() {
-        return seconds;
+        this.secondsLeft = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
     }
 
 }

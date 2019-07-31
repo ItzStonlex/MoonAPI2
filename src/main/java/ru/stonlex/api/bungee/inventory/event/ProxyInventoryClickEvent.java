@@ -20,4 +20,5 @@ public class ProxyInventoryClickEvent extends ProxyInventoryEvent {
         this.slot = slot;
         this.currentItem = currentItem;
     }
+
 }

@@ -1,4 +1,4 @@
-package ru.stonlex.api.bukkit.modules.protocol.packet.impl;
+package ru.stonlex.api.bukkit.modules.protocol.packet.entity;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;

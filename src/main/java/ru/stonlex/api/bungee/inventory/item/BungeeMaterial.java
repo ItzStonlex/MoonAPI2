@@ -1,7 +1,6 @@
 package ru.stonlex.api.bungee.inventory.item;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.Validate;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -576,7 +575,6 @@ public enum BungeeMaterial {
     }
 
     public static BungeeMaterial matchBungeeMaterial(String name) {
-        Validate.notNull(name, "Name cannot be null");
         BungeeMaterial result = null;
 
         try {

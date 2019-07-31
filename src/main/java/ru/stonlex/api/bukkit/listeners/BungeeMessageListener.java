@@ -48,7 +48,6 @@ public class BungeeMessageListener implements PluginMessageListener {
              * Инициализация кнопок в инвентаре
              */
             case "SendButtons": {
-                System.out.println("sendbuttons packet accept");
                 String inventoryName = dataInput.readUTF();
 
                 MoonInventory inventory = MoonAPI.getInventoryManager().getCachedInventory(inventoryName);
@@ -58,9 +57,6 @@ public class BungeeMessageListener implements PluginMessageListener {
                 }
 
                 int buttonCount = dataInput.readInt();
-
-                System.out.println("sendbuttons: buttons - " + buttonCount);
-                System.out.println("sendbuttons: inventoryName - " + inventoryName);
 
                 for (int i = 0 ; i < buttonCount ; i++) {
                     int slot = dataInput.readInt();
@@ -77,7 +73,6 @@ public class BungeeMessageListener implements PluginMessageListener {
              * Открытие инвентаря игроку
              */
             case "OpenInventory": {
-
                 String playerName = dataInput.readUTF();
                 String inventoryName = dataInput.readUTF();
 
@@ -86,8 +81,6 @@ public class BungeeMessageListener implements PluginMessageListener {
                 if (inventory == null) {
                     break;
                 }
-
-                inventory.clear();
 
                 Player player = Bukkit.getPlayerExact(playerName);
 

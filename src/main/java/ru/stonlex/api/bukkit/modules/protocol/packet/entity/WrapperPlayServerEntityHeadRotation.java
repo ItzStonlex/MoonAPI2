@@ -1,11 +1,11 @@
-package ru.stonlex.api.bukkit.modules.protocol.packet.impl;
+package ru.stonlex.api.bukkit.modules.protocol.packet.entity;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 
 public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 	public static final PacketType TYPE =
@@ -24,7 +24,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 	 * Retrieve Entity ID.
 	 * <p>
 	 * Notes: entity's ID
-	 * 
+	 *
 	 * @return The current Entity ID
 	 */
 	public int getEntityID() {
@@ -33,7 +33,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 
 	/**
 	 * Set Entity ID.
-	 * 
+	 *
 	 * @param value - new value.
 	 */
 	public void setEntityID(int value) {
@@ -42,7 +42,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 
 	/**
 	 * Retrieve the entity of the painting that will be spawned.
-	 * 
+	 *
 	 * @param world - the current world of the entity.
 	 * @return The spawned entity.
 	 */
@@ -52,7 +52,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 
 	/**
 	 * Retrieve the entity of the painting that will be spawned.
-	 * 
+	 *
 	 * @param event - the packet event.
 	 * @return The spawned entity.
 	 */
@@ -64,7 +64,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 	 * Retrieve Head Yaw.
 	 * <p>
 	 * Notes: head yaw in steps of 2p/256
-	 * 
+	 *
 	 * @return The current Head Yaw
 	 */
 	public byte getHeadYaw() {
@@ -73,7 +73,7 @@ public class WrapperPlayServerEntityHeadRotation extends AbstractPacket {
 
 	/**
 	 * Set Head Yaw.
-	 * 
+	 *
 	 * @param value - new value.
 	 */
 	public void setHeadYaw(byte value) {

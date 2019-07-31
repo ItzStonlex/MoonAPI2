@@ -1,37 +1,38 @@
-package ru.stonlex.api.bukkit.modules.protocol.packet.impl;
+package ru.stonlex.api.bukkit.modules.protocol.packet.entity;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 
-public class WrapperPlayServerEntityTeleport extends AbstractPacket {
-	public static final PacketType TYPE =
-			PacketType.Play.Server.ENTITY_TELEPORT;
+public class WrapperPlayServerEntityLook extends AbstractPacket {
+	public static final PacketType TYPE = PacketType.Play.Server.ENTITY_LOOK;
 
-	public WrapperPlayServerEntityTeleport() {
+	public WrapperPlayServerEntityLook() {
 		super(new PacketContainer(TYPE), TYPE);
 		handle.getModifier().writeDefaults();
 	}
 
-	public WrapperPlayServerEntityTeleport(PacketContainer packet) {
+	public WrapperPlayServerEntityLook(PacketContainer packet) {
 		super(packet, TYPE);
 	}
 
 	/**
-	 * Retrieve entity ID.
-	 *
-	 * @return The current EID
+	 * Retrieve Entity ID.
+	 * <p>
+	 * Notes: entity's ID
+	 * 
+	 * @return The current Entity ID
 	 */
 	public int getEntityID() {
 		return handle.getIntegers().read(0);
 	}
 
 	/**
-	 * Set entity ID.
-	 *
+	 * Set Entity ID.
+	 * 
 	 * @param value - new value.
 	 */
 	public void setEntityID(int value) {
@@ -39,52 +40,28 @@ public class WrapperPlayServerEntityTeleport extends AbstractPacket {
 	}
 
 	/**
-	 * Retrieve the entity.
-	 *
+	 * Retrieve the entity of the painting that will be spawned.
+	 * 
 	 * @param world - the current world of the entity.
-	 * @return The entity.
+	 * @return The spawned entity.
 	 */
 	public Entity getEntity(World world) {
 		return handle.getEntityModifier(world).read(0);
 	}
 
 	/**
-	 * Retrieve the entity.
-	 *
+	 * Retrieve the entity of the painting that will be spawned.
+	 * 
 	 * @param event - the packet event.
-	 * @return The entity.
+	 * @return The spawned entity.
 	 */
 	public Entity getEntity(PacketEvent event) {
 		return getEntity(event.getPlayer().getWorld());
 	}
 
-	public double getX() {
-		return handle.getDoubles().read(0);
-	}
-
-	public void setX(double value) {
-		handle.getDoubles().write(0, value);
-	}
-
-	public double getY() {
-		return handle.getDoubles().read(1);
-	}
-
-	public void setY(double value) {
-		handle.getDoubles().write(1, value);
-	}
-
-	public double getZ() {
-		return handle.getDoubles().read(2);
-	}
-
-	public void setZ(double value) {
-		handle.getDoubles().write(2, value);
-	}
-
 	/**
 	 * Retrieve the yaw of the current entity.
-	 *
+	 * 
 	 * @return The current Yaw
 	 */
 	public float getYaw() {
@@ -93,7 +70,7 @@ public class WrapperPlayServerEntityTeleport extends AbstractPacket {
 
 	/**
 	 * Set the yaw of the current entity.
-	 *
+	 * 
 	 * @param value - new yaw.
 	 */
 	public void setYaw(float value) {
@@ -102,7 +79,7 @@ public class WrapperPlayServerEntityTeleport extends AbstractPacket {
 
 	/**
 	 * Retrieve the pitch of the current entity.
-	 *
+	 * 
 	 * @return The current pitch
 	 */
 	public float getPitch() {
@@ -111,17 +88,27 @@ public class WrapperPlayServerEntityTeleport extends AbstractPacket {
 
 	/**
 	 * Set the pitch of the current entity.
-	 *
+	 * 
 	 * @param value - new pitch.
 	 */
 	public void setPitch(float value) {
 		handle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));
 	}
 
+	/**
+	 * Retrieve On Ground.
+	 * 
+	 * @return The current On Ground
+	 */
 	public boolean getOnGround() {
 		return handle.getBooleans().read(0);
 	}
 
+	/**
+	 * Set On Ground.
+	 * 
+	 * @param value - new value.
+	 */
 	public void setOnGround(boolean value) {
 		handle.getBooleans().write(0, value);
 	}

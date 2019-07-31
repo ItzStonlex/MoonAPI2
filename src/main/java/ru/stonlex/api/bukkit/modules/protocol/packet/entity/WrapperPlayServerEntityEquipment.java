@@ -1,13 +1,13 @@
-package ru.stonlex.api.bukkit.modules.protocol.packet.impl;
+package ru.stonlex.api.bukkit.modules.protocol.packet.entity;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
+import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import ru.stonlex.api.bukkit.modules.protocol.packet.AbstractPacket;
 
 public class WrapperPlayServerEntityEquipment extends AbstractPacket {
 	public static final PacketType TYPE =

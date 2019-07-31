@@ -22,7 +22,7 @@ public class LocationUtil {
     /**
      * Преобразование строки с координатами в саму локацию
      */
-    public Location locationToString(String locString) {
+    public Location stringToLocation(String locString) {
         String[] locData = locString.split(", ");
 
         World world = Bukkit.getWorld(locData[0]);

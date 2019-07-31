@@ -2,389 +2,314 @@ package ru.stonlex.api.bukkit.modules.protocol.entity;
 
 import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.FieldAccessor;
-import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
-import org.bukkit.Bukkit;
+import lombok.NonNull;
+import lombok.Setter;
+import ru.stonlex.api.bukkit.modules.protocol.entity.animation.FakeEntityAnimation;
+import ru.stonlex.api.bukkit.modules.protocol.entity.equipment.FakeEntityEquipment;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import ru.stonlex.api.bukkit.modules.protocol.packet.impl.*;
-import ru.stonlex.api.java.interfaces.Clickable;
+import ru.stonlex.api.bukkit.modules.protocol.packet.entity.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Getter
 public abstract class MoonFakeEntity {
 
-    private static final TIntObjectMap<MoonFakeEntity> entities = new TIntObjectHashMap<>();
+    protected static final WrappedDataWatcher.Serializer BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte.class);
+    protected static final WrappedDataWatcher.Serializer INT_SERIALIZER = WrappedDataWatcher.Registry.get(Integer.class);
+    protected static final WrappedDataWatcher.Serializer STRING_SERIALIZER = WrappedDataWatcher.Registry.get(String.class);
+    protected static final WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER = WrappedDataWatcher.Registry.get(Boolean.class);
 
-    public static Collection<MoonFakeEntity> getEntities() {
-        return entities.valueCollection();
+
+    private static final FieldAccessor ENTITY_ID = Accessors.getFieldAccessor(
+            MinecraftReflection.getEntityClass(), "entityCount", true);
+
+    private static final List<MoonFakeEntity> ENTITIES = new ArrayList<>();
+
+    public static List<MoonFakeEntity> getEntities() {
+        return Collections.unmodifiableList(ENTITIES);
     }
 
     public static MoonFakeEntity getEntityById(int id) {
-        return entities.get(id);
-    }
+        for (MoonFakeEntity fakeEntity : ENTITIES) {
+            if (fakeEntity.getId() != id) {
+                continue;
+            }
 
-    private static int getNextId() {
-        try {
-            String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-            Class<?> entity = Class.forName("net.minecraft.server." + version + ".Entity");
-
-            FieldAccessor fieldAccessor = Accessors.getFieldAccessor(entity, "entityCount", true);
-            final int result = (int) (fieldAccessor.get(null));
-
-            fieldAccessor.set(null, result + 1);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
+            return fakeEntity;
         }
-        return -1;
+
+        return null;
     }
+
+    private final int id;
+
+    private final EntityType entityType;
+
+    private final WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
+    private final FakeEntityEquipment entityEquipment = new FakeEntityEquipment(this);
+
+    private final List<Player> receivers = new ArrayList<>();
 
 
     private Location location;
 
-    private final Map<EnumWrappers.ItemSlot, ItemStack> equipment;
+    @Setter
+    private Consumer<Player> clickAction;
 
-    private final EntityType entityType;
+    private boolean burning, sneaking, sprinting, invisible, elytraFlying, customNameVisible;
 
-    private final List<Player> receivers;
+    private String customName;
 
-    private final int id;
-
-    private final WrappedDataWatcher dataWatcher;
-
-    private Vector velocity;
-
-    private byte headYaw;
-
-    private Clickable<Player> clickable;
+    private ChatColor glowingColor;
 
     public MoonFakeEntity(EntityType entityType, Location location) {
+        this.id = (int) ENTITY_ID.get(null);
         this.entityType = entityType;
         this.location = location;
-        this.equipment = new HashMap<>();
-        this.receivers = new ArrayList<>();
-        this.id = getNextId();
-        this.dataWatcher = new WrappedDataWatcher();
-        this.velocity = new Vector();
 
-        entities.put(id, this);
+        ENTITY_ID.set(null, id + 1);
+        ENTITIES.add(this);
     }
 
-    private void sendPacket(Player receiver, PacketType packetType) {
-        switch (packetType) {
-            case SPAWN: {
-                WrapperPlayServerSpawnEntityLiving packet = new WrapperPlayServerSpawnEntityLiving();
-
-                packet.setEntityID(id);
-                packet.setType(entityType);
-                packet.setMetadata(dataWatcher);
-
-                packet.setX(location.getX());
-                packet.setY(location.getY());
-                packet.setZ(location.getZ());
-
-                packet.setYaw(location.getYaw());
-                location.setPitch(location.getPitch());
-
-                packet.sendPacket(receiver);
-                break;
-            }
-            case DESTROY: {
-                WrapperPlayServerEntityDestroy packet = new WrapperPlayServerEntityDestroy();
-
-                packet.setEntityIds(new int[]{id});
-
-                packet.sendPacket(receiver);
-                break;
-            }
-            case METADATA: {
-                WrapperPlayServerEntityMetadata packet = new WrapperPlayServerEntityMetadata();
-
-                packet.setEntityID(id);
-                packet.setMetadata(dataWatcher.getWatchableObjects());
-
-                packet.sendPacket(receiver);
-                break;
-            }
-            case TELEPORT: {
-                WrapperPlayServerEntityTeleport packet = new WrapperPlayServerEntityTeleport();
-
-                packet.setEntityID(id);
-
-                packet.setX(location.getX());
-                packet.setY(location.getY());
-                packet.setZ(location.getZ());
-
-                packet.setYaw(location.getYaw());
-                packet.setPitch(location.getPitch());
-
-                packet.sendPacket(receiver);
-                break;
-            }
-            case EQUIPMENT: {
-                for (EnumWrappers.ItemSlot slot : equipment.keySet()) {
-                    ItemStack itemStack = equipment.get(slot);
-                    if (itemStack == null) {
-                        continue;
-                    }
-
-                    WrapperPlayServerEntityEquipment packet = new WrapperPlayServerEntityEquipment();
-
-                    packet.setEntityID(id);
-                    packet.setSlot(slot);
-                    packet.setItem(itemStack);
-
-                    packet.sendPacket(receiver);
-                }
-                break;
-            }
-            case HEAD_ROTATION: {
-                WrapperPlayServerEntityHeadRotation packet = new WrapperPlayServerEntityHeadRotation();
-
-                packet.setEntityID(id);
-                packet.setHeadYaw(headYaw);
-
-                packet.sendPacket(receiver);
-                break;
-            }
-            case VELOCITY: {
-                WrapperPlayServerEntityVelocity packet = new WrapperPlayServerEntityVelocity();
-
-                packet.setEntityID(id);
-
-                packet.setVelocityX(velocity.getX());
-                packet.setVelocityY(velocity.getY());
-                packet.setVelocityZ(velocity.getZ());
-
-                packet.sendPacket(receiver);
-                break;
-            }
-        }
-    }
-
-    private void sendPacket(PacketType packetType) {
-        for (Player receiver : receivers) {
-            sendPacket(receiver, packetType);
-        }
-    }
-
-    private void broadcastPacket(PacketType packetType) {
-        receivers.clear();
-        receivers.addAll(Bukkit.getOnlinePlayers());
-
-        sendPacket(packetType);
-    }
-
-    private enum PacketType {
-        SPAWN, DESTROY, METADATA, TELEPORT, VELOCITY, EQUIPMENT, HEAD_ROTATION
-    }
-
-    public void addReceiver(Player player) {
-        if (player == null) {
-            throw new RuntimeException("поч игрок null");
-        }
+    public void addReceiver(@NonNull Player player) {
         receivers.add(player);
 
-        sendPacket(player, PacketType.SPAWN);
+        sendSpawnPacket(player);
+        onReceiverAdd(player);
+
+        getEntityEquipment().updateEquipmentPacket(player);
     }
 
-    public void removeReceiver(Player player) {
-        if (player == null) {
-            throw new RuntimeException("поч игрок null");
-        }
+    public void removeReceiver(@NonNull Player player) {
         receivers.remove(player);
 
-        sendPacket(player, PacketType.DESTROY);
+        sendDestroyPacket(player);
+        onReceiverRemove(player);
     }
 
-    public boolean hasReceiver(Player player) {
-        if (player == null) {
-            throw new RuntimeException("поч игрок null");
-        }
+    public boolean hasReceiver(@NonNull Player player) {
         return receivers.contains(player);
     }
 
-    public void updateForReceiver(Player player) {
-        if (player == null) {
-            throw new RuntimeException("поч игрок null");
-        }
-
-        sendPacket(player, PacketType.METADATA);
-    }
-
-    public void updateWatcher() {
-        sendPacket(PacketType.METADATA);
-    }
-
-    /*
-    Тут сеттеры
-     */
-
-    public void setClickable(Clickable<Player> clickable) {
-        this.clickable = clickable;
-    }
-
-    public void setLocation(Location location) {
+    public void teleport(Location location) {
         this.location = location;
 
-        sendPacket(PacketType.TELEPORT);
-    }
-
-    public void setVelocity(Vector velocity) {
-        this.velocity = velocity;
-
-        sendPacket(PacketType.VELOCITY);
-    }
-
-    public void setEquipment(EnumWrappers.ItemSlot slot, ItemStack itemStack) {
-        equipment.put(slot, itemStack);
-
-        sendPacket(PacketType.EQUIPMENT);
-    }
-
-    public void setHeadPosition(byte headYaw) {
-        this.headYaw = headYaw;
-
-        sendPacket(PacketType.HEAD_ROTATION);
-    }
-
-    /*
-    Entity
-     */
-
-    public void setBurning(boolean burning) {
-        setFlag(0, 0, burning);
-
-        updateWatcher();
-    }
-
-    public boolean isBurning() {
-        return getFlag(0, 0);
+        sendTeleportPacket();
     }
 
     public void setSneaking(boolean sneaking) {
-        setFlag(0, 1, sneaking);
+        if (sneaking == this.sneaking) {
+            return;
+        }
 
-        updateWatcher();
+        this.sneaking = sneaking;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    public boolean isSneaking() {
-        return getFlag(0, 1);
+    public void setCustomNameVisible(boolean customNameVisible) {
+        if (customNameVisible == this.customNameVisible) {
+            return;
+        }
+
+        this.customNameVisible = customNameVisible;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, BOOLEAN_SERIALIZER), customNameVisible);
+        sendDataWatcherPacket();
+    }
+
+    public void setCustomName(@NonNull String customName) {
+        this.customName = customName;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), customName);
+        sendDataWatcherPacket();
     }
 
     public void setSprinting(boolean sprinting) {
-        setFlag(0, 3, sprinting);
+        if (sprinting == this.sprinting) {
+            return;
+        }
 
-        updateWatcher();
+        this.sprinting = sprinting;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
-    public boolean isSprinting() {
-        return getFlag(0, 3);
+    public void setBurning(boolean burning) {
+        if (burning == this.burning) {
+            return;
+        }
+
+        this.burning = burning;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
     }
 
     public void setInvisible(boolean invisible) {
-        setFlag(0, 5, invisible);
-
-        updateWatcher();
-    }
-
-    public boolean isInvisible() {
-        return getFlag(0, 5);
-    }
-
-    public void setAirTicks(short airTicks) {
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
-        dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(1, serializer), airTicks);
-
-        updateWatcher();
-    }
-
-    public short getAirTicks() {
-        return dataWatcher.getShort(1);
-    }
-
-    public void setCustomName(String name) {
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(String.class, false);
-        dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, serializer), name);
-
-        updateWatcher();
-    }
-
-    public String getCustomName() {
-        return dataWatcher.getString(2);
-    }
-
-    public void setCustomNameVisible(boolean visible) {
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Boolean.class);
-        dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, serializer), visible);
-
-        updateWatcher();
-    }
-
-    public boolean getCustomNameVisible() {
-        return dataWatcher.getByte(3) == 1;
-    }
-
-    public void setSilent(boolean visible) {
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class, false);
-        dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(4, serializer), (byte) (visible ? 1 : 0));
-
-        updateWatcher();
-    }
-
-    public boolean isSilent() {
-        return dataWatcher.getByte(4) == 1;
-    }
-
-    public float getHealth() {
-        return dataWatcher.getFloat(6);
-    }
-
-    public void setHealth(float health) {
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Float.class, false);
-        dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(6, serializer), health);
-
-        updateWatcher();
-    }
-
-    public boolean getFlag(int index, int num) {
-        Byte value = dataWatcher.getByte(index);
-        if (value == null) return false;
-        return (value & (1 << num)) != 0;
-    }
-
-    public void setFlag(int index, int num, boolean flag) {
-        //Byte value = dataWatcher.getByte(index);
-        //if (value == null) {
-        //    value = (byte) 0;
-        //}
-        //if (flag) {
-        //    value = (byte)(value | (1 << num));
-        //} else {
-        //    value = (byte)(value & ~(1 << num));
-        //}
-        WrappedDataWatcher.WrappedDataWatcherObject isInvisibleIndex = new WrappedDataWatcher.WrappedDataWatcherObject(0, WrappedDataWatcher.Registry.get(Byte.class));
-        dataWatcher.setObject(isInvisibleIndex, (byte) 0x20);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj != null && !(obj instanceof MoonFakeEntity)) return false;
-
-        MoonFakeEntity fakeEntity = (MoonFakeEntity) obj;
-        if (fakeEntity != null && fakeEntity.id == this.id) {
-            return true;
+        if (invisible == this.invisible) {
+            return;
         }
-        return false;
+
+        this.invisible = invisible;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
+    }
+
+    public void setElytraFlying(boolean elytraFlying) {
+        if (elytraFlying == this.elytraFlying) {
+            return;
+        }
+
+        this.elytraFlying = elytraFlying;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
+    }
+
+    /**
+     * Для обычных энтити цвет свечения будет по умолчанию
+     * серый, для FakePlayer (NPC-игрока) будет в зависимости
+     * от цвета тимы
+     */
+    public void setGlowingColor(ChatColor glowingColor) {
+        if (glowingColor == this.glowingColor) {
+            return;
+        }
+
+        this.glowingColor = glowingColor;
+
+        getDataWatcher().setObject(new WrappedDataWatcher.WrappedDataWatcherObject(0, BYTE_SERIALIZER), generateBitMask());
+        sendDataWatcherPacket();
+    }
+
+    public void look(Player player) {
+        //не ебу, что тут происходит, но без этого кода он не смотрит в сторону игрока
+        Vector vector = player.getLocation().clone().subtract(location).toVector().normalize();
+        //---------------------------------
+
+        this.location.setDirection(vector);
+        this.location.setYaw(location.getYaw());
+        this.location.setPitch(location.getPitch());
+
+        sendEntityLookPacket(player);
+        sendHeadRotationPacket(player);
+    }
+
+    public void look(float yaw, float pitch) {
+        location.setYaw(yaw);
+        location.setPitch(pitch);
+
+        for (Player receiver : receivers) {
+            sendEntityLookPacket(receiver);
+            sendHeadRotationPacket(receiver);
+        }
+    }
+
+    public final void playAnimation(FakeEntityAnimation entityAnimation) {
+        receivers.forEach(receiver -> playAnimation(receiver, entityAnimation));
+    }
+
+    public final void playAnimation(Player player, FakeEntityAnimation entityAnimation) {
+        WrapperPlayServerAnimation animationPacket = new WrapperPlayServerAnimation();
+
+        animationPacket.setEntityID(id);
+        animationPacket.setAnimation(entityAnimation.ordinal());
+
+        animationPacket.sendPacket(player);
+    }
+
+    protected final void sendDataWatcherPacket() {
+        WrapperPlayServerEntityMetadata metadataPacket = new WrapperPlayServerEntityMetadata();
+
+        metadataPacket.setEntityID(id);
+        metadataPacket.setMetadata(dataWatcher.getWatchableObjects());
+
+        receivers.forEach(metadataPacket::sendPacket);
+    }
+
+    protected final void sendTeleportPacket() {
+        WrapperPlayServerEntityTeleport packet = new WrapperPlayServerEntityTeleport();
+
+        packet.setEntityID(id);
+
+        packet.setX(location.getX());
+        packet.setY(location.getY());
+        packet.setZ(location.getZ());
+
+        packet.setYaw(location.getYaw());
+        packet.setPitch(location.getPitch());
+
+        receivers.forEach(packet::sendPacket);
+    }
+
+    protected final void sendEntityLookPacket(Player player) {
+        WrapperPlayServerEntityLook entityLook = new WrapperPlayServerEntityLook();
+
+        entityLook.setEntityID(id);
+        entityLook.setYaw(location.getYaw());
+        entityLook.setPitch(location.getPitch());
+
+        entityLook.sendPacket(player);
+    }
+
+    protected final void sendHeadRotationPacket(Player player) {
+        WrapperPlayServerEntityHeadRotation headRotation = new WrapperPlayServerEntityHeadRotation();
+
+        headRotation.setEntityID(id);
+        headRotation.setHeadYaw((byte) ((int) (location.getYaw() * 256.0F / 360.0F)));
+
+        headRotation.sendPacket(player);
+    }
+
+    protected final void sendDestroyPacket(Player player) {
+        WrapperPlayServerEntityDestroy packet = new WrapperPlayServerEntityDestroy();
+
+        packet.setEntityIds(new int[]{id});
+
+        packet.sendPacket(player);
+    }
+
+    /**
+     * Отправка пакета спавна энтити, для некоторых
+     * может отличаться, поэтому можно переопределять
+     */
+    protected void sendSpawnPacket(Player player) {
+        WrapperPlayServerSpawnEntityLiving packet = new WrapperPlayServerSpawnEntityLiving();
+
+        packet.setEntityID(id);
+        packet.setType(entityType);
+        packet.setMetadata(dataWatcher);
+
+        packet.setX(location.getX());
+        packet.setY(location.getY());
+        packet.setZ(location.getZ());
+
+        packet.setYaw(location.getYaw());
+        packet.setPitch(location.getPitch());
+
+        packet.sendPacket(player);
+    }
+
+    protected void onReceiverAdd(Player player) { }
+
+    protected void onReceiverRemove(Player player) { }
+
+    private byte generateBitMask() {
+        return (byte) ((burning ? 0x01 : 0) + (sneaking ? 0x02 : 0) + (sprinting ? 0x08 : 0) + (invisible ? 0x20 : 0) + (glowingColor != null ? 0x40 : 0) + (elytraFlying ? 0x80 : 0));
     }
 
 }
