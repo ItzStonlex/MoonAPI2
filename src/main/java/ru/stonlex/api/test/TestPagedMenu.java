@@ -1,5 +1,6 @@
 package ru.stonlex.api.test;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -7,10 +8,7 @@ import ru.stonlex.api.bukkit.menus.PagedMoonInventory;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 import ru.stonlex.api.java.interfaces.Clickable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TestPagedMenu extends PagedMoonInventory {
 
@@ -19,14 +17,16 @@ public class TestPagedMenu extends PagedMoonInventory {
     }
 
     @Override
-    public Map<ItemStack, Clickable<Player>> initializeItems() {
-        Map<ItemStack, Clickable<Player>> itemMap = new HashMap<>();
+    public LinkedHashMap<ItemStack, Clickable<Player>> initializeItems() {
+        LinkedHashMap<ItemStack, Clickable<Player>> itemMap = new LinkedHashMap<>();
 
-        itemMap.put(ItemUtil.getItemStack(Material.STONE), player -> {
-            player.sendMessage("Ты кликнул по камню");
+        for (int i = 0 ; i < 100 ; i++) {
+            itemMap.put(ItemUtil.getItemStack(Material.STONE, String.format("%s%s", ChatColor.RED, i)), player -> {
+                player.sendMessage("Ты кликнул по камню");
 
-            player.closeInventory();
-        });
+                player.closeInventory();
+            });
+        }
 
         return itemMap;
     }

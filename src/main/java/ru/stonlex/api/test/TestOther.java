@@ -8,12 +8,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.bukkit.board.MoonSidebar;
+import ru.stonlex.api.bukkit.board.objective.SidebarObjective;
 import ru.stonlex.api.bukkit.particle.ParticleEffect;
 import ru.stonlex.api.java.JavaMoonAPI;
 import ru.stonlex.api.java.mail.MailSender;
 import ru.stonlex.api.java.schedulers.MoonTask;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
-import ru.stonlex.api.java.utility.DateUtil;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -26,12 +27,6 @@ public class TestOther {
     /**
      * В данном методе мы создаем Sidebar, или же Scoreboard, или
      * даже просто Board, кому как удобнее это называть :)
-     *
-     * Все происходит максимально просто и удобно:
-     *  При помощи основного класса MoonSidebar мы вызываем новый
-     *  Builder, через который строим весь скорборд, устанавливая ему
-     *  строки, DisplayName, и даже добавляя Updater (можно несколько),
-     *  который будет обновлять то, и так, как мы того сами хотим.
      */
     public void setSidebar(Player player) {
 
@@ -39,25 +34,23 @@ public class TestOther {
         ChatColor[] displayNameColors = new ChatColor[]{ChatColor.AQUA, ChatColor.BLUE};
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
-        //Непосредтсвенно создание самого скорборда
-        MoonAPI.getSidebarManager().newBuilder()
-                .setShowPlayer(player)
+        //Непосредственно создание самого скорборда
+        MoonAPI.getSidebarManager().newBuilder(player)
 
-                .setDisplayName("§6§lMOONSTUDIO")
+                .setDisplayName("§b§lMoonStudio")
 
-                .addLine(4, "&7".concat(DateUtil.getDate("Дата: dd/MM/yy, Время: HH:mm")) )
-                .addLine(3, "")
-                .addLine(2, "&fАвтор MoonAPI: &cItzStonlex")
-                .addLine(1, "")
-                .addLine(0, "&ewww.moonstudio.space")
+                .setLine(2, "§aТестовая строка 1")
+                .setLine(1, "§aТестовая строка 2")
+                .setLine(0, "§aТестовая строка 3")
 
-                .addUpdater(20, update -> {
-                    update.setDisplayName(displayNameColors[random.nextInt(displayNameColors.length)] + "§lMOONSTUDIO");
+                .newUpdater(update -> {
+                    ChatColor chatColor = displayNameColors[random.nextInt(displayNameColors.length)];
 
-                    update.addLine(4, "&7".concat(DateUtil.getDate("Дата: dd/MM/yy, Время: HH:mm")) );
-                })
+                    update.setDisplayName(chatColor + "MoonStudio");
+                    update.setLine(2, chatColor + "Тестовая строка 1");
+                }, 5)
 
-                .build().show();
+                .showPlayer(player);
     }
 
     /**
@@ -66,7 +59,7 @@ public class TestOther {
     public void sendMailMessage() {
         //Получение отправителя
         MailSender mailSender = JavaMoonAPI.getMailManager().getMailSender("itzstonlex@bk.ru",
-                "itzstonlex@bk.ru", "*****",
+                "itzstonlex@bk.ru", "***",
                 "smtp.mail.ru");
 
         //Отправка сообщения на другой EMail-адрес

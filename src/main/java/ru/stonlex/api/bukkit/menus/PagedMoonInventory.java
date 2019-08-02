@@ -8,6 +8,7 @@ import ru.stonlex.api.bukkit.utility.ItemUtil;
 import ru.stonlex.api.java.interfaces.Clickable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
     private Player viewerPlayer;
 
-    private final Map<ItemStack, Clickable<Player>> buttonMap;
+    private final LinkedHashMap<ItemStack, Clickable<Player>> buttonMap;
     private final List<Integer> slotsList;
 
     /**
@@ -52,7 +53,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
     /**
      * Инициализация предметов в инвентарь
      */
-    public abstract Map<ItemStack, Clickable<Player>> initializeItems();
+    public abstract LinkedHashMap<ItemStack, Clickable<Player>> initializeItems();
 
     /**
      * Инициализация слотов, на которых будут стоять предметы

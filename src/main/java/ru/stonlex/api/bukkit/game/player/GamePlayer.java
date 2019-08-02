@@ -17,7 +17,7 @@ public interface GamePlayer {
     boolean isSpectator();
 
     void setSpectator();
-    void setMultiple(int multiple);
+    void setMultiple(double multiple);
     void leave();
 
 }

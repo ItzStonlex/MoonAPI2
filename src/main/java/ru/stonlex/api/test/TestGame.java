@@ -30,8 +30,10 @@ import java.util.concurrent.TimeUnit;
 public class TestGame extends AbstractGameFactory {
 
     private static final MoonKit PLAYER_DEFAULT_KIT = KitManager.newBuilder("PlayerKit")
+
             .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
             .setChestplateItem(ItemUtil.getItemStack(Material.LEATHER_CHESTPLATE, "§eКуртка"))
+
             .setItemList(Lists.newArrayList(ItemUtil.getItemStack(Material.WOOD_SWORD, "§eДеревянный меч"),
                     ItemUtil.getItemStack(Material.WOOD_PICKAXE, "§eДеревянная кирка"),
                     ItemUtil.getItemStack(Material.WOOD_AXE, "§eДеревянный топор")))
@@ -46,6 +48,8 @@ public class TestGame extends AbstractGameFactory {
         GAME_SETTINGS.LOBBY_SERVER_NAME = "SWLobby-3";
         GAME_SETTINGS.SUCCESSFULLY_PREFIX = "§f[§cSkyWars§f] ";
         GAME_SETTINGS.ERROR_PREFIX = GAME_SETTINGS.SUCCESSFULLY_PREFIX.concat("§c");
+
+        GAME_API.setGameFactory(this);
     }
 
     private void setupStartSettings() {
@@ -123,13 +127,12 @@ public class TestGame extends AbstractGameFactory {
 
     @Override
     public void onDeath(@NonNull Player player) {
+        Player playerKiller = player.getKiller();
+        VaultManager vaultManager = MoonAPI.getVaultManager();
+
         GamePlayer gamePlayer = GAME_API.getGamePlayer(player);
 
         gamePlayer.setSpectator();
-
-        Player playerKiller = player.getKiller();
-
-        VaultManager vaultManager = MoonAPI.getVaultManager();
 
         if (playerKiller != null) {
             broadcastToPlayers(vaultManager.getVaultPlayer(playerKiller).getPrefix() + playerKiller.getName()

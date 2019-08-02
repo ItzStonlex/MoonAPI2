@@ -1,11 +1,7 @@
 package ru.stonlex.api.bukkit;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.api.bukkit.board.manager.SidebarManager;
 import ru.stonlex.api.bukkit.commands.CommandManager;
@@ -19,11 +15,7 @@ import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
 import ru.stonlex.api.bukkit.modules.protocol.entity.listeners.FakeEntityClickListener;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
-import ru.stonlex.api.bukkit.utility.cooldown.CooldownUtil;
 import ru.stonlex.api.test.TestCommand;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public final class MoonAPI extends JavaPlugin {
 
@@ -66,8 +58,13 @@ public final class MoonAPI extends JavaPlugin {
 
         registerProtocolListener();
 
-        messagingManager = new MessagingManager(this);
-        vaultManager     = new VaultManager();
+        messagingManager   = new MessagingManager(this);
+        vaultManager       = new VaultManager();
+
+
+        /* TEST */
+        commandManager.registerCommand(this, new TestCommand(), "test", "тест");
+        /* TEST */
     }
 
     /**

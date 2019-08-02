@@ -8,7 +8,7 @@ import ru.stonlex.api.java.schedulers.MoonTask;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
-public class GameTimerFactory {
+public final class GameTimerFactory {
 
     @Getter
     private int secondsLeft;
@@ -26,6 +26,8 @@ public class GameTimerFactory {
      * Запуск таймера в лобби
      */
     public void start() {
+        this.secondsLeft = gameFactory.GAME_SETTINGS.LOBBY_TIMER_START_SECONDS;
+
         this.timerWorked = true;
 
         this.timerTask = new MoonTask() {
@@ -49,9 +51,10 @@ public class GameTimerFactory {
                 }
 
                 if (secondsLeft % 5 == 0 || secondsLeft < 5) {
-                    Bukkit.getOnlinePlayers().forEach(player -> {
+                    gameFactory.broadcastToAll("Игра начнется через §e" + secondsLeft + " секунд");
 
-                        gameFactory.broadcastToAll("Игра начнется через §e" + secondsLeft + " секунд");
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        player.setLevel(secondsLeft);
 
                         player.sendTitle(String.format("§6§l%s %s", gameFactory.GAME_SETTINGS.GAME_NAME, gameFactory.GAME_SETTINGS.GAME_TYPE.getType()),
                                 "Начало игры через §c" + secondsLeft);

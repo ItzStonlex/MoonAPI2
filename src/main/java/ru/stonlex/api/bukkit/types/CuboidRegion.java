@@ -115,7 +115,7 @@ public class CuboidRegion implements Iterable<Block>, Cloneable, ConfigurationSe
         if (this.blocks != null) {
             return this.blocks;
         }
-        this.blocks = new ArrayList<Block>();
+        this.blocks = new ArrayList<>();
         for (Block block : this) {
             this.blocks.add(block);
         }
@@ -400,35 +400,70 @@ public class CuboidRegion implements Iterable<Block>, Cloneable, ConfigurationSe
     }
 
     public List<Block> getEndLines() {
-        ArrayList<Block> list = new ArrayList<Block>();
-        CuboidRegion cuboidRegion1 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[1].getLocation());
-        list.addAll(cuboidRegion1.getBlocks());
-        CuboidRegion cuboidRegion2 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[2].getLocation());
+        CuboidRegion cuboidRegion1 = new CuboidRegion(
+                this.corners()[0].getLocation(),
+                this.corners()[1].getLocation());
+        ArrayList<Block> list = new ArrayList<>(cuboidRegion1.getBlocks());
+
+        CuboidRegion cuboidRegion2 = new CuboidRegion(
+                this.corners()[0].getLocation(),
+                this.corners()[2].getLocation());
         list.addAll(cuboidRegion2.getBlocks());
-        CuboidRegion cuboidRegion3 = new CuboidRegion(this.corners()[0].getLocation(), this.corners()[4].getLocation());
+
+        CuboidRegion cuboidRegion3 = new CuboidRegion(
+                this.corners()[0].getLocation(),
+                this.corners()[4].getLocation());
         list.addAll(cuboidRegion3.getBlocks());
-        CuboidRegion cuboidRegion4 = new CuboidRegion(this.corners()[1].getLocation(), this.corners()[3].getLocation());
+
+        CuboidRegion cuboidRegion4 = new CuboidRegion(
+                this.corners()[1].getLocation(),
+                this.corners()[3].getLocation());
         list.addAll(cuboidRegion4.getBlocks());
-        CuboidRegion cuboidRegion5 = new CuboidRegion(this.corners()[1].getLocation(), this.corners()[5].getLocation());
+
+        CuboidRegion cuboidRegion5 = new CuboidRegion(
+                this.corners()[1].getLocation(),
+                this.corners()[5].getLocation());
         list.addAll(cuboidRegion5.getBlocks());
-        CuboidRegion cuboidRegion6 = new CuboidRegion(this.corners()[2].getLocation(), this.corners()[3].getLocation());
+
+        CuboidRegion cuboidRegion6 = new CuboidRegion(
+                this.corners()[2].getLocation(),
+                this.corners()[3].getLocation());
         list.addAll(cuboidRegion6.getBlocks());
-        CuboidRegion cuboidRegion7 = new CuboidRegion(this.corners()[2].getLocation(), this.corners()[6].getLocation());
+
+        CuboidRegion cuboidRegion7 = new CuboidRegion(
+                this.corners()[2].getLocation(),
+                this.corners()[6].getLocation());
         list.addAll(cuboidRegion7.getBlocks());
-        CuboidRegion cuboidRegion8 = new CuboidRegion(this.corners()[3].getLocation(), this.corners()[7].getLocation());
+
+        CuboidRegion cuboidRegion8 = new CuboidRegion(
+                this.corners()[3].getLocation(),
+                this.corners()[7].getLocation());
         list.addAll(cuboidRegion8.getBlocks());
-        CuboidRegion cuboidRegion9 = new CuboidRegion(this.corners()[4].getLocation(), this.corners()[5].getLocation());
+
+        CuboidRegion cuboidRegion9 = new CuboidRegion(
+                this.corners()[4].getLocation(),
+                this.corners()[5].getLocation());
         list.addAll(cuboidRegion9.getBlocks());
-        CuboidRegion cuboidRegion10 = new CuboidRegion(this.corners()[4].getLocation(), this.corners()[6].getLocation());
+
+        CuboidRegion cuboidRegion10 = new CuboidRegion(
+                this.corners()[4].getLocation(),
+                this.corners()[6].getLocation());
         list.addAll(cuboidRegion10.getBlocks());
-        CuboidRegion cuboidRegion11 = new CuboidRegion(this.corners()[5].getLocation(), this.corners()[7].getLocation());
+
+        CuboidRegion cuboidRegion11 = new CuboidRegion(
+                this.corners()[5].getLocation(),
+                this.corners()[7].getLocation());
         list.addAll(cuboidRegion11.getBlocks());
-        CuboidRegion cuboidRegion12 = new CuboidRegion(this.corners()[7].getLocation(), this.corners()[6].getLocation());
+
+        CuboidRegion cuboidRegion12 = new CuboidRegion(
+                this.corners()[7].getLocation(),
+                this.corners()[6].getLocation());
         list.addAll(cuboidRegion12.getBlocks());
+
         return list;
     }
 
-    public static enum CuboidDirection {
+    public enum CuboidDirection {
         North,
         East,
         South,

@@ -18,8 +18,6 @@ public abstract class AbstractGameFactory implements Listener {
 
     protected final GameSettings GAME_SETTINGS = GAME_API.getGameSettings();
 
-    protected final GameType GAME_TYPE = GAME_SETTINGS.GAME_TYPE;
-
     protected final GameTimerFactory GAME_LOBBY_TIMER_FACTORY = new GameTimerFactory(this);
 
     /**

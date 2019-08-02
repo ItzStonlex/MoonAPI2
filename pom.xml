@@ -77,6 +77,13 @@
         </dependency>
 
         <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-event</artifactId>
+            <version>1.13-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>

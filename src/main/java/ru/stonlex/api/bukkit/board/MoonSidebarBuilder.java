@@ -1,73 +1,59 @@
 package ru.stonlex.api.bukkit.board;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
+import ru.stonlex.api.bukkit.board.objective.SidebarObjective;
 import ru.stonlex.api.bukkit.board.updater.SidebarUpdater;
-import ru.stonlex.api.java.interfaces.Builder;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.function.Consumer;
 
-public final class MoonSidebarBuilder implements Builder<MoonSidebar> {
+/**
+ * @Author ItzStonlex.
+ * @VK https://vk.com/itzstonlex
+ * <p>
+ * (Created on 01.08.2019 15:25)
+ */
+public class MoonSidebarBuilder {
 
-    private MoonSidebar board = null;
-    private String displayName;
-    private Player player;
+    private final MoonSidebar sidebar;
 
-    private final Map<Integer, String> cache = new HashMap<>();
+    private final SidebarObjective sidebarObjective;
+
+    private final SidebarUpdater sidebarUpdater;
 
 
-    /**
-     * Установить DisplayName для скорборда
-     */
-    public MoonSidebarBuilder setShowPlayer(Player player) {
-        if (board == null) this.board = new MoonSidebar(player);
+    public MoonSidebarBuilder(Player player) {
+        this.sidebar = new MoonSidebar();
+        this.sidebarObjective = new SidebarObjective(player.getName(), "§6§lMoonStudio");
+        this.sidebarUpdater = new SidebarUpdater(sidebar);
 
-        this.player = player;
+        sidebar.setObjective(sidebarObjective);
 
-        return this;
+        sidebarObjective.create(player);
     }
 
-    /**
-     * Установить DisplayName для скорборда
-     */
     public MoonSidebarBuilder setDisplayName(String displayName) {
-        this.displayName = displayName;
+        sidebarObjective.setDisplayName(displayName, sidebar);
 
         return this;
     }
 
-    /**
-     * Добавить строку в скорборд
-     */
-    public MoonSidebarBuilder addLine(int index, String line) {
-        cache.put(index, line);
+    public MoonSidebarBuilder setLine(int index, String line) {
+        sidebar.setLine(index, line);
 
         return this;
     }
 
-    /**
-     * Добавить обновление в скорборд
-     */
-    public MoonSidebarBuilder addUpdater(long time, SidebarUpdater boardUpdater) {
-        if (board == null) this.board = new MoonSidebar(player);
-
-        this.board.addUpdater(time, boardUpdater);
+    public MoonSidebarBuilder newUpdater(@NonNull Consumer<MoonSidebar> task, long delay) {
+        sidebarUpdater.newTask(task, delay);
 
         return this;
     }
 
-    /**
-     * Построить и создать скорборд
-     */
-    @Override
-    public MoonSidebar build() {
-        Objects.requireNonNull(this.board, "board is not initialized");
+    public void showPlayer(Player player) {
+        sidebar.send(player);
 
-        cache.forEach((index, line) -> this.board.addLine(index, line));
-        this.board.setDisplayName(this.displayName);
-        this.board.startCommonUpdater();
-
-        return this.board;
+        sidebarUpdater.start();
     }
+
 }

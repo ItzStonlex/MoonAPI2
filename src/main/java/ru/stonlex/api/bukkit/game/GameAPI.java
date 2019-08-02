@@ -11,33 +11,42 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.bukkit.MoonAPI;
-import ru.stonlex.api.bukkit.game.enums.GameStatus;
+import ru.stonlex.api.bukkit.game.cage.manager.CageManager;
 import ru.stonlex.api.bukkit.game.factory.AbstractGameFactory;
 import ru.stonlex.api.bukkit.game.kit.manager.KitManager;
 import ru.stonlex.api.bukkit.game.listeners.*;
 import ru.stonlex.api.bukkit.game.perk.manager.PerkManager;
 import ru.stonlex.api.bukkit.game.player.GamePlayer;
-import ru.stonlex.api.bukkit.MoonAPI;
+import ru.stonlex.api.bukkit.game.team.manager.TeamManager;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Getter
 public final class GameAPI {
 
-    private final PerkManager perkManager   = new PerkManager();
-
-    private final KitManager kitManager     = new KitManager();
-
-    private final GameSettings gameSettings = new GameSettings();
-
-    @Setter
-    private AbstractGameFactory gameFactory;
-
+    @Getter
+    private final TeamManager teamManager        = new TeamManager();
 
     @Getter
+    private final CageManager cageManager        = new CageManager();
+
+    @Getter
+    private final PerkManager perkManager        = new PerkManager();
+
+    @Getter
+    private final KitManager kitManager          = new KitManager();
+
+    @Getter
+    private final GameSettings gameSettings      = new GameSettings();
+
+
+    @Setter
+    private AbstractGameFactory gameFactory = null;
+
+
     private final Map<String, GamePlayer> playersInGameMap = new HashMap<>();
+
 
     /**
      * Регистрация игровых листенеров, которые отслеживают
@@ -74,6 +83,22 @@ public final class GameAPI {
     }
 
     /**
+     * Добавить игрока в игру
+     */
+    public void addPlayerInGame(String playerName) {
+        playersInGameMap.put(playerName.toLowerCase(), new GamePlayerImpl(playerName));
+    }
+
+    /**
+     * Удалить игрока из игры
+     */
+    public void removePlayerInGame(String playerName) {
+        GamePlayer gamePlayer = playersInGameMap.get(playerName.toLowerCase());
+
+        gamePlayer.setSpectator();
+    }
+
+    /**
      * Получение списка выживших игроков
      */
     public final Collection<GamePlayer> getAlivePlayers() {
@@ -91,37 +116,28 @@ public final class GameAPI {
     }
 
 
-
     @RequiredArgsConstructor
+    @Getter
     public class GamePlayerImpl implements GamePlayer {
 
-        private final String playerName;
+        private final String name;
 
+        @Setter
         private double multiple;
 
         @Override
-        public String getName() {
-            return playerName;
-        }
-
-        @Override
         public Player getPlayer() {
-            return Bukkit.getPlayer(playerName);
+            return Bukkit.getPlayer(name);
         }
 
         @Override
         public ItemStack getHead() {
-            return ItemUtil.getPlayerSkull(playerName);
-        }
-
-        @Override
-        public double getMultiple() {
-            return multiple;
+            return ItemUtil.getPlayerSkull(name);
         }
 
         @Override
         public boolean isPlayer() {
-            return playersInGameMap.containsKey(playerName.toLowerCase());
+            return playersInGameMap.containsKey(name.toLowerCase());
         }
 
         @Override
@@ -132,10 +148,10 @@ public final class GameAPI {
         @Override
         public void setSpectator() {
             if (isSpectator()) {
-                throw new RuntimeException("player '" + playerName + "' is already has been spectator");
+                throw new RuntimeException("player '" + name + "' is already a spectator");
             }
 
-            playersInGameMap.remove(playerName.toLowerCase());
+            playersInGameMap.remove(name.toLowerCase());
 
             if (getPlayer() == null) {
                 throw new RuntimeException("player is not online");
@@ -171,11 +187,6 @@ public final class GameAPI {
                 player.showPlayer(getPlayer());
                 getPlayer().showPlayer(player);
             });
-        }
-
-        @Override
-        public void setMultiple(int multiple) {
-            this.multiple = multiple;
         }
 
         @Override
