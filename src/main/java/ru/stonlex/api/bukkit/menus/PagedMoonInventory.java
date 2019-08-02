@@ -19,8 +19,10 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
     private Player viewerPlayer;
 
-    private final LinkedHashMap<ItemStack, Clickable<Player>> buttonMap;
-    private final List<Integer> slotsList;
+    private final String inventoryTitle;
+
+    private LinkedHashMap<ItemStack, Clickable<Player>> buttonMap;
+    private List<Integer> slotsList;
 
     /**
      * Инициализация инвентаря
@@ -43,11 +45,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
         super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
 
         this.page = page;
-
-        this.buttonMap = initializeItems();
-        this.slotsList = initializeSlots();
-
-        this.pagesCount = buttonMap.size() / slotsList.size();
+        this.inventoryTitle = inventoryTitle;
     }
 
     /**
@@ -71,6 +69,8 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         this.page--;
 
+        setTitle(inventoryTitle.concat(" | " + (page + 1)));
+
         updateInventory(player);
     }
 
@@ -78,11 +78,13 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * На страницу вперед
      */
     private void forward(Player player) {
-        if (page - 1 < 0) {
+        if (page > pagesCount) {
             throw new RuntimeException("Page cannot be > max pages count");
         }
 
         this.page++;
+
+        setTitle(inventoryTitle.concat(" | " + (page + 1)));
 
         updateInventory(player);
     }
@@ -93,14 +95,19 @@ public abstract class PagedMoonInventory extends MoonInventory {
     private void buildPage(Player player) {
         this.viewerPlayer = player;
 
+        this.buttonMap = initializeItems();
+        this.slotsList = initializeSlots();
+
+        this.pagesCount = buttonMap.size() / slotsList.size();
+
         if (page < pagesCount) {
-            setItem(getInventory().getSize() - 4, ItemUtil.getItemStack(Material.ARROW, "§eВперед"),
-                    player1 -> forward(player));
+            setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
+                    "§eВперед"), player1 -> forward(player));
         }
 
         if (page > 0) {
-            setItem(getInventory().getSize() - 6, ItemUtil.getItemStack(Material.ARROW, "§eНазад"),
-                    player1 -> backward(player));
+            setItem(getInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
+                    "§eНазад"), player1 -> backward(player));
         }
 
 
