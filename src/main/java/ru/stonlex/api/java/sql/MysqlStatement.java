@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-final class Statement {
+final class MysqlStatement {
 
     /**
      * Опять же, этот код старый, и переписывать его мне было
@@ -21,7 +21,7 @@ final class Statement {
     /**
      * Инициализация статемента
      */
-    public Statement(Connection connection, String sql, Object... elements) throws SQLException {
+    public MysqlStatement(Connection connection, String sql, Object... elements) throws SQLException {
         this.statement = connection.prepareStatement(sql);
         if (elements != null && elements.length != 0) {
             for (int i = 0; i < elements.length; ++i) {

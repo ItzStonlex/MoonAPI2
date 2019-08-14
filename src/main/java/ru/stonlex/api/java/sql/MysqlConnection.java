@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SQLConnection {
+public class MysqlConnection {
 
     /**
      * Опять же, этот код старый, и переписывать его мне было
@@ -33,8 +33,8 @@ public class SQLConnection {
      * @param tables - Таблицы с их аргументами, которые нужно создать
      *               при условии, что их не существует.
      */
-    private SQLConnection(String host, int port, String username, String password, String database,
-                          Map<String, String> tables) {
+    private MysqlConnection(String host, int port, String username, String password, String database,
+                            Map<String, String> tables) {
 
         dataSource.setServerName(host);
         dataSource.setPort(port);
@@ -49,12 +49,12 @@ public class SQLConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Executor.getExecutor(this).execute(true, String.format("CREATE DATABASE IF NOT EXISTS `%s`", database));
+        MysqlExecutor.getExecutor(this).execute(true, String.format("CREATE DATABASE IF NOT EXISTS `%s`", database));
 
         for (String table : tables.keySet()) {
             final String value = tables.get(table);
             final String sql = String.format("CREATE TABLE IF NOT EXISTS `%s` (%s)", table, value);
-            Executor.getExecutor(this).execute(true, sql);
+            MysqlExecutor.getExecutor(this).execute(true, sql);
         }
     }
 
@@ -62,8 +62,8 @@ public class SQLConnection {
      * Получение класса с запросами
      * в MySQL
      */
-    public Executor getExecutor() {
-        return Executor.getExecutor(this);
+    public MysqlExecutor getExecutor() {
+        return MysqlExecutor.getExecutor(this);
     }
 
     /**
@@ -96,7 +96,7 @@ public class SQLConnection {
     }
 
 
-    public static class SQLBuilder implements Builder<SQLConnection> {
+    public static class SQLBuilder implements Builder<MysqlConnection> {
 
         private String host = "localhost",
                 password = "",
@@ -106,7 +106,7 @@ public class SQLConnection {
         private Map<String, String> tables = new HashMap<>();
 
         @Getter
-        private static final Map<String, SQLConnection> databases = new HashMap<>();
+        private static final Map<String, MysqlConnection> databases = new HashMap<>();
 
         /**
          * Инициализация базы данных, схемы
@@ -171,11 +171,11 @@ public class SQLConnection {
         }
 
         @Override
-        public SQLConnection build() {
-            SQLConnection connection = databases.getOrDefault(database, null);
+        public MysqlConnection build() {
+            MysqlConnection connection = databases.getOrDefault(database, null);
 
             if (connection == null) {
-                connection = new SQLConnection(this.host, this.port, this.username,
+                connection = new MysqlConnection(this.host, this.port, this.username,
                         this.password, this.database, this.tables);
                 databases.put(database, connection);
 

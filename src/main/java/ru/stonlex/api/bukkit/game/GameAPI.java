@@ -38,14 +38,13 @@ public final class GameAPI {
     @Getter
     private final GameSettings gameSettings      = new GameSettings();
 
+    @Setter
+    @Getter
+    private AbstractGameFactory gameFactory;
 
     @Setter
     @Getter
-    private AbstractGameFactory gameFactory = null;
-
-    @Setter
-    @Getter
-    private AbstractTimerFactory timerFactory = null;
+    private AbstractTimerFactory timerFactory;
 
 
     private final Map<String, GamePlayer> gamePlayerMap = new HashMap<>();

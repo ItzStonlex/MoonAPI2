@@ -19,7 +19,7 @@ public final class ReflectionUtil {
     public static /* varargs */ Constructor<?> getConstructor(Class<?> clazz, Class<?> ... parameterTypes) throws NoSuchMethodException {
         Class<?>[] primitiveTypes = DataType.getPrimitive(parameterTypes);
         for (Constructor<?> constructor : clazz.getConstructors()) {
-            if (!DataType.compare(DataType.getPrimitive(constructor.getParameterTypes()), primitiveTypes)) continue;
+            if (DataType.compare(DataType.getPrimitive(constructor.getParameterTypes()), primitiveTypes)) continue;
             return constructor;
         }
         throw new NoSuchMethodException("There is no such constructor in this class with the specified parameter types");
@@ -38,7 +38,7 @@ public final class ReflectionUtil {
     public static Method getMethod(Class<?> clazz, String methodName, Class<?> ... parameterTypes) throws NoSuchMethodException {
         Class<?>[] primitiveTypes = DataType.getPrimitive(parameterTypes);
         for (Method method : clazz.getMethods()) {
-            if (!method.getName().equals(methodName) || !DataType.compare(DataType.getPrimitive(method.getParameterTypes()), primitiveTypes)) continue;
+            if (!method.getName().equals(methodName) || DataType.compare(DataType.getPrimitive(method.getParameterTypes()), primitiveTypes)) continue;
             return method;
         }
         throw new NoSuchMethodException("There is no such method in this class with the specified name and parameter types");
@@ -105,7 +105,7 @@ public final class ReflectionUtil {
         }
     }
 
-    public static enum DataType {
+    public enum DataType {
         BYTE(Byte.TYPE, Byte.class),
         SHORT(Short.TYPE, Short.class),
         INTEGER(Integer.TYPE, Integer.class),
@@ -119,7 +119,7 @@ public final class ReflectionUtil {
         private final Class<?> primitive;
         private final Class<?> reference;
 
-        private DataType(Class<?> primitive, Class<?> reference) {
+        DataType(Class<?> primitive, Class<?> reference) {
             this.primitive = primitive;
             this.reference = reference;
         }
@@ -184,19 +184,19 @@ public final class ReflectionUtil {
 
         public static boolean compare(Class<?>[] primary, Class<?>[] secondary) {
             if (primary == null || secondary == null || primary.length != secondary.length) {
-                return false;
+                return true;
             }
             for (int index = 0; index < primary.length; ++index) {
                 Class<?> primaryClass = primary[index];
                 Class<?> secondaryClass = secondary[index];
                 if (primaryClass.equals(secondaryClass) || primaryClass.isAssignableFrom(secondaryClass)) continue;
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         static {
-            CLASS_MAP = new HashMap();
+            CLASS_MAP = new HashMap<>();
             for (DataType type : DataType.values()) {
                 CLASS_MAP.put(type.primitive, type);
                 CLASS_MAP.put(type.reference, type);

@@ -8,6 +8,7 @@ import ru.stonlex.api.bukkit.game.enums.GameStatus;
 import ru.stonlex.api.bukkit.game.enums.GameType;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 
+@SuppressWarnings("All")
 public final class GameSettings {
 
     public ItemStack TEAM_SELECT_ITEM = ItemUtil.getItemStack(Material.ANVIL, "§aВыбор команды",
@@ -45,9 +46,7 @@ public final class GameSettings {
     public int LOBBY_TIMER_START_SECONDS = 15;
 
     public GameMode DEFAULT_GAMEMODE = GameMode.ADVENTURE;
-
     public GameType GAME_TYPE = GameType.SOLO;
-
     public GameStatus GAME_STATUS = GameStatus.WAITING_PLAYERS;
 
     public String SUCCESSFULLY_PREFIX = "§6SkyWars §8| §f";

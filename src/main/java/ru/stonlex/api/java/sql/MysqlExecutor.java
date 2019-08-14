@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
 @Getter
-public class Executor {
+public class MysqlExecutor {
 
     /**
      * Опять же, этот код старый, и переписывать его мне было
@@ -21,10 +21,10 @@ public class Executor {
      * поэтому можно и самому ее написать
      */
 
-    private final SQLConnection connection;
+    private final MysqlConnection connection;
 
-    static Executor getExecutor(SQLConnection connection) {
-        return new Executor(connection);
+    static MysqlExecutor getExecutor(MysqlConnection connection) {
+        return new MysqlExecutor(connection);
     }
 
     /**
@@ -34,10 +34,10 @@ public class Executor {
         Runnable command = () -> {
             connection.refreshConnection();
             try {
-                Statement statement = new Statement(connection.getConnection(), sql, elements);
+                MysqlStatement mysqlStatement = new MysqlStatement(connection.getConnection(), sql, elements);
 
-                statement.execute();
-                statement.close();
+                mysqlStatement.execute();
+                mysqlStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -60,10 +60,10 @@ public class Executor {
         Runnable command = () -> {
             connection.refreshConnection();
             try {
-                Statement statement = new Statement(connection.getConnection(), sql, elements);
+                MysqlStatement mysqlStatement = new MysqlStatement(connection.getConnection(), sql, elements);
 
-                result.set(handler.handleResponse(statement.getResultSet()));
-                statement.close();
+                result.set(handler.handleResponse(mysqlStatement.getResultSet()));
+                mysqlStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
