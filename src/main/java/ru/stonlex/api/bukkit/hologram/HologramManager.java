@@ -5,14 +5,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.protocol.entity.impl.FakeArmorStand;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public final class HologramManager extends CacheManager<MoonHologram> {
+public final class HologramManager extends AbstractCacheManager<MoonHologram> {
 
     /**
      * Кеширование голограммы в мапу по ее имени.

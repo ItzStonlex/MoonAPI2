@@ -19,32 +19,32 @@ import ru.stonlex.api.test.TestCommand;
 
 public final class MoonAPI extends JavaPlugin {
 
-    public static final String PLUGIN_MESSAGE_CHANNEL      = "MoonAPI";
+    public static final String PLUGIN_MESSAGE_CHANNEL        = "MoonAPI";
 
 
     @Getter
-    private static final CommandManager commandManager     = new CommandManager();
+    private static final CommandManager commandManager       = new CommandManager();
 
     @Getter
-    private static final HologramManager hologramManager   = new HologramManager();
+    private static final HologramManager hologramManager     = new HologramManager();
 
     @Getter
-    private static final InventoryManager inventoryManager = new InventoryManager();
+    private static final InventoryManager inventoryManager   = new InventoryManager();
 
     @Getter
-    private static final GameAPI gameAPI                   = new GameAPI();
+    private static final GameAPI gameAPI                     = new GameAPI();
 
     @Getter
-    private static final EventRegisterManager eventManager = new EventRegisterManager();
+    private static final EventRegisterManager eventManager   = new EventRegisterManager();
 
     @Getter
-    private static final SidebarManager sidebarManager     = new SidebarManager();
+    private static final SidebarManager sidebarManager       = new SidebarManager();
 
     @Getter
-    private static MessagingManager messagingManager       = null;
+    private static MessagingManager messagingManager         = null;
 
     @Getter
-    private static VaultManager vaultManager               =  null;
+    private static VaultManager vaultManager                 = null;
 
 
     @Override
@@ -56,7 +56,7 @@ public final class MoonAPI extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
-        registerProtocolListener();
+        ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));
 
         messagingManager   = new MessagingManager(this);
         vaultManager       = new VaultManager();
@@ -65,14 +65,6 @@ public final class MoonAPI extends JavaPlugin {
         /* TEST */
         commandManager.registerCommand(this, new TestCommand(), "test", "тест");
         /* TEST */
-    }
-
-    /**
-     * Регистрация пакетного листенера для прослушки клика
-     * по MoonFakeEntity
-     */
-    private void registerProtocolListener() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));
     }
 
 }

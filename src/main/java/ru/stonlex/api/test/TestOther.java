@@ -7,13 +7,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.api.bukkit.MoonAPI;
-import ru.stonlex.api.bukkit.board.MoonSidebar;
-import ru.stonlex.api.bukkit.board.objective.SidebarObjective;
+import ru.stonlex.api.bukkit.modules.protocol.entity.animation.FakeEntityAnimation;
+import ru.stonlex.api.bukkit.modules.protocol.entity.impl.FakePlayer;
 import ru.stonlex.api.bukkit.particle.ParticleEffect;
 import ru.stonlex.api.java.JavaMoonAPI;
 import ru.stonlex.api.java.mail.MailSender;
-import ru.stonlex.api.java.schedulers.MoonTask;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,8 +36,7 @@ public class TestOther {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         //Непосредственно создание самого скорборда
-        MoonAPI.getSidebarManager().newBuilder(player)
-
+        MoonAPI.getSidebarManager().newBuilder()
                 .setDisplayName("§b§lMoonStudio")
 
                 .setLine(2, "§aТестовая строка 1")
@@ -50,7 +50,7 @@ public class TestOther {
                     update.setLine(2, chatColor + "Тестовая строка 1");
                 }, 5)
 
-                .showPlayer(player);
+                .showToPlayer(player);
     }
 
     /**
@@ -89,19 +89,26 @@ public class TestOther {
      * В этом незамысловатом методе мы очень просто и легко создаем
      * голограмму, которая может быть видима только 1 игроку, а может и всем.
      */
-    public void spawnHologram(Player player, Location location, boolean showForAll) {
+    public void spawnHologram(Player receiver, Location location, boolean showForAll) {
         MoonAPI.getHologramManager().createHologram("testHologram", location, hologram -> {
-            hologram.addLine("123");
-            hologram.addLine("§c321");
-            hologram.addLine("Автор API - ItzStonlex");
-            hologram.addLine("VK: vk.com/itzstonlex");
+            hologram.addLine("123"); //Добавить линию
+            hologram.addLine("§c321"); //Добавить линию
+            hologram.addLine("Автор API - ItzStonlex"); //Добавить линию
+            hologram.addLine("VK: vk.com/itzstonlex"); //Добавить линию
 
+            hologram.setClickAction(player -> { //Действие при клике на голограмму
+                player.sendMessage("Test"); //Отправитб сообщение игроку
+
+                hologram.modifyLine(0, "321"); //Изменить 1 строку на другую
+            });
+
+            //Если значение = true, то показывам голограмму для всех
             if (showForAll) {
                 hologram.spawn();
                 return;
             }
 
-            hologram.addReceiver(player);
+            hologram.addReceiver(receiver); //Отправляем голграмму игроку
         });
     }
 
@@ -170,16 +177,11 @@ public class TestOther {
     }
 
     /**
-     * В данном методе предусмотрены сразу две фишки MoonAPI 2.0:
-     *
-     * 1. MoonTask - Разработчик сделал свои собственные таски
-     *  (тот же BukkitRunnable), которые в разы удобнее баккитовских.
-     *
-     * 2. ParticleEffect - Удобный enum-класс с удобной работой
+     * ParticleEffect - Удобный enum-класс с удобной работой
      *  с партиклами и эффектами, с их редактированием и видоизменением.
      */
-    public void spawnCircle(Player player, Location location) {
-        new MoonTask() {
+    public void spawnCircle(Plugin plugin, Player player, Location location) {
+        new BukkitRunnable() {
             double t = 0;
 
             @Override
@@ -192,7 +194,28 @@ public class TestOther {
                 ParticleEffect.SPELL.display(0, 0, 0, 0, 3,
                         location.clone().add(x, 0, z), player);
             }
-        }.scheduleTimer(0, 1, TimeUnit.SECONDS);
+        }.runTaskTimer(plugin, 0, 20);
+    }
+
+    /**
+     * Создание NPC или любого другого фейкового моба
+     * при помощи пакетов
+     */
+    public void createNPC(Player receiver, Location location) {
+        FakePlayer fakePlayer = new FakePlayer("Ник скина для NPC", location);
+
+        fakePlayer.playAnimation(FakeEntityAnimation.TAKE_DAMAGE); //Воспроиграть анимацию (Махание рукой, вставание с кровати, и т.д.)
+        fakePlayer.look(receiver, receiver.getLocation()); //Повернуть голову и тело FakePlayer в сторону того, кому отправляем NPC
+        fakePlayer.setGlowingColor(ChatColor.AQUA); //Создать подсветку вокруг FakePlayer определенного цвета
+        fakePlayer.setSneaking(true); //Встать на SHIFT
+
+        fakePlayer.setClickAction(player -> { //Действие при клике на FakePlayer
+            player.sendMessage("Test"); //Отправить сообщение игроку, который кликнул по FakePlayer
+
+            fakePlayer.removeReceiver(player); //Скрыть FakePlayer от игрока, который кликнул по нему
+        });
+
+        fakePlayer.addReceiver(receiver); //Отправить FakePlayer игроку
     }
 
 }

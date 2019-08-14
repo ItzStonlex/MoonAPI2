@@ -5,11 +5,13 @@ import com.mojang.authlib.properties.Property;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import ru.stonlex.api.java.interfaces.Builder;
 import ru.stonlex.api.java.utility.ReflectionUtil;
@@ -29,6 +31,8 @@ public class ItemUtil {
      * Если кому-то он неудобен, то система как бы не особо сложная,
      * поэтому можно и самому ее написать
      */
+
+    public final ItemStack EMPTY_ITEM = new ItemStack(Material.AIR);
 
     public ItemStack getItemStack(Material material, byte durability, int amount, String name, String... lore) {
         ItemStack itemStack = new ItemStack(material, amount, durability);
@@ -130,7 +134,7 @@ public class ItemUtil {
     }
 
     public ItemBuilder newBuilder() {
-        return newBuilder(Material.AIR);
+        return newBuilder(EMPTY_ITEM);
     }
 
     public ItemBuilder newBuilder(Material material) {
@@ -138,7 +142,7 @@ public class ItemUtil {
     }
 
     public ItemBuilder newBuilder(ItemStack itemStack) {
-        return new ItemBuilder(itemStack);
+        return new ItemBuilder(itemStack.clone());
     }
 
 
@@ -254,6 +258,16 @@ public class ItemUtil {
             } catch (Exception ignored) {}
 
             this.itemStack.setItemMeta(skullMeta);
+
+            return this;
+        }
+
+        public ItemBuilder setLeatherColor(Color color) {
+            LeatherArmorMeta armorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+
+            armorMeta.setColor(color);
+
+            this.itemStack.setItemMeta(armorMeta);
 
             return this;
         }

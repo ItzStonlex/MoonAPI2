@@ -5,14 +5,25 @@ import org.bukkit.entity.Player;
 
 public interface MoonCommand {
 
+    /**
+     * Выполнение команды и ее процесс
+     *
+     * @param sender - Отправитель команды.
+     * @param args - Аргументы отправителя команды.
+     *
+     * @throws Exception - Нужен в случае того, чтобы не делать в коде
+     *                      лишних try/catch, тем самым сделав его красивее.
+     */
     void execute(CommandSender sender, String[] args) throws Exception;
 
+
+    /**
+     * Возвращает, является ли отправитель игроком
+     *
+     * @param commandSender - Отправитель команды.
+     */
     default boolean senderIsPlayer(CommandSender commandSender) {
         return commandSender instanceof Player;
-    }
-
-    default boolean hasArguments(String... args) {
-        return args.length == 0 || (args.length < 2 && args[0].isEmpty());
     }
 
 }

@@ -2,10 +2,10 @@ package ru.stonlex.api.bukkit.menus.manager;
 
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.menus.MoonInventory;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 import ru.stonlex.api.java.interfaces.Applicable;
 
-public final class InventoryManager extends CacheManager<MoonInventory> {
+public final class InventoryManager extends AbstractCacheManager<MoonInventory> {
 
     /**
      * Создание инвентаря без использования абстракции.

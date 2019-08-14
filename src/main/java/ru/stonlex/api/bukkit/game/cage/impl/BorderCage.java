@@ -17,6 +17,7 @@ import java.util.Map;
  * <p>
  * (Created on 01.08.2019 21:12)
  */
+@Deprecated
 public class BorderCage implements GameCage {
 
     @Getter
@@ -57,4 +58,5 @@ public class BorderCage implements GameCage {
         return worldBorderPacketMap.containsKey(player.getName().toLowerCase())
                 && worldBorderPacketMap.get(player.getName().toLowerCase()) != null;
     }
+
 }

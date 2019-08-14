@@ -3,9 +3,9 @@ package ru.stonlex.api.bukkit.game.kit.manager;
 import ru.stonlex.api.bukkit.game.kit.KitBuilder;
 import ru.stonlex.api.bukkit.game.kit.KitInfo;
 import ru.stonlex.api.bukkit.game.kit.MoonKit;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
-public final class KitManager extends CacheManager<MoonKit> {
+public final class KitManager extends AbstractCacheManager<MoonKit> {
 
     /**
      * Кеширование набора в мапу по его имени.
@@ -21,17 +21,18 @@ public final class KitManager extends CacheManager<MoonKit> {
         return getCache(kitName.toLowerCase());
     }
 
+
     /**
      * Создание нового Builder
      */
-    public static KitBuilder newBuilder() {
+    public KitBuilder newBuilder() {
         return newBuilder("moonapi");
     }
 
     /**
      * Создание нового Builder с именем набора
      */
-    public static KitBuilder newBuilder(String kitName) {
+    public KitBuilder newBuilder(String kitName) {
         return new KitBuilder(kitName, new KitInfo(null, null, null, null, null));
     }
 

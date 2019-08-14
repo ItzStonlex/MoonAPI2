@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @UtilityClass
 public class MojangUtil {
@@ -26,10 +29,12 @@ public class MojangUtil {
     private final String UUID_URL_STRING = "https://api.mojang.com/users/profiles/minecraft/";
     private final String SKIN_URL_STRING = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
+    private final Map<String, Skin> skinMap = new HashMap<>();
+
     private String readURL(String url) throws IOException {
         final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("User-Agent", "ItzStonlex");
+        connection.setRequestProperty("User-Agent", "MoonAPI");
         connection.setConnectTimeout(5000);
         connection.setReadTimeout(5000);
         connection.setDoOutput(true);
@@ -45,6 +50,12 @@ public class MojangUtil {
     }
 
     public Skin getSkinTextures(String name) {
+        Skin cachedSkin = skinMap.get(name);
+
+        if (cachedSkin != null && !cachedSkin.isExpired()) {
+            return cachedSkin;
+        }
+
         try {
             final String playerUUID = new JsonParser()
                     .parse(MojangUtil.readURL(UUID_URL_STRING + name))
@@ -64,7 +75,11 @@ public class MojangUtil {
             final String texture = textureProperty.get("value").getAsString();
             final String signature = textureProperty.get("signature").getAsString();
 
-            return new Skin(name, playerUUID, texture, signature, System.currentTimeMillis());
+            Skin skin = new Skin(name, playerUUID, texture, signature, System.currentTimeMillis());
+
+            skinMap.put(name, skin);
+
+            return skin;
         } catch (IOException var8) {
             return null;
         }
@@ -79,6 +94,10 @@ public class MojangUtil {
         private final String value;
         private final String signature;
         private final long timestamp;
+
+        public boolean isExpired() {
+            return System.currentTimeMillis() - this.timestamp > TimeUnit.HOURS.toMillis(12L);
+        }
     }
 
 }

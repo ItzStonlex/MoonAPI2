@@ -3,9 +3,9 @@ package ru.stonlex.api.bukkit.game.perk.manager;
 import ru.stonlex.api.bukkit.game.perk.MoonPerk;
 import ru.stonlex.api.bukkit.game.perk.PerkBuilder;
 import ru.stonlex.api.bukkit.game.perk.PerkInfo;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
-public final class PerkManager extends CacheManager<MoonPerk> {
+public final class PerkManager extends AbstractCacheManager<MoonPerk> {
 
     /**
      * Кеширование перка в мапу по его имени.
@@ -21,17 +21,18 @@ public final class PerkManager extends CacheManager<MoonPerk> {
         return getCache(perkName.toLowerCase());
     }
 
+
     /**
      * Создание нового Builder
      */
-    public static PerkBuilder newBuilder() {
+    public PerkBuilder newBuilder() {
         return newBuilder("moonapi");
     }
 
     /**
      * Создание нового Builder с именем перка
      */
-    public static PerkBuilder newBuilder(String perkName) {
+    public PerkBuilder newBuilder(String perkName) {
         return new PerkBuilder(perkName, new PerkInfo(null, 0, 1, null));
     }
 

@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultChatManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultEconomyManager;
 import ru.stonlex.api.bukkit.modules.vault.providers.VaultPermissionManager;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
 @Getter
-public final class VaultManager extends CacheManager<VaultPlayer> {
+public final class VaultManager extends AbstractCacheManager<VaultPlayer> {
 
     private final VaultEconomyManager economyManager       = new VaultEconomyManager();
     private final VaultPermissionManager permissionManager = new VaultPermissionManager();
@@ -33,6 +33,7 @@ public final class VaultManager extends CacheManager<VaultPlayer> {
     public VaultPlayer getVaultPlayer(Player player) {
         return getVaultPlayer(player.getName());
     }
+
 
     /**
      * Класс, наследующий VaultPlayer

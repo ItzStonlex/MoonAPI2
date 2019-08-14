@@ -71,7 +71,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         setTitle(inventoryTitle.concat(" | " + (page + 1)));
 
-        updateInventory(player);
+        openInventory(player);
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         setTitle(inventoryTitle.concat(" | " + (page + 1)));
 
-        updateInventory(player);
+        openInventory(player);
     }
 
     /**

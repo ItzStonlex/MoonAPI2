@@ -26,18 +26,18 @@ public class BlockCage implements GameCage {
 
     @Setter
     @Getter
-    private final Material cageType = Material.STAINED_GLASS;
+    private Material cageType = Material.STAINED_GLASS;
 
 
     @Override
     public void create(Player player, Location location, int size) {
-        List<Block> cageLocations = new ArrayList<>();
+        final List<Block> cageLocations = new ArrayList<>();
 
-        CuboidRegion cuboidRegion = new CuboidRegion(
+        final CuboidRegion cuboidRegion = new CuboidRegion(
                 location.clone().add(size, 3, size),
                 location.clone().subtract(size, 1, size));
 
-        CuboidRegion inCageRegion = new CuboidRegion(
+        final CuboidRegion inCageRegion = new CuboidRegion(
                 cuboidRegion.getUpperSW().clone().subtract(1, 1, 1),
                 cuboidRegion.getLowerNE().clone().add(1, 1, 1));
 
@@ -59,7 +59,7 @@ public class BlockCage implements GameCage {
 
     @Override
     public void remove(Player player) {
-        List<Block> cageLocations = cageBlockMap.get(player.getName().toLowerCase());
+        final List<Block> cageLocations = cageBlockMap.get(player.getName().toLowerCase());
 
         cageLocations.forEach(block -> block.setType(Material.AIR));
     }

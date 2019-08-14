@@ -1,9 +1,8 @@
 package ru.stonlex.api.bukkit.board.manager;
 
-import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.board.MoonSidebarBuilder;
 import ru.stonlex.api.bukkit.board.MoonSidebar;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
 /**
  * @Author ItzStonlex.
@@ -11,17 +10,14 @@ import ru.stonlex.api.java.types.CacheManager;
  * <p>
  * (Created on 01.08.2019 15:25)
  */
-public final class SidebarManager extends CacheManager<MoonSidebar> {
+public final class SidebarManager extends AbstractCacheManager<MoonSidebar> {
 
     /**
      * Вызов нового билдера
-     *
-     * @param player - Игрок
      */
-    public MoonSidebarBuilder newBuilder(Player player) {
-        return new MoonSidebarBuilder(player);
+    public MoonSidebarBuilder newBuilder() {
+        return new MoonSidebarBuilder();
     }
-
 
 
     /**

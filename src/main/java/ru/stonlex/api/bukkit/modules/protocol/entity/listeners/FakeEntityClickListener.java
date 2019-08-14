@@ -3,11 +3,10 @@ package ru.stonlex.api.bukkit.modules.protocol.entity.listeners;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import ru.stonlex.api.bukkit.modules.protocol.entity.MoonFakeEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import ru.stonlex.api.bukkit.utility.cooldown.CooldownUtil;
+import ru.stonlex.api.bukkit.utility.cooldown.PlayerCooldownUtil;
 
 public class FakeEntityClickListener extends PacketAdapter {
 
@@ -19,13 +18,7 @@ public class FakeEntityClickListener extends PacketAdapter {
     public void onPacketReceiving(PacketEvent event) {
         Player player = event.getPlayer();
 
-        if (CooldownUtil.hasCooldown(player.getName().concat("_fake_click"))) {
-            return;
-        }
-
-        EnumWrappers.EntityUseAction entityUseAction = event.getPacket().getEntityUseActions().read(0);
-
-        if (entityUseAction != EnumWrappers.EntityUseAction.INTERACT) {
+        if (PlayerCooldownUtil.hasCooldown("fake-entity_click", player)) {
             return;
         }
 
@@ -37,6 +30,6 @@ public class FakeEntityClickListener extends PacketAdapter {
 
         fakeEntity.getClickAction().accept(player);
 
-        CooldownUtil.putCooldown(player.getName().concat("_fake_click"), 1000);
+        PlayerCooldownUtil.putCooldown("fake-entity_click", player, 1000);
     }
 }

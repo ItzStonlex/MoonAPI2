@@ -1,13 +1,13 @@
-package ru.stonlex.api.test;
+package ru.stonlex.api.test.game;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.game.enums.GameStatus;
 import ru.stonlex.api.bukkit.game.enums.GameType;
@@ -17,7 +17,6 @@ import ru.stonlex.api.bukkit.game.kit.manager.KitManager;
 import ru.stonlex.api.bukkit.game.player.GamePlayer;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
-import ru.stonlex.api.java.schedulers.MoonTask;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TestGame extends AbstractGameFactory {
 
-    private static final MoonKit PLAYER_DEFAULT_KIT = KitManager.newBuilder("PlayerKit")
+    private final MoonKit PLAYER_DEFAULT_KIT = GAME_API.getKitManager().newBuilder("PlayerKit")
 
             .setHelmetItem(ItemUtil.getItemStack(Material.LEATHER_HELMET, "§eШапка"))
             .setChestplateItem(ItemUtil.getItemStack(Material.LEATHER_CHESTPLATE, "§eКуртка"))
@@ -113,7 +112,7 @@ public class TestGame extends AbstractGameFactory {
 
         broadcastToAll("Игра окончена!");
 
-        new MoonTask() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
@@ -122,7 +121,7 @@ public class TestGame extends AbstractGameFactory {
                     gamePlayer.leave();
                 });
             }
-        }.scheduleLater(5, TimeUnit.SECONDS);
+        }.runTaskLater(MoonAPI.getPlugin(MoonAPI.class), 500);
     }
 
     @Override

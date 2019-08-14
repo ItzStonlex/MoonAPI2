@@ -1,9 +1,9 @@
 package ru.stonlex.api.bukkit.board;
 
 import lombok.NonNull;
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.entity.Player;
 import ru.stonlex.api.bukkit.board.objective.SidebarObjective;
-import ru.stonlex.api.bukkit.board.updater.SidebarUpdater;
 
 import java.util.function.Consumer;
 
@@ -17,23 +17,18 @@ public class MoonSidebarBuilder {
 
     private final MoonSidebar sidebar;
 
-    private final SidebarObjective sidebarObjective;
 
-    private final SidebarUpdater sidebarUpdater;
-
-
-    public MoonSidebarBuilder(Player player) {
+    public MoonSidebarBuilder() {
         this.sidebar = new MoonSidebar();
-        this.sidebarObjective = new SidebarObjective(player.getName(), "§6§lMoonStudio");
-        this.sidebarUpdater = new SidebarUpdater(sidebar);
+
+        SidebarObjective sidebarObjective = new SidebarObjective(RandomStringUtils.randomAlphabetic(16), "§6§lMoonStudio");
 
         sidebar.setObjective(sidebarObjective);
-
-        sidebarObjective.create(player);
     }
 
+
     public MoonSidebarBuilder setDisplayName(String displayName) {
-        sidebarObjective.setDisplayName(displayName, sidebar);
+        sidebar.setDisplayName(displayName);
 
         return this;
     }
@@ -45,15 +40,21 @@ public class MoonSidebarBuilder {
     }
 
     public MoonSidebarBuilder newUpdater(@NonNull Consumer<MoonSidebar> task, long delay) {
-        sidebarUpdater.newTask(task, delay);
+        sidebar.getUpdater().newTask(task, delay);
 
         return this;
     }
 
-    public void showPlayer(Player player) {
+    public void showToPlayer(Player player) {
+        MoonSidebar oldSidebar = MoonSidebar.getPlayerSidebarsMap().get(player.getName().toLowerCase());
+
+        if (oldSidebar != null) {
+            oldSidebar.hide();
+        }
+
         sidebar.send(player);
 
-        sidebarUpdater.start();
+        sidebar.getUpdater().start();
     }
 
 }

@@ -44,7 +44,7 @@ public class Executor {
         };
 
         if (async) {
-            JavaMoonAPI.getSchedulerManager().async(command);
+            JavaMoonAPI.async(command);
             return;
         }
 
@@ -70,7 +70,7 @@ public class Executor {
         };
 
         if (async) {
-            JavaMoonAPI.getSchedulerManager().async(command);
+            JavaMoonAPI.async(command);
             return null;
         }
 

@@ -1,4 +1,4 @@
-package ru.stonlex.api.test;
+package ru.stonlex.api.test.menu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

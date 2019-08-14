@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import ru.stonlex.api.bukkit.board.MoonSidebar;
 
 import java.util.HashMap;
@@ -13,11 +12,9 @@ import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-@RequiredArgsConstructor
 public class SidebarUpdater {
 
-    private final Multimap<Long, Consumer<MoonSidebar>> tasks
-            = Multimaps.synchronizedSetMultimap(Multimaps.newSetMultimap(new HashMap<>(), HashSet::new));;
+    private final Multimap<Long, Consumer<MoonSidebar>> tasks;
 
     @Getter
     private final MoonSidebar sidebar;
@@ -27,14 +24,35 @@ public class SidebarUpdater {
     @Getter
     private volatile boolean started;
 
+    /**
+     * Конструктор апдейтера
+     *
+     * @param sidebar - скорборд
+     */
+    public SidebarUpdater(@NonNull MoonSidebar sidebar) {
+        this.sidebar = sidebar;
+        this.tasks = Multimaps.synchronizedSetMultimap(Multimaps.newSetMultimap(new HashMap<>(), HashSet::new));
+    }
+
+    /**
+     * Получение списка задач.
+     *
+     * @return список задач
+     */
     public Multimap<Long, Consumer<MoonSidebar>> getTasks() {
         return Multimaps.unmodifiableMultimap(tasks);
     }
 
+    /**
+     * Очистка всех задач.
+     */
     public void clearTasks() {
         this.tasks.clear();
     }
 
+    /**
+     * Остановка апдейтера.
+     */
     public void stop() {
         Preconditions.checkState(isStarted(), "Updating is not started.");
 
@@ -42,33 +60,41 @@ public class SidebarUpdater {
         if (!executionThread.isInterrupted()) executionThread.stop();
     }
 
+    /**
+     * Добавление новой задачи
+     *
+     * @param task  - реализация задачи
+     * @param delay - период ее вызова
+     * @return инстанс этого класса
+     */
     public SidebarUpdater newTask(@NonNull Consumer<MoonSidebar> task, long delay) {
-        if (delay < 0) {
-            throw new IllegalArgumentException("Delay value must be positive");
-        }
-
+        if (delay < 0) throw new IllegalArgumentException("Delay value must be > 0");
         tasks.put(delay, task);
-
         return this;
     }
 
+    /**
+     * Стартовать обновление
+     */
     public void start() {
-        Preconditions.checkState(!isStarted(), "Update task is already started.");
+        Preconditions.checkState(!isStarted(), "Updating already started.");
 
-        startTaskExecution();
+        startTaskExecution(); //Lets rock!
 
         started = true;
     }
 
+    /**
+     * Внутренний метод для выполнения задач
+     */
     private void startTaskExecution() {
         AtomicLong time = new AtomicLong();
 
         Runnable updater = () -> {
             while (!Thread.interrupted()) {
                 try {
-                    Thread.sleep(100L);
+                    Thread.sleep(50L);
                 } catch (InterruptedException ignored) {
-
                 }
 
                 tasks.asMap().entrySet()
@@ -79,7 +105,6 @@ public class SidebarUpdater {
                 time.incrementAndGet();
             }
         };
-
         executionThread = new Thread(updater, String.format("%s-Updater", sidebar.getObjective().getName()));
         executionThread.start();
     }

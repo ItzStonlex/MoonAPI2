@@ -12,21 +12,19 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.bukkit.MoonAPI;
 import ru.stonlex.api.bukkit.game.cage.manager.CageManager;
+import ru.stonlex.api.bukkit.game.enums.GamePlayerType;
 import ru.stonlex.api.bukkit.game.factory.AbstractGameFactory;
+import ru.stonlex.api.bukkit.game.factory.AbstractTimerFactory;
 import ru.stonlex.api.bukkit.game.kit.manager.KitManager;
 import ru.stonlex.api.bukkit.game.listeners.*;
 import ru.stonlex.api.bukkit.game.perk.manager.PerkManager;
 import ru.stonlex.api.bukkit.game.player.GamePlayer;
-import ru.stonlex.api.bukkit.game.team.manager.TeamManager;
 import ru.stonlex.api.bukkit.utility.ItemUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public final class GameAPI {
-
-    @Getter
-    private final TeamManager teamManager        = new TeamManager();
 
     @Getter
     private final CageManager cageManager        = new CageManager();
@@ -42,10 +40,15 @@ public final class GameAPI {
 
 
     @Setter
+    @Getter
     private AbstractGameFactory gameFactory = null;
 
+    @Setter
+    @Getter
+    private AbstractTimerFactory timerFactory = null;
 
-    private final Map<String, GamePlayer> playersInGameMap = new HashMap<>();
+
+    private final Map<String, GamePlayer> gamePlayerMap = new HashMap<>();
 
 
     /**
@@ -66,13 +69,14 @@ public final class GameAPI {
         pluginManager  .registerEvents  (new LeavesDecayListener(),     plugin);
         pluginManager  .registerEvents  (new MoveListener(),            plugin);
         pluginManager  .registerEvents  (new WeatherChangeListener(),   plugin);
+        pluginManager  .registerEvents  (new PlayerDeathListener(),     plugin);
     }
 
     /**
      * Получение игрока из кеша выживших по нику
      */
     public final GamePlayer getGamePlayer(String playerName) {
-        return playersInGameMap.get(playerName.toLowerCase());
+        return gamePlayerMap.get(playerName.toLowerCase());
     }
 
     /**
@@ -86,14 +90,14 @@ public final class GameAPI {
      * Добавить игрока в игру
      */
     public void addPlayerInGame(String playerName) {
-        playersInGameMap.put(playerName.toLowerCase(), new GamePlayerImpl(playerName));
+        gamePlayerMap.put(playerName.toLowerCase(), new GamePlayerImpl(playerName));
     }
 
     /**
      * Удалить игрока из игры
      */
     public void removePlayerInGame(String playerName) {
-        GamePlayer gamePlayer = playersInGameMap.get(playerName.toLowerCase());
+        GamePlayer gamePlayer = gamePlayerMap.get(playerName.toLowerCase());
 
         gamePlayer.setSpectator();
     }
@@ -102,7 +106,7 @@ public final class GameAPI {
      * Получение списка выживших игроков
      */
     public final Collection<GamePlayer> getAlivePlayers() {
-        return Collections.unmodifiableCollection(playersInGameMap.values());
+        return Collections.unmodifiableCollection(gamePlayerMap.values());
     }
 
     /**
@@ -122,6 +126,8 @@ public final class GameAPI {
 
         private final String name;
 
+        private GamePlayerType type = GamePlayerType.PLAYER;
+
         @Setter
         private double multiple;
 
@@ -137,7 +143,7 @@ public final class GameAPI {
 
         @Override
         public boolean isPlayer() {
-            return playersInGameMap.containsKey(name.toLowerCase());
+            return type == GamePlayerType.PLAYER;
         }
 
         @Override
@@ -150,8 +156,6 @@ public final class GameAPI {
             if (isSpectator()) {
                 throw new RuntimeException("player '" + name + "' is already a spectator");
             }
-
-            playersInGameMap.remove(name.toLowerCase());
 
             if (getPlayer() == null) {
                 throw new RuntimeException("player is not online");
@@ -179,14 +183,13 @@ public final class GameAPI {
             getPlayer().teleport(gameSettings.SPECTATOR_SPAWN_LOCATION);
 
             //Скрытие игрока от всех, кроме наблюдателей
-            playersInGameMap.values().forEach(gamePlayer -> {
-                gamePlayer.getPlayer().hidePlayer(getPlayer());
-            });
+            getAlivePlayers().forEach(gamePlayer -> gamePlayer.getPlayer().hidePlayer(getPlayer()));
 
             getSpectatePlayers().forEach(player -> {
-                player.showPlayer(getPlayer());
                 getPlayer().showPlayer(player);
             });
+
+            type = GamePlayerType.SPECTATOR;
         }
 
         @Override

@@ -14,11 +14,11 @@ import java.util.Collection;
 
 public abstract class AbstractGameFactory implements Listener {
 
+//---------------------------------------------------------------//
     protected final GameAPI GAME_API = MoonAPI.getGameAPI();
 
     protected final GameSettings GAME_SETTINGS = GAME_API.getGameSettings();
-
-    protected final GameTimerFactory GAME_LOBBY_TIMER_FACTORY = new GameTimerFactory(this);
+//---------------------------------------------------------------//
 
     /**
      * Инициализация некоторых настроек игры
@@ -103,13 +103,6 @@ public abstract class AbstractGameFactory implements Listener {
      */
     protected void broadcastToPlayers(String text) {
         broadcast(GAME_API.getAlivePlayers(), text);
-    }
-
-    /**
-     * Получение лобби-таймера
-     */
-    public GameTimerFactory getTimerFactory() {
-        return GAME_LOBBY_TIMER_FACTORY;
     }
 
 }

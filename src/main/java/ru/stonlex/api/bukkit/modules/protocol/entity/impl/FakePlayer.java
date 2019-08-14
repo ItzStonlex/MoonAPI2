@@ -83,11 +83,12 @@ public class FakePlayer extends MoonFakeEntity {
         scoreboardTeam.setName(teamName);
         scoreboardTeam.setMode(mode);
 
+        scoreboardTeam.setCollisionRule("never");
+        scoreboardTeam.setNameTagVisibility("never");
+
         if (mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED || mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
             scoreboardTeam.setDisplayName(teamName);
             scoreboardTeam.setPrefix(getGlowingColor() == null ? "§8" : getGlowingColor().toString());
-            scoreboardTeam.setCollisionRule("never");
-            scoreboardTeam.setNameTagVisibility("never");
             scoreboardTeam.setPackOptionData(0);
             scoreboardTeam.setColor(0);
         } else {

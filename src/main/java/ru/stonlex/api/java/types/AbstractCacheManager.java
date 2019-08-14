@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class CacheManager<T> {
+public abstract class AbstractCacheManager<T> {
 
     protected final Map<String, T> cacheMap = new HashMap<>();
 

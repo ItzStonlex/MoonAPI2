@@ -21,39 +21,36 @@ public class SidebarObjective {
 
         WrapperPlayServerScoreboardObjective packet = getPacket();
         packet.setMode(WrapperPlayServerScoreboardObjective.Mode.UPDATE_VALUE);
-
         sidebar.broadcastPacket(packet);
     }
 
     public void create(Player player) {
         WrapperPlayServerScoreboardObjective packet = getPacket();
-
         packet.setMode(WrapperPlayServerScoreboardObjective.Mode.ADD_OBJECTIVE);
+
         packet.sendPacket(player);
     }
 
     public void remove(Player player) {
         WrapperPlayServerScoreboardObjective packet = getPacket();
-
         packet.setMode(WrapperPlayServerScoreboardObjective.Mode.REMOVE_OBJECTIVE);
+
         packet.sendPacket(player);
     }
 
     public void show(Player player) {
         WrapperPlayServerScoreboardDisplayObjective displayObjective = new WrapperPlayServerScoreboardDisplayObjective();
-
         displayObjective.setPosition(SIDEBAR);
         displayObjective.setScoreName(name);
+
         displayObjective.sendPacket(player);
     }
 
     private WrapperPlayServerScoreboardObjective getPacket() {
         WrapperPlayServerScoreboardObjective packet = new WrapperPlayServerScoreboardObjective();
-
         packet.setDisplayName(displayName);
         packet.setName(name);
         packet.setHealthDisplay(WrapperPlayServerScoreboardObjective.HealthDisplay.INTEGER);
-
         return packet;
     }
 }

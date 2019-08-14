@@ -196,10 +196,8 @@ public abstract class MoonFakeEntity {
         sendDataWatcherPacket();
     }
 
-    public void look(Player player) {
-        //не ебу, что тут происходит, но без этого кода он не смотрит в сторону игрока
-        Vector vector = player.getLocation().clone().subtract(location).toVector().normalize();
-        //---------------------------------
+    public void look(Player player, Location location) {
+        Vector vector = location.clone().subtract(location).toVector().normalize();
 
         this.location.setDirection(vector);
         this.location.setYaw(location.getYaw());
@@ -207,6 +205,10 @@ public abstract class MoonFakeEntity {
 
         sendEntityLookPacket(player);
         sendHeadRotationPacket(player);
+    }
+
+    public void look(Player player) {
+        look(player, player.getLocation());
     }
 
     public void look(float yaw, float pitch) {

@@ -52,7 +52,7 @@ public class MailSender {
             }
         };
 
-        JavaMoonAPI.getSchedulerManager().async(messageSender);
+        JavaMoonAPI.async(messageSender);
     }
 
 

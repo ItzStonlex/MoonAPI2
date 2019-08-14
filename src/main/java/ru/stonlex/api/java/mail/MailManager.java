@@ -1,8 +1,8 @@
 package ru.stonlex.api.java.mail;
 
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
-public final class MailManager extends CacheManager<MailSender> {
+public final class MailManager extends AbstractCacheManager<MailSender> {
 
     /**
      * Получение MailSender из кеша.

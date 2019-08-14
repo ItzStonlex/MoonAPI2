@@ -1,9 +1,9 @@
 package ru.stonlex.api.bungee.inventory.manager;
 
 import ru.stonlex.api.bungee.inventory.BungeeMoonInventory;
-import ru.stonlex.api.java.types.CacheManager;
+import ru.stonlex.api.java.types.AbstractCacheManager;
 
-public final class BungeeInventoryManager extends CacheManager<BungeeMoonInventory> {
+public final class BungeeInventoryManager extends AbstractCacheManager<BungeeMoonInventory> {
 
     /**
      * Получение инвентаря из кеша

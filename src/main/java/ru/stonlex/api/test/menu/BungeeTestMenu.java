@@ -1,4 +1,4 @@
-package ru.stonlex.api.test;
+package ru.stonlex.api.test.menu;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import ru.stonlex.api.bungee.inventory.BungeeMoonInventory;

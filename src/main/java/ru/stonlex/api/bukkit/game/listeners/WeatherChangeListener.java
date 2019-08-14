@@ -12,7 +12,7 @@ public class WeatherChangeListener implements Listener {
     public void onWeatherChange(WeatherChangeEvent event) {
         GameAPI gameAPI = MoonAPI.getGameAPI();
 
-        event.setCancelled(gameAPI.getGameSettings().WEATHER_CHANGE);
+        event.setCancelled(!gameAPI.getGameSettings().WEATHER_CHANGE);
     }
 
 }
