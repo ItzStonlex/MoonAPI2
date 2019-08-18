@@ -15,18 +15,23 @@ public final class JavaMoonAPI {
     @Getter
     private static final MoonLogger moonLogger             = new MoonLogger();
 
-    public static void main(String[] args) {
-        moonLogger.info("Test message 1");
-    }
-
 
     private static final ExecutorService CACHED_POOL_THREAD = Executors.newCachedThreadPool();
+
 
     /**
      * Асинхронное выполнение команды
      */
     public static void async(Runnable command) {
         CACHED_POOL_THREAD.submit(command);
+    }
+
+
+    public static void main(String[] args) {
+        moonLogger.info("Test message 1");
+
+        mailManager.getMailSender("seltixfromhell@bk.ru", "123qweasdzxc")
+                .sendMessage("саня хуй соси", "братан ты че рил соснул?", "itzstonlex@bk.ru");
     }
 
 }

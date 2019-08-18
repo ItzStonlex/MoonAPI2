@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MysqlConnection {
+public final class MysqlConnection {
 
     /**
      * Опять же, этот код старый, и переписывать его мне было
@@ -20,6 +20,8 @@ public class MysqlConnection {
      */
 
     private MysqlDataSource dataSource = new MysqlDataSource();
+
+    @Getter
     private Connection connection;
 
     /**
@@ -43,18 +45,22 @@ public class MysqlConnection {
         dataSource.setDatabaseName(database);
 
         dataSource.setEncoding("UTF-8");
+
         try {
             dataSource.setAutoReconnect(true);
+
             this.connection = dataSource.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         MysqlExecutor.getExecutor(this).execute(true, String.format("CREATE DATABASE IF NOT EXISTS `%s`", database));
 
         for (String table : tables.keySet()) {
-            final String value = tables.get(table);
-            final String sql = String.format("CREATE TABLE IF NOT EXISTS `%s` (%s)", table, value);
-            MysqlExecutor.getExecutor(this).execute(true, sql);
+            String value = tables.get(table);
+            String query = String.format("CREATE TABLE IF NOT EXISTS `%s` (%s)", table, value);
+
+            MysqlExecutor.getExecutor(this).execute(true, query);
         }
     }
 
@@ -64,13 +70,6 @@ public class MysqlConnection {
      */
     public MysqlExecutor getExecutor() {
         return MysqlExecutor.getExecutor(this);
-    }
-
-    /**
-     * Получение соединения
-     */
-    public Connection getConnection() {
-        return connection;
     }
 
     /**
@@ -88,6 +87,7 @@ public class MysqlConnection {
         }
     }
 
+
     /**
      * Вызов нового билдера соединения с MySQL
      */
@@ -95,18 +95,22 @@ public class MysqlConnection {
         return new SQLBuilder();
     }
 
-
     public static class SQLBuilder implements Builder<MysqlConnection> {
+
 
         private String host = "localhost",
                 password = "",
                 username = "root",
                 database = "mysql";
+
         private int port = 3306;
+
         private Map<String, String> tables = new HashMap<>();
+
 
         @Getter
         private static final Map<String, MysqlConnection> databases = new HashMap<>();
+
 
         /**
          * Инициализация базы данных, схемы
@@ -115,6 +119,7 @@ public class MysqlConnection {
          */
         public SQLBuilder setDatabase(String database) {
             this.database = database;
+
             return this;
         }
 
@@ -125,6 +130,7 @@ public class MysqlConnection {
          */
         public SQLBuilder setPassword(String password) {
             this.password = password;
+
             return this;
         }
 
@@ -135,6 +141,7 @@ public class MysqlConnection {
          */
         public SQLBuilder setPort(int port) {
             this.port = port;
+
             return this;
         }
 
@@ -145,6 +152,7 @@ public class MysqlConnection {
          */
         public SQLBuilder setHost(String host) {
             this.host = host;
+
             return this;
         }
 
@@ -155,6 +163,7 @@ public class MysqlConnection {
          */
         public SQLBuilder setUsername(String username) {
             this.username = username;
+
             return this;
         }
 
@@ -169,6 +178,7 @@ public class MysqlConnection {
 
             return this;
         }
+
 
         @Override
         public MysqlConnection build() {

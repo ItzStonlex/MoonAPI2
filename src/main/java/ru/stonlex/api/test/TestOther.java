@@ -58,9 +58,7 @@ public class TestOther {
      */
     public void sendMailMessage() {
         //Получение отправителя
-        MailSender mailSender = JavaMoonAPI.getMailManager().getMailSender("itzstonlex@bk.ru",
-                "itzstonlex@bk.ru", "***",
-                "smtp.mail.ru");
+        MailSender mailSender = JavaMoonAPI.getMailManager().getMailSender("itzstonlex@bk.ru", "***");
 
         //Отправка сообщения на другой EMail-адрес
         mailSender.sendMessage("Тема сообщения", "Сообщение",
