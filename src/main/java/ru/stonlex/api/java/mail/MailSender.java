@@ -36,13 +36,13 @@ public class MailSender {
      * @param content - содержимое сообщения
      * @param to - email адрес получателя
      */
-    public void sendMessage(String subject, String content, String to) {
+    public void sendMessage(String subject, String content, String toMail) {
         Runnable messageSender = () -> {
             try {
                 Message message = new MimeMessage(session);
 
                 message.setFrom(new InternetAddress(senderMail));
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(toMail));
                 message.setSubject(subject);
                 message.setContent(content, "text/html; charset=UTF-8");
 

@@ -16,12 +16,12 @@ public final class InventoryManager extends AbstractCacheManager<MoonInventory> 
     public void createInventory(String inventoryName, String title, int rows, Applicable<MoonInventory> inventoryApplicable) {
         MoonInventory inventory = new MoonInventory(title, rows) {
             @Override
-            public void generateInventory(Player player) { }
+            public void generateInventory(Player player) {
+                inventoryApplicable.apply(this);
+            }
         };
 
         cacheInventory(inventoryName, inventory);
-
-        inventoryApplicable.apply(inventory);
     }
 
     /**

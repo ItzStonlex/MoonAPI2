@@ -61,8 +61,7 @@ public class TestOther {
         MailSender mailSender = JavaMoonAPI.getMailManager().getMailSender("itzstonlex@bk.ru", "***");
 
         //Отправка сообщения на другой EMail-адрес
-        mailSender.sendMessage("Тема сообщения", "Сообщение",
-                "moonstudio@bk.ru");
+        mailSender.sendMessage("Тема сообщения", "Сообщение", "moonstudio@bk.ru");
     }
 
     /**
