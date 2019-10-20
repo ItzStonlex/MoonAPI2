@@ -33,7 +33,7 @@ public final class KitManager extends AbstractCacheManager<MoonKit> {
      * Создание нового Builder с именем набора
      */
     public KitBuilder newBuilder(String kitName) {
-        return new KitBuilder(kitName, new KitInfo(null, null, null, null, 0, null));
+        return new KitBuilder(kitName, new KitInfo(null, null, null, null, null, 0, null));
     }
 
 }
