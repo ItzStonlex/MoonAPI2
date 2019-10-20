@@ -12,7 +12,10 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.api.java.interfaces.Builder;
 import ru.stonlex.api.java.utility.ReflectionUtil;
 
@@ -235,6 +238,36 @@ public class ItemUtil {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             this.itemStack.setItemMeta(meta);
+
+            return this;
+        }
+
+        public ItemBuilder addCustomPotionEffect(PotionEffect potionEffect, boolean isAdd) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+
+            potionMeta.addCustomEffect(potionEffect, isAdd);
+
+            itemStack.setItemMeta(potionMeta);
+
+            return this;
+        }
+
+        public ItemBuilder setMainPotionEffect(PotionEffectType potionEffectType) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+
+            potionMeta.setMainEffect(potionEffectType);
+
+            itemStack.setItemMeta(potionMeta);
+
+            return this;
+        }
+
+        public ItemBuilder setPotionColor(Color color) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+
+            potionMeta.setColor(color);
+
+            itemStack.setItemMeta(potionMeta);
 
             return this;
         }
