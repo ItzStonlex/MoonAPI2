@@ -64,22 +64,8 @@
 
         <dependency>
             <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.13-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-config</artifactId>
-            <version>1.13-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-event</artifactId>
-            <version>1.13-SNAPSHOT</version>
+            <artifactId>bungeecord</artifactId>
+            <version>1.12</version>
             <scope>provided</scope>
         </dependency>
 

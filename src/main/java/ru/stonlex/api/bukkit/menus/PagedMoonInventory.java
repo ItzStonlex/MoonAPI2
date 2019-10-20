@@ -31,7 +31,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * @param inventoryRows  - Количество строк в инвентаре
      */
     public PagedMoonInventory(String inventoryTitle, int inventoryRows) {
-        this(0, inventoryTitle, inventoryRows);
+        this(1, inventoryTitle, inventoryRows);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * @param inventoryRows  - Количество строк в инвентаре
      */
     private PagedMoonInventory(int page, String inventoryTitle, int inventoryRows) {
-        super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
+        super(inventoryTitle.concat(" | " + page), inventoryRows);
 
         this.page = page;
         this.inventoryTitle = inventoryTitle;
@@ -69,7 +69,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         this.page--;
 
-        setTitle(inventoryTitle.concat(" | " + (page + 1)));
+        setTitle( inventoryTitle.concat(" | " + page) );
 
         openInventory(player);
     }
@@ -78,13 +78,13 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * На страницу вперед
      */
     private void forward(Player player) {
-        if (page > pagesCount) {
-            throw new RuntimeException("Page cannot be > max pages count");
+        if (page >= pagesCount) {
+            throw new RuntimeException("Page cannot be >= max pages count");
         }
 
         this.page++;
 
-        setTitle(inventoryTitle.concat(" | " + (page + 1)));
+        setTitle( inventoryTitle.concat(" | " + page) );
 
         openInventory(player);
     }
@@ -100,12 +100,12 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         this.pagesCount = buttonMap.size() / slotsList.size();
 
-        if (page < pagesCount) {
+        if ( page < pagesCount ) {
             setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
                     "§eВперед"), player1 -> forward(player));
         }
 
-        if (page > 0) {
+        if ( page - 1 >= 0 ) {
             setItem(getInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
                     "§eНазад"), player1 -> backward(player));
         }
@@ -124,7 +124,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
             ItemStack itemStack = itemEntry.getKey();
 
-            this.setItem(slot, itemStack, itemEntry.getValue());
+            setItem(slot, itemStack, itemEntry.getValue());
         }
     }
 
@@ -134,6 +134,8 @@ public abstract class PagedMoonInventory extends MoonInventory {
      */
     @Override
     public void openInventory(Player player) {
+        clear();
+
         buildPage(player);
 
         super.openInventory(player);
@@ -144,6 +146,11 @@ public abstract class PagedMoonInventory extends MoonInventory {
      */
     @Override
     public void updateInventory(Player player) {
-        super.updateInventory(player, () -> buildPage(player));
+        super.updateInventory(player, () -> {
+            clear();
+
+            buildPage(player);
+            generateInventory(player);
+        });
     }
 }

@@ -191,7 +191,7 @@ public class TestOther {
                 ParticleEffect.SPELL.display(0, 0, 0, 0, 3,
                         location.clone().add(x, 0, z), player);
             }
-        }.runTaskTimer(plugin, 0, 20);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     /**

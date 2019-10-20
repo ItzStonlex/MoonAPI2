@@ -57,18 +57,18 @@ public final class GameAPI {
     public void registerGameListeners(Plugin plugin) {
         PluginManager pluginManager = plugin.getServer().getPluginManager();
 
-        pluginManager  .registerEvents  (new BlockListener(),           plugin);
-        pluginManager  .registerEvents  (new DamageListener(),          plugin);
-        pluginManager  .registerEvents  (new EntitySpawnListener(),     plugin);
-        pluginManager  .registerEvents  (new FoodChangeListener(),      plugin);
-        pluginManager  .registerEvents  (new GameStatusListener(),      plugin);
-        pluginManager  .registerEvents  (new InteractListener(),        plugin);
-        pluginManager  .registerEvents  (new ItemListener(),            plugin);
-        pluginManager  .registerEvents  (new JoinListener(),            plugin);
-        pluginManager  .registerEvents  (new LeavesDecayListener(),     plugin);
-        pluginManager  .registerEvents  (new MoveListener(),            plugin);
-        pluginManager  .registerEvents  (new WeatherChangeListener(),   plugin);
-        pluginManager  .registerEvents  (new PlayerDeathListener(),     plugin);
+        pluginManager.registerEvents(new BlockListener(),           plugin);
+        pluginManager.registerEvents(new DamageListener(),          plugin);
+        pluginManager.registerEvents(new EntitySpawnListener(),     plugin);
+        pluginManager.registerEvents(new FoodChangeListener(),      plugin);
+        pluginManager.registerEvents(new GameStatusListener(),      plugin);
+        pluginManager.registerEvents(new InteractListener(),        plugin);
+        pluginManager.registerEvents(new ItemListener(),            plugin);
+        pluginManager.registerEvents(new JoinListener(),            plugin);
+        pluginManager.registerEvents(new LeavesDecayListener(),     plugin);
+        pluginManager.registerEvents(new MoveListener(),            plugin);
+        pluginManager.registerEvents(new WeatherChangeListener(),   plugin);
+        pluginManager.registerEvents(new PlayerDeathListener(),     plugin);
     }
 
     /**

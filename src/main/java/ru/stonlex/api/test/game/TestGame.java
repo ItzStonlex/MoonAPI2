@@ -49,6 +49,7 @@ public class TestGame extends AbstractGameFactory {
         GAME_SETTINGS.ERROR_PREFIX = GAME_SETTINGS.SUCCESSFULLY_PREFIX.concat("§c");
 
         GAME_API.setGameFactory(this);
+        GAME_API.setTimerFactory(new TestTimer());
     }
 
     private void setupStartSettings() {

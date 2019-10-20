@@ -16,7 +16,9 @@ public final class PerkInfo {
 
     private ItemStack baseItem;
 
-    private int minLevel, maxLevel;
+    private String permission;
+
+    private int minLevel, maxLevel, price;
 
     private Applicable<Player> playerApplicable;
 
