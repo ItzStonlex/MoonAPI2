@@ -52,6 +52,24 @@ public final class PerkBuilder implements Builder<MoonPerk> {
     }
 
     /**
+     * Установка права для перка
+     */
+    public PerkBuilder setPermission(String permission) {
+        perkInfo.setPermission(permission);
+
+        return this;
+    }
+
+    /**
+     * Установка цены перка
+     */
+    public PerkBuilder setPrice(int price) {
+        perkInfo.setPrice(price);
+
+        return this;
+    }
+
+    /**
      * Установка действия применения перка игроку
      */
     public PerkBuilder setPlayerApplicable(Applicable<Player> playerApplicable) {

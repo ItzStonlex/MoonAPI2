@@ -61,6 +61,24 @@ public final class KitBuilder implements Builder<MoonKit> {
     }
 
     /**
+     * Установка права для набора
+     */
+    public KitBuilder setPermission(String permission) {
+        kitInfo.setPermission(permission);
+
+        return this;
+    }
+
+    /**
+     * Установка цены набора
+     */
+    public KitBuilder setPrice(int price) {
+        kitInfo.setPrice(price);
+
+        return this;
+    }
+
+    /**
      * Добаление прелмета в набор
      */
     public KitBuilder addItem(ItemStack itemStack) {

@@ -14,6 +14,8 @@ public final class KitInfo {
 
     private ItemStack helmetItem, chestplateItem, leggingsItem, bootsItem;
 
+    private String permission;
+
     private int price;
 
     private List<ItemStack> itemList;
