@@ -33,7 +33,7 @@ public final class PerkManager extends AbstractCacheManager<MoonPerk> {
      * Создание нового Builder с именем перка
      */
     public PerkBuilder newBuilder(String perkName) {
-        return new PerkBuilder(perkName, new PerkInfo(null, 0, 1, null));
+        return new PerkBuilder(perkName, new PerkInfo(null, null, 0, 1, 0, null));
     }
 
 }
