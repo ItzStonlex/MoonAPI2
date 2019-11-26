@@ -31,7 +31,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * @param inventoryRows  - Количество строк в инвентаре
      */
     public PagedMoonInventory(String inventoryTitle, int inventoryRows) {
-        this(1, inventoryTitle, inventoryRows);
+        this(0, inventoryTitle, inventoryRows);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class PagedMoonInventory extends MoonInventory {
      * @param inventoryRows  - Количество строк в инвентаре
      */
     private PagedMoonInventory(int page, String inventoryTitle, int inventoryRows) {
-        super(inventoryTitle.concat(" | " + page), inventoryRows);
+        super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
 
         this.page = page;
         this.inventoryTitle = inventoryTitle;
@@ -64,12 +64,12 @@ public abstract class PagedMoonInventory extends MoonInventory {
      */
     private void backward(Player player) {
         if (page - 1 < 0) {
-            throw new RuntimeException("Page cannot be < 0");
+            throw new RuntimeException( String.format("Page cannot be < 0 (%s - 1 < 0)", page) );
         }
 
         this.page--;
 
-        setTitle( inventoryTitle.concat(" | " + page) );
+        setTitle( inventoryTitle.concat(" | " + (page + 1)) );
 
         openInventory(player);
     }
@@ -79,12 +79,12 @@ public abstract class PagedMoonInventory extends MoonInventory {
      */
     private void forward(Player player) {
         if (page >= pagesCount) {
-            throw new RuntimeException("Page cannot be >= max pages count");
+            throw new RuntimeException( String.format("Page cannot be >= max pages count (%s >= %s)", page, pagesCount) );
         }
 
         this.page++;
 
-        setTitle( inventoryTitle.concat(" | " + page) );
+        setTitle( inventoryTitle.concat(" | " + (page + 1)) );
 
         openInventory(player);
     }
@@ -100,18 +100,18 @@ public abstract class PagedMoonInventory extends MoonInventory {
 
         this.pagesCount = buttonMap.size() / slotsList.size();
 
-        if ( page < pagesCount ) {
+        if ( !(page >= pagesCount) ) {
             setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
                     "§eВперед"), player1 -> forward(player));
         }
 
-        if ( page - 1 >= 0 ) {
+        if ( !(page - 1 < 0) ) {
             setItem(getInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
                     "§eНазад"), player1 -> backward(player));
         }
 
 
-        for (int i = 0; i < slotsList.size(); ++i) {
+        for (int i = 0; i < slotsList.size(); i++) {
             int index = page * slotsList.size() + i;
 
             if (buttonMap.size() <= index) {

@@ -17,6 +17,7 @@ import ru.stonlex.api.bukkit.menus.manager.InventoryManager;
 import ru.stonlex.api.bukkit.messaging.MessagingManager;
 import ru.stonlex.api.bukkit.modules.protocol.entity.listeners.FakeEntityClickListener;
 import ru.stonlex.api.bukkit.modules.vault.VaultManager;
+import ru.stonlex.api.bukkit.tag.manager.TagManager;
 import ru.stonlex.api.test.TestCommand;
 
 public final class MoonAPI extends JavaPlugin {
@@ -41,6 +42,9 @@ public final class MoonAPI extends JavaPlugin {
 
     @Getter
     private static final SidebarManager sidebarManager       = new SidebarManager();
+
+    @Getter
+    private static final TagManager tagManager               = new TagManager();
 
     @Getter
     private static MessagingManager messagingManager         = null;
