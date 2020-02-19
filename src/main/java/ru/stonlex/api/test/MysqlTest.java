@@ -67,7 +67,6 @@ public class MysqlTest {
      */
     public void getAsyncDataById(int id, Consumer<String> dataConsumer) {
         DATABASE.executeQuery(true, GET_DATA_BY_ID_QUERY, rs -> {
-
             dataConsumer.accept(rs.getString("Data"));
 
             return null;

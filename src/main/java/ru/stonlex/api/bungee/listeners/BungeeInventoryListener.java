@@ -19,11 +19,8 @@ public class BungeeInventoryListener implements Listener {
         int slot = event.getSlot();
 
         if (event.getCurrentItem() == null || event.getCurrentItem().getMaterial() == BungeeMaterial.AIR || inventory == null || !inventory.getButtonMap().containsKey(slot)) {
-            System.out.println("ты говнокодер");
             return;
         }
-
-        System.out.println("ты не говнокодер");
 
         BungeeInventoryButton button = inventory.getButtonMap().get(slot);
 

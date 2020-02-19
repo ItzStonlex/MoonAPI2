@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import ru.stonlex.api.java.interfaces.Applicable;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor

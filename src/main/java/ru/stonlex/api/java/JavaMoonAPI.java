@@ -3,6 +3,7 @@ package ru.stonlex.api.java;
 import lombok.Getter;
 import ru.stonlex.api.java.logger.MoonLogger;
 import ru.stonlex.api.java.mail.MailManager;
+import ru.stonlex.api.java.mail.MailSender;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,10 +29,10 @@ public final class JavaMoonAPI {
 
 
     public static void main(String[] args) {
-        moonLogger.info("Test message 1");
+        MailSender mailSender = mailManager.getMailSender("seltixfromhell@bk.ru", "***");
 
-        mailManager.getMailSender("seltixfromhell@bk.ru", "123qweasdzxc")
-                .sendMessage("саня хуй соси", "братан ты че рил соснул?", "itzstonlex@bk.ru");
+        mailSender.sendMessage("Тестовая тема", "Тестовое сообщение",
+                "itzstonlex@bk.ru");
     }
 
 }

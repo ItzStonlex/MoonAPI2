@@ -1,10 +1,7 @@
 package ru.stonlex.api.bungee.inventory;
 
-import gnu.trove.list.TIntList;
-import gnu.trove.map.TIntObjectMap;
 import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import ru.stonlex.api.bungee.inventory.interfaces.BungeeInventoryButton;
 import ru.stonlex.api.bungee.inventory.item.BungeeItemStack;
 import ru.stonlex.api.bungee.inventory.item.BungeeMaterial;
 import ru.stonlex.api.bungee.utility.BungeeItemUtil;
